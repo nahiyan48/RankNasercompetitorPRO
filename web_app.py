@@ -2827,6 +2827,9 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             }
             if (geminiKey) {
                 localStorage.setItem('gemini_api_key', geminiKey);
+                if (document.getElementById('wGeminiKey')) document.getElementById('wGeminiKey').value = geminiKey;
+                if (document.getElementById('multiGeminiKey')) document.getElementById('multiGeminiKey').value = geminiKey;
+                if (document.getElementById('autoGeminiKey')) document.getElementById('autoGeminiKey').value = geminiKey;
             }
 
             document.getElementById('writerSpinner').style.display = 'block';
@@ -3054,15 +3057,19 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             const tone = document.getElementById('multiTone').value;
             const wordCount = parseInt(document.getElementById('multiWordCount').value, 10);
             const country = document.getElementById('multiCountry') ? document.getElementById('multiCountry').value : 'Bangladesh';
-            const geminiKey = document.getElementById('multiGeminiKey').value.trim();
+            const geminiKey = (document.getElementById('multiGeminiKey') ? document.getElementById('multiGeminiKey').value.trim() : '') || localStorage.getItem('gemini_api_key') || '';
 
             if (brandName) {
                 localStorage.setItem('user_brand_name', brandName);
                 if (document.getElementById('wBrandName')) document.getElementById('wBrandName').value = brandName;
+                if (document.getElementById('multiBrandName')) document.getElementById('multiBrandName').value = brandName;
+                if (document.getElementById('autoBrandName')) document.getElementById('autoBrandName').value = brandName;
             }
             if (geminiKey) {
                 localStorage.setItem('gemini_api_key', geminiKey);
                 if (document.getElementById('wGeminiKey')) document.getElementById('wGeminiKey').value = geminiKey;
+                if (document.getElementById('multiGeminiKey')) document.getElementById('multiGeminiKey').value = geminiKey;
+                if (document.getElementById('autoGeminiKey')) document.getElementById('autoGeminiKey').value = geminiKey;
             }
 
             document.getElementById('multiSpinner').style.display = 'block';
@@ -3402,13 +3409,23 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             const specificTopic = document.getElementById('autoSpecificTopic').value.trim();
             const wordCount = parseInt(document.getElementById('autoWordCount').value, 10);
             const tone = document.getElementById('autoTone').value;
-            const geminiKey = document.getElementById('autoGeminiKey').value.trim();
+            const geminiKey = (document.getElementById('autoGeminiKey') ? document.getElementById('autoGeminiKey').value.trim() : '') || localStorage.getItem('gemini_api_key') || '';
 
             const isWp = document.getElementById('autoPublishWp').checked;
             const isCustom = document.getElementById('autoPublishCustom').checked;
 
-            if (brand) localStorage.setItem('user_brand_name', brand);
-            if (geminiKey) localStorage.setItem('gemini_api_key', geminiKey);
+            if (brand) {
+                localStorage.setItem('user_brand_name', brand);
+                if (document.getElementById('wBrandName')) document.getElementById('wBrandName').value = brand;
+                if (document.getElementById('multiBrandName')) document.getElementById('multiBrandName').value = brand;
+                if (document.getElementById('autoBrandName')) document.getElementById('autoBrandName').value = brand;
+            }
+            if (geminiKey) {
+                localStorage.setItem('gemini_api_key', geminiKey);
+                if (document.getElementById('wGeminiKey')) document.getElementById('wGeminiKey').value = geminiKey;
+                if (document.getElementById('multiGeminiKey')) document.getElementById('multiGeminiKey').value = geminiKey;
+                if (document.getElementById('autoGeminiKey')) document.getElementById('autoGeminiKey').value = geminiKey;
+            }
 
             const comps = compInput.split(',').map(s => s.trim()).filter(Boolean);
             if (comps.length === 0 && !specificTopic) {
@@ -4132,7 +4149,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 target_words = int(data.get('target_words', 2000))
                 competitor_url = data.get('competitor_url', '').strip()
                 country = data.get('country', 'Bangladesh').strip()
-                gemini_key = data.get('gemini_key', '').strip()
+                gemini_key = data.get('gemini_key', '').strip() or os.environ.get('GEMINI_API_KEY', '').strip()
 
                 writer_agent = ContentWritingAgent(gemini_api_key=gemini_key if gemini_key else None)
                 article_data = writer_agent.generate_content(
@@ -4172,7 +4189,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 tone = data.get('tone', 'Authoritative & Expert')
                 target_words = int(data.get('target_words', 0))
                 country = data.get('country', 'Bangladesh').strip()
-                gemini_key = data.get('gemini_key', '').strip()
+                gemini_key = data.get('gemini_key', '').strip() or os.environ.get('GEMINI_API_KEY', '').strip()
 
                 engine = MultiCompetitorEngine(
                     competitor_urls=comp_urls,
@@ -4326,7 +4343,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 specific_topic = data.get('specific_topic', '').strip() or None
                 target_words = int(data.get('target_words', 2500))
                 tone = data.get('tone', 'Authoritative & Expert').strip()
-                gemini_key = data.get('gemini_key', '').strip()
+                gemini_key = data.get('gemini_key', '').strip() or os.environ.get('GEMINI_API_KEY', '').strip()
                 wp_config = data.get('wp_config', None)
                 custom_webhook_config = data.get('custom_webhook_config', None)
 

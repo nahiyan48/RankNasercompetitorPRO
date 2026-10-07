@@ -58,7 +58,9 @@ FORBIDDEN_WORDS = {
     'latest', 'list', 'review', 'reviews', 'help', 'helpful', 'from', 'buy', 'get', 'choosing',
     'navigating', 'market', 'price', 'pricing', 'online', 'bangladesh', 'bd', 'subheading', 'headings',
     'heading', 'frequently', 'asked', 'questions', 'step', 'steps', 'understand', 'needs', 'need',
-    'set', 'budget', 'feels', 'different', 'avoid', 'common', 'mistakes', 'final', 'words', 'thoughts'
+    'set', 'budget', 'feels', 'different', 'avoid', 'common', 'mistakes', 'final', 'words', 'thoughts',
+    'add', 'cart', 'compare', 'save', 'wishlist', 'stock', 'checkout', 'button', 'filter', 'sort', 'delivery',
+    'bdt', 'tk', 'now', 'image', 'picture', 'details', 'show', 'showing', 'items', 'item', 'product', 'products'
 }
 
 DEFAULT_HEADERS = {
