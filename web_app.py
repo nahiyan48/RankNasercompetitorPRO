@@ -4526,8 +4526,8 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                 return;
             }
 
-            const keywords = kwRaw.split(/[\r\n,]+/).map(k => k.trim()).filter(k => k.length > 0);
-            const competitor_urls = compRaw.split(/[\r\n,]+/).map(u => u.trim()).filter(u => u.length > 0);
+            const keywords = kwRaw.split(String.fromCharCode(10)).flatMap(function(line) { return line.split(','); }).map(function(k) { return k.trim(); }).filter(function(k) { return k.length > 0; });
+            const competitor_urls = compRaw.split(String.fromCharCode(10)).flatMap(function(line) { return line.split(','); }).map(function(u) { return u.trim(); }).filter(function(u) { return u.length > 0; });
             const geminiKey = localStorage.getItem('gemini_api_key') || '';
 
             const btn = document.getElementById('btnGenDirectorPlan');
@@ -4848,36 +4848,50 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             }
 
             const c = currentDirectorCampaign;
-            let md = `# 10-Day Master SEO Campaign Roadmap: ${c.company_name}\n`;
-            md += `**Target Domain:** ${c.domain} | **Country:** ${c.target_country}\n`;
-            md += `**Primary Focus Keyword:** ${c.primary_keyword}\n`;
-            md += `**All Target Keywords:** ${c.all_keywords.join(', ')}\n`;
-            md += `**Created Date:** ${c.created_at}\n\n`;
-            md += `---\n\n`;
+            const NL = String.fromCharCode(10);
+            const lines = [
+                '# 10-Day Master SEO Campaign Roadmap: ' + c.company_name,
+                '**Target Domain:** ' + c.domain + ' | **Country:** ' + c.target_country,
+                '**Primary Focus Keyword:** ' + c.primary_keyword,
+                '**All Target Keywords:** ' + (c.all_keywords || []).join(', '),
+                '**Created Date:** ' + c.created_at,
+                '',
+                '---',
+                ''
+            ];
 
-            c.roadmap.forEach(day => {
-                md += `## Day ${day.day}: ${day.title} (${day.category})\n`;
-                md += `**Objective:** ${day.objective}\n`;
-                md += `**Target Keywords:** ${(day.target_keywords || []).join(', ')}\n\n`;
+            (c.roadmap || []).forEach(function(day) {
+                lines.push('## Day ' + day.day + ': ' + day.title + ' (' + day.category + ')');
+                lines.push('**Objective:** ' + day.objective);
+                lines.push('**Target Keywords:** ' + (day.target_keywords || []).join(', '));
+                lines.push('');
 
                 const deliv = directorDeliverables[day.day];
                 if (deliv) {
-                    md += `### Executed Deliverable:\n\n`;
+                    lines.push('### Executed Deliverable:');
+                    lines.push('');
                     if (deliv.markdown) {
-                        md += deliv.markdown + `\n\n`;
+                        lines.push(deliv.markdown);
+                        lines.push('');
                     } else if (deliv.schema_json) {
-                        md += "```json\n" + deliv.schema_json + "\n```\n\n";
+                        lines.push('```json');
+                        lines.push(deliv.schema_json);
+                        lines.push('```');
+                        lines.push('');
                     }
                 } else {
-                    md += `*Deliverable status: Ready to execute*\n\n`;
+                    lines.push('*Deliverable status: Ready to execute*');
+                    lines.push('');
                 }
-                md += `---\n\n`;
+                lines.push('---');
+                lines.push('');
             });
 
-            const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
+            const mdContent = lines.join(NL);
+            const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `SEO_10_Day_Campaign_${c.company_name.replace(/[^a-zA-Z0-9]/g, '_')}.md`;
+            link.download = 'SEO_10_Day_Campaign_' + c.company_name.replace(/[^a-zA-Z0-9]/g, '_') + '.md';
             link.click();
         }
 
