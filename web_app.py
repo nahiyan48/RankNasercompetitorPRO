@@ -2610,14 +2610,6 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             document.getElementById('tabAutopilotBtn').className = 'tab-btn autopilot' + (tab === 'autopilot' ? ' active' : '');
             document.getElementById('tabDirectorBtn').className = 'tab-btn director' + (tab === 'director' ? ' active' : '');
 
-            // Update floating button label and action
-            const floatBtn = document.getElementById('floatingHomeBtn');
-            if (floatBtn) {
-                floatBtn.innerHTML = '<span>🏠 Home</span>';
-                floatBtn.title = 'Return to Home (Daily Tracker)';
-                floatBtn.onclick = goBackToHome;
-            }
-
             if (updateHistory) {
                 try {
                     history.pushState({ tab: tab }, '', '#' + tab);
@@ -5050,13 +5042,6 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             }
         });
     </script>
-
-    <!-- Persistent Floating Return / Back to Home Button -->
-    <div id="floatingHomeBtnContainer" style="position: fixed; bottom: 22px; right: 22px; z-index: 99999;">
-        <button id="floatingHomeBtn" type="button" onclick="goBackToHome();" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; border-radius: 30px; padding: 11px 20px; font-weight: 700; font-size: 13.5px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 4px 16px rgba(2,132,199,0.4); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px) scale(1.04)';" onmouseout="this.style.transform='none';" title="Return to Home (Daily Tracker)">
-            <span>🏠 Home</span>
-        </button>
-    </div>
 </body>
 </html>
 """
