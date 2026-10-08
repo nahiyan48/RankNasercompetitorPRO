@@ -910,13 +910,16 @@ HTML_PAGE = """<!DOCTYPE html>
     <div class="container">
         <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 16px;">
             <div style="text-align: left;">
-                <span class="logo-badge" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; font-weight: 800; letter-spacing: 1px; padding: 5px 16px; border-radius: 20px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                    <span>🚀</span> RANKNASERPRO
+                <span class="logo-badge" onclick="goBackToHome();" style="cursor: pointer; background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; font-weight: 800; letter-spacing: 1px; padding: 6px 16px; border-radius: 20px; font-size: 13px; display: inline-flex; align-items: center; gap: 7px; margin-bottom: 6px; box-shadow: 0 2px 8px rgba(37,99,235,0.25); transition: transform 0.15s;" title="Click to return to Home (Daily Tracker)" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                    <span>🚀</span> RANKNASERPRO <span style="font-size: 10.5px; background: rgba(255,255,255,0.22); padding: 1px 7px; border-radius: 10px; margin-left: 2px;">⬅️ Home</span>
                 </span>
-                <h1 style="font-size: 28px; font-weight: 800; margin: 4px 0 3px 0; color: #0f172a; letter-spacing: -0.5px;">RankNaserPro Intelligence Suite</h1>
+                <h1 onclick="goBackToHome();" style="cursor: pointer; font-size: 28px; font-weight: 800; margin: 4px 0 3px 0; color: #0f172a; letter-spacing: -0.5px;" title="Click to return to Home (Daily Tracker)">RankNaserPro Intelligence Suite</h1>
                 <p class="subtitle" style="margin: 0; color: #64748b; font-size: 13.5px;">Autonomous Competitor Spy, 5 vs 1 SERP Outranker & AI Content Publishing Machine</p>
             </div>
             <div style="display: flex; gap: 9px; align-items: center; flex-wrap: wrap;">
+                <button type="button" id="homeTopBtn" onclick="goBackToHome();" style="background: #ffffff; color: #1e3a8a; border: 1.5px solid #cbd5e1; font-weight: 700; border-radius: 10px; padding: 10px 15px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); font-size: 12.5px; transition: all 0.2s;" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#cbd5e1'">
+                    <span>🏠 Home / Tracker</span>
+                </button>
                 <button type="button" id="roadmapBtn" onclick="openRoadmapModal()" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; font-weight: 700; border-radius: 10px; padding: 10px 15px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(2,132,199,0.3); font-size: 12.5px;">
                     <span>🗺️ 30-Day Content Roadmap</span>
                 </button>
@@ -984,6 +987,18 @@ HTML_PAGE = """<!DOCTYPE html>
 
         <!-- TAB 2: Competitor Deep Spy -->
         <div id="tabSpy" style="display: none;">
+            <!-- Top Return & Breadcrumb Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); flex-wrap: wrap; gap: 10px;">
+                <button type="button" onclick="goBackToHome();" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; border: none; font-weight: 700; border-radius: 8px; padding: 9px 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; box-shadow: 0 2px 6px rgba(37,99,235,0.25); transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                    <span>⬅️ Back to Home / Daily Tracker</span>
+                </button>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; font-weight: 600;">
+                    <a href="javascript:void(0)" onclick="goBackToHome();" style="color: #2563eb; text-decoration: none;">🏠 Home</a>
+                    <span>&rsaquo;</span>
+                    <span style="background: #f3e8ff; color: #7e22ce; font-weight: 800; padding: 3px 10px; border-radius: 6px; font-size: 12px;">🕵️‍♂️ Tab 2: 360° Deep Spy</span>
+                </div>
+            </div>
+
             <div class="search-card" style="border-color: rgba(139, 92, 246, 0.4);">
                 <form id="spyForm">
                     <div class="form-grid">
@@ -1008,6 +1023,18 @@ HTML_PAGE = """<!DOCTYPE html>
 
         <!-- TAB 3: 5 vs 1 Master Outranker -->
         <div id="tabMulti" style="display: none;">
+            <!-- Top Return & Breadcrumb Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); flex-wrap: wrap; gap: 10px;">
+                <button type="button" onclick="goBackToHome();" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; border: none; font-weight: 700; border-radius: 8px; padding: 9px 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; box-shadow: 0 2px 6px rgba(37,99,235,0.25); transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                    <span>⬅️ Back to Home / Daily Tracker</span>
+                </button>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; font-weight: 600;">
+                    <a href="javascript:void(0)" onclick="goBackToHome();" style="color: #2563eb; text-decoration: none;">🏠 Home</a>
+                    <span>&rsaquo;</span>
+                    <span style="background: #fee2e2; color: #b91c1c; font-weight: 800; padding: 3px 10px; border-radius: 6px; font-size: 12px;">⚔️ Tab 3: 5 vs 1 Outrank</span>
+                </div>
+            </div>
+
             <div class="search-card" style="border-color: rgba(220, 38, 38, 0.4); background: linear-gradient(180deg, #ffffff, #fffafb);">
                 <div style="margin-bottom: 18px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
@@ -1157,6 +1184,18 @@ HTML_PAGE = """<!DOCTYPE html>
 
         <!-- TAB 4: Content Writing AI Studio -->
         <div id="tabWriter" style="display: none;">
+            <!-- Top Return & Breadcrumb Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); flex-wrap: wrap; gap: 10px;">
+                <button type="button" onclick="goBackToHome();" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; border: none; font-weight: 700; border-radius: 8px; padding: 9px 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; box-shadow: 0 2px 6px rgba(37,99,235,0.25); transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                    <span>⬅️ Back to Home / Daily Tracker</span>
+                </button>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; font-weight: 600;">
+                    <a href="javascript:void(0)" onclick="goBackToHome();" style="color: #2563eb; text-decoration: none;">🏠 Home</a>
+                    <span>&rsaquo;</span>
+                    <span style="background: #dcfce7; color: #15803d; font-weight: 800; padding: 3px 10px; border-radius: 6px; font-size: 12px;">✍️ Tab 4: AI Content Studio</span>
+                </div>
+            </div>
+
             <div class="search-card" style="border-color: rgba(16, 185, 129, 0.4);">
                 <div style="margin-bottom: 16px;">
                     <h3 style="font-size: 18px; color: #065f46; display: flex; align-items: center; gap: 8px;">
@@ -1353,6 +1392,18 @@ HTML_PAGE = """<!DOCTYPE html>
 
         <!-- TAB 5: Autonomous AI Autopilot Agent -->
         <div id="tabAutopilot" style="display: none;">
+            <!-- Top Return & Breadcrumb Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); flex-wrap: wrap; gap: 10px;">
+                <button type="button" onclick="goBackToHome();" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; border: none; font-weight: 700; border-radius: 8px; padding: 9px 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; box-shadow: 0 2px 6px rgba(37,99,235,0.25); transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                    <span>⬅️ Back to Home / Daily Tracker</span>
+                </button>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; font-weight: 600;">
+                    <a href="javascript:void(0)" onclick="goBackToHome();" style="color: #2563eb; text-decoration: none;">🏠 Home</a>
+                    <span>&rsaquo;</span>
+                    <span style="background: #e0f2fe; color: #0369a1; font-weight: 800; padding: 3px 10px; border-radius: 6px; font-size: 12px;">🤖 Tab 5: Autopilot Agent</span>
+                </div>
+            </div>
+
             <div class="search-card" style="border: 2px solid #3b82f6; background: linear-gradient(to bottom, #ffffff, #f8fafc);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
                     <div>
@@ -1469,6 +1520,18 @@ HTML_PAGE = """<!DOCTYPE html>
 
         <!-- TAB 6: Personal SEO Director Agent (10-Day Autonomous Multi-Company SEO) -->
         <div id="tabDirector" style="display: none;">
+            <!-- Top Return & Breadcrumb Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 10px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); flex-wrap: wrap; gap: 10px;">
+                <button type="button" onclick="goBackToHome();" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; border: none; font-weight: 700; border-radius: 8px; padding: 9px 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; box-shadow: 0 2px 6px rgba(37,99,235,0.25); transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                    <span>⬅️ Back to Home / Daily Tracker</span>
+                </button>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; font-weight: 600;">
+                    <a href="javascript:void(0)" onclick="goBackToHome();" style="color: #2563eb; text-decoration: none;">🏠 Home</a>
+                    <span>&rsaquo;</span>
+                    <span style="background: #ede9fe; color: #5b21b6; font-weight: 800; padding: 3px 10px; border-radius: 6px; font-size: 12px;">🧠 Tab 6: Personal SEO Agent</span>
+                </div>
+            </div>
+
             <!-- Hero Banner -->
             <div style="background: linear-gradient(135deg, #1e1b4b, #312e81, #1e3a8a); color: white; border-radius: 16px; padding: 24px 28px; margin-bottom: 22px; box-shadow: 0 4px 20px rgba(49, 46, 129, 0.25);">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
@@ -1481,11 +1544,16 @@ HTML_PAGE = """<!DOCTYPE html>
                             Give directives for any company or multiple clients and walk away. This agent autonomously maps search intent, writes AI Overview-ready pillar content, engineers JSON-LD technical schemas, builds internal link silos, drafts Skyscraper backlink pitches, and crafts Digital PR syndicates over a complete <strong>10-Day SEO Roadmap</strong>.
                         </p>
                     </div>
-                    <div style="text-align: right; background: rgba(255,255,255,0.08); padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
-                        <div style="font-size: 11px; color: #93c5fd; text-transform: uppercase; font-weight: 700;">Director Status</div>
-                        <div style="font-size: 18px; font-weight: 800; color: #34d399; display: flex; align-items: center; gap: 6px; justify-content: flex-end;">
-                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #34d399; box-shadow: 0 0 8px #34d399;"></span> Active & Ready
+                    <div style="text-align: right; background: rgba(255,255,255,0.08); padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                        <div>
+                            <div style="font-size: 11px; color: #93c5fd; text-transform: uppercase; font-weight: 700;">Director Status</div>
+                            <div style="font-size: 18px; font-weight: 800; color: #34d399; display: flex; align-items: center; gap: 6px; justify-content: flex-end;">
+                                <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #34d399; box-shadow: 0 0 8px #34d399;"></span> Active & Ready
+                            </div>
                         </div>
+                        <button type="button" onclick="goBackToHome();" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.35); font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                            <span>⬅️ Back to Home</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1603,8 +1671,23 @@ https://techlandbd.com</textarea>
             </div>
 
             <!-- 10-Day Action Mission Cards Grid -->
-            <div id="dirDaysGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin-bottom: 30px;">
+            <div id="dirDaysGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin-bottom: 24px;">
                 <!-- 10 Day Cards Injected Dynamically Here -->
+            </div>
+
+            <!-- Bottom Return to Top / Home Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 14px 20px; margin-bottom: 30px; flex-wrap: wrap; gap: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
+                <div style="font-size: 13px; color: #475569; font-weight: 600;">
+                    💡 Finished reviewing or executing your 10-Day SEO Roadmap?
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'});" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-weight: 700; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px;">
+                        <span>⬆️ Back to Top</span>
+                    </button>
+                    <button type="button" onclick="goBackToHome();" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; border: none; font-weight: 700; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 13px; box-shadow: 0 2px 6px rgba(37,99,235,0.25);">
+                        <span>🏠 Back to Home / Daily Tracker</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -1879,32 +1962,46 @@ https://techlandbd.com</textarea>
     </div>
 
     <!-- Deliverable Inspector Modal -->
-        <div id="dirDeliverableModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.7); backdrop-filter: blur(4px); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
-            <div style="background: white; border-radius: 16px; max-width: 900px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); overflow: hidden;">
-                <div style="padding: 16px 22px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span id="dirModalDayBadge" style="background: #2563eb; color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;">DAY 1</span>
-                        <h3 id="dirModalTitle" style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 0;">Deliverable Preview</h3>
-                    </div>
-                    <button type="button" onclick="closeDirectorModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #64748b;">✕</button>
+    <div id="dirDeliverableModal" onclick="if(event.target===this) closeDirectorModal();" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.7); backdrop-filter: blur(4px); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
+        <div style="background: white; border-radius: 16px; max-width: 900px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); overflow: hidden;">
+            <div style="padding: 16px 22px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span id="dirModalDayBadge" style="background: #2563eb; color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;">DAY 1</span>
+                    <h3 id="dirModalTitle" style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 0;">Deliverable Preview</h3>
                 </div>
-                <div style="display: flex; gap: 8px; padding: 10px 22px; background: #f1f5f9; border-bottom: 1px solid var(--border); align-items: center; flex-wrap: wrap;">
-                    <button type="button" class="btn-action" onclick="copyDirectorDeliverable()" style="background: #ffffff; border: 1px solid #cbd5e1; color: #334155; font-size: 12px; padding: 6px 12px;">
-                        <span>📋 Copy Markdown / Code</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button type="button" onclick="closeDirectorModal()" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                        <span>⬅️ Back / Close</span>
                     </button>
-                    <button type="button" id="btnDirSendToStudio" class="btn-action" onclick="sendDirectorArticleToStudio()" style="display: none; background: #059669; color: white; border: none; font-size: 12px; padding: 6px 12px;">
-                        <span>✍️ Open in AI Content Studio</span>
-                    </button>
-                    <button type="button" id="btnDirSendToWp" class="btn-action" onclick="publishDirectorDeliverableToWp()" style="display: none; background: #0073aa; color: white; border: none; font-size: 12px; padding: 6px 12px;">
-                        <span>🌐 Send to WordPress</span>
-                    </button>
-                    <span id="dirModalCopyAlert" style="font-size: 11px; color: #059669; font-weight: 700; display: none;">Copied to clipboard!</span>
-                </div>
-                <div id="dirModalContent" style="padding: 22px; overflow-y: auto; flex: 1; font-size: 13.5px; line-height: 1.6; color: #1e293b;">
-                    <!-- Rendered HTML / Markdown preview -->
+                    <button type="button" onclick="closeDirectorModal()" style="background: none; border: none; font-size: 22px; cursor: pointer; color: #64748b; line-height: 1;">✕</button>
                 </div>
             </div>
+            <div style="display: flex; gap: 8px; padding: 10px 22px; background: #f1f5f9; border-bottom: 1px solid var(--border); align-items: center; flex-wrap: wrap;">
+                <button type="button" onclick="closeDirectorModal()" style="background: #ffffff; border: 1.5px solid #cbd5e1; color: #1e293b; font-weight: 700; font-size: 12px; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
+                    <span>⬅️ Back to Roadmap</span>
+                </button>
+                <button type="button" class="btn-action" onclick="copyDirectorDeliverable()" style="background: #ffffff; border: 1px solid #cbd5e1; color: #334155; font-size: 12px; padding: 6px 12px;">
+                    <span>📋 Copy Markdown / Code</span>
+                </button>
+                <button type="button" id="btnDirSendToStudio" class="btn-action" onclick="sendDirectorArticleToStudio()" style="display: none; background: #059669; color: white; border: none; font-size: 12px; padding: 6px 12px;">
+                    <span>✍️ Open in AI Content Studio</span>
+                </button>
+                <button type="button" id="btnDirSendToWp" class="btn-action" onclick="publishDirectorDeliverableToWp()" style="display: none; background: #0073aa; color: white; border: none; font-size: 12px; padding: 6px 12px;">
+                    <span>🌐 Send to WordPress</span>
+                </button>
+                <span id="dirModalCopyAlert" style="font-size: 11px; color: #059669; font-weight: 700; display: none;">Copied to clipboard!</span>
+            </div>
+            <div id="dirModalContent" style="padding: 22px; overflow-y: auto; flex: 1; font-size: 13.5px; line-height: 1.6; color: #1e293b;">
+                <!-- Rendered HTML / Markdown preview -->
+            </div>
+            <div style="padding: 12px 22px; background: #f8fafc; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 12px; color: #64748b;">Press <kbd style="background:#e2e8f0; padding:2px 6px; border-radius:4px; font-size:11px;">ESC</kbd> or click Back to return to 10-Day Plan</div>
+                <button type="button" onclick="closeDirectorModal()" style="background: #334155; color: white; border: none; font-size: 12.5px; font-weight: 700; padding: 7px 18px; border-radius: 8px; cursor: pointer;">
+                    <span>⬅️ Back to Roadmap</span>
+                </button>
+            </div>
         </div>
+    </div>
 
     <script>
         document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
@@ -2490,7 +2587,18 @@ async def receive_article(request: Request, authorization: str = Header(None)):
         // Initialize Custom API sync badge
         updateCustomBadge();
 
-        function switchTab(tab) {
+        function goBackToHome() {
+            closeDirectorModal();
+            closeWpModal();
+            closeCustomApiModal();
+            closeClientReportModal();
+            closeRoadmapModal();
+            switchTab('daily');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchTab(tab, updateHistory) {
+            if (updateHistory === undefined) updateHistory = true;
             document.getElementById('tabDaily').style.display = (tab === 'daily') ? 'block' : 'none';
             document.getElementById('tabSpy').style.display = (tab === 'spy') ? 'block' : 'none';
             document.getElementById('tabMulti').style.display = (tab === 'multi') ? 'block' : 'none';
@@ -2504,7 +2612,51 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             document.getElementById('tabWriterBtn').className = 'tab-btn writer' + (tab === 'writer' ? ' active' : '');
             document.getElementById('tabAutopilotBtn').className = 'tab-btn autopilot' + (tab === 'autopilot' ? ' active' : '');
             document.getElementById('tabDirectorBtn').className = 'tab-btn director' + (tab === 'director' ? ' active' : '');
+
+            // Update floating button label and action
+            const floatBtn = document.getElementById('floatingHomeBtn');
+            if (floatBtn) {
+                if (tab === 'daily') {
+                    floatBtn.innerHTML = '<span>⬆️ Back to Top</span>';
+                    floatBtn.title = 'Scroll to top of Daily Tracker';
+                    floatBtn.onclick = function() { window.scrollTo({ top: 0, behavior: 'smooth' }); };
+                } else {
+                    floatBtn.innerHTML = '<span>🏠 Back to Home</span>';
+                    floatBtn.title = 'Return to Home (Daily Tracker)';
+                    floatBtn.onclick = goBackToHome;
+                }
+            }
+
+            if (updateHistory) {
+                try {
+                    history.pushState({ tab: tab }, '', '#' + tab);
+                } catch(e) {}
+            }
         }
+
+        window.addEventListener('popstate', function(e) {
+            if (e.state && e.state.tab) {
+                switchTab(e.state.tab, false);
+            } else {
+                const hash = window.location.hash.replace('#', '');
+                if (hash && ['daily', 'spy', 'multi', 'writer', 'autopilot', 'director'].includes(hash)) {
+                    switchTab(hash, false);
+                } else {
+                    switchTab('daily', false);
+                }
+            }
+        });
+
+        // Keyboard Escape listener to close any open modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDirectorModal();
+                closeWpModal();
+                closeCustomApiModal();
+                closeClientReportModal();
+                closeRoadmapModal();
+            }
+        });
 
         // Tracker Form Submit
         document.getElementById('trackerForm').addEventListener('submit', async function(e) {
@@ -4898,7 +5050,22 @@ async def receive_article(request: Request, authorization: str = Header(None)):
 
         // Initialize Director company pills on page load
         renderCompanyPills();
+
+        // Check URL hash on load for deep linking & initial tab setup
+        window.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash.replace('#', '');
+            if (hash && ['daily', 'spy', 'multi', 'writer', 'autopilot', 'director'].includes(hash)) {
+                switchTab(hash, false);
+            }
+        });
     </script>
+
+    <!-- Persistent Floating Return / Back to Home Button -->
+    <div id="floatingHomeBtnContainer" style="position: fixed; bottom: 22px; right: 22px; z-index: 99999;">
+        <button id="floatingHomeBtn" type="button" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; border: 2px solid rgba(255,255,255,0.4); border-radius: 30px; padding: 11px 19px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 6px 20px rgba(30,58,138,0.45); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px) scale(1.04)';" onmouseout="this.style.transform='none';" title="Scroll to top of Daily Tracker">
+            <span>⬆️ Back to Top</span>
+        </button>
+    </div>
 </body>
 </html>
 """
