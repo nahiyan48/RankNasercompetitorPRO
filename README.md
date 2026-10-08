@@ -1,75 +1,68 @@
-# Competitor Keyword & Article Tracker (প্রতিযোগী ওয়েবসাইট মনিটর)
+# RankNaserPro — Autonomous SEO Intelligence & Outranking Suite
 
-একটি শক্তিশালী পাইথন অটোমেশন স্ক্রিপ্ট যা আপনার মূল প্রতিযোগী (Competitor) ওয়েবসাইটের আজকের তারিখে প্রকাশিত সমস্ত নতুন আর্টিকেল স্ক্যান করে এবং বের করে দেয়:
-1. **আজকের পাবলিশ হওয়া আর্টিকেলের তালিকা ও লিংক**
-2. **কোন প্রোডাক্ট নিয়ে আর্টিকেল লেখা হয়েছে (Target Product / Topic)**
-3. **মূল ফোকাস কিওয়ার্ড (Main Keyword)**
-4. **সম্পর্কিত বা এলএসআই কিওয়ার্ড (LSI / Secondary Keywords)**
-5. **সার্চ ইনটেন্ট ও সাব-হেডিংস (H1, H2, H3)**
-6. **সরাসরি CSV, JSON এবং Markdown রিপোর্ট ফাইল আকারে সংরক্ষণ**
+**RankNaserPro** is an enterprise-grade autonomous SEO intelligence and content publishing platform. It empowers businesses, digital agencies, and SEO specialists to continuously monitor competitors, reverse-engineer top-ranking search results, synthesize high-intent outranking articles optimized for Google AI Overviews, and execute full-stack multi-client SEO campaigns across **On-Page SEO**, **Technical SEO**, and **Off-Page SEO**.
 
 ---
 
-## 🚀 ফিচারসমূহ (Key Features)
+## 🎯 What This Platform Does (Core Capabilities)
 
-- **Smart Discovery (স্মার্ট অটো-ডিটেকশন):** 
-  - প্রতিযোগীর XML Sitemap (`sitemap.xml`, `post-sitemap.xml` ইত্যাদি) এবং RSS / Atom Feed স্ক্যান করে রিয়েল-টাইমে আজকের তারিখের পোস্ট ফিল্টার করে।
-  - সাইটম্যাপ না থাকলেও ব্লগ পেজ থেকে আর্টিকেলের পাবলিকেশন ডেট (`datePublished`, `<time>` ট্যাগ) ট্র্যাক করতে পারে।
-- **প্রোডাক্ট ডিটেকশন:** টাইটেল, Schema.org এবং হেডিংস অ্যানালাইসিস করে নির্দিষ্ট প্রোডাক্ট বা সার্ভিসের নাম চিহ্নিত করে।
-- **মেইন কিওয়ার্ড এক্সট্রাকশন:** হেডিংস, টাইটেল, স্লাগ (URL) এবং বডি টেক্সটের ফ্রিকোয়েন্সি ক্যালকুলেশন করে মূল কিওয়ার্ড আলাদা করে।
-- **LSI কিওয়ার্ড ক্লাস্টারিং:** আর্টিকেলের H2, H3 সাব-হেডিংস এবং কনটেক্সচুয়াল টার্ম থেকে শক্তিশালী LSI ও সেকেন্ডারি কিওয়ার্ড বের করে।
-- **ডুয়েল মোড (Dual Mode):**
-  - **১০০% ফ্রি অফলাইন মোড (Default):** কোনো পেইড API কি ছাড়াই নিজস্ব NLP অ্যালগরিদম দিয়ে সম্পূর্ণ কাজ করে।
-  - **Google Gemini AI মোড (ঐচ্ছিক):** ফ্রি Gemini API Key যোগ করলে এটি গভীর এসইও অ্যানালাইসিস ও নিখুঁত ইনটেন্ট রিপোর্ট দেয়।
+### 1. 📅 Daily Competitor Keyword & Article Tracker
+- **Real-Time Publication Discovery:** Automatically crawls competitor XML sitemaps (`sitemap.xml`, `post-sitemap.xml`) and RSS/Atom feeds to detect newly published articles the moment they go live.
+- **Product & Topic Identification:** Pinpoints the exact target products, brand entities, and topics covered in competitor content.
+- **Focus & LSI Keyword Extraction:** Analyzes URL slugs, headings (`H1`, `H2`, `H3`), and semantic body frequency to extract primary focus keywords and secondary LSI keyword clusters.
+- **Search Intent Classification:** Identifies whether queries are Transactional, Commercial Investigation, or Informational.
+- **Automated Multi-Format Reporting:** Generates structured **CSV**, **JSON**, and **Markdown** audit reports for instant reporting or database integration.
 
 ---
 
-## 🛠️ কীভাবে সেটআপ ও রান করবেন (How to Setup & Run)
-
-### ১. পাইথন ইনস্টল (যদি পিসিতে না থাকে):
-- [python.org/downloads](https://www.python.org/downloads/) থেকে পাইথন ডাউনলোড করে ইনস্টল করুন।
-- ইনস্টলের সময় অবশ্যই **"Add python.exe to PATH"** বক্সে টিক চিহ্ন দিন।
-
-### ২. লাইব্রেরি ইনস্টল করুন:
-টার্মিনাল বা কমান্ড প্রম্পট খুলে এই ফোল্ডারে গিয়ে কমান্ড দিন:
-```bash
-pip install -r requirements.txt
-```
-
-### ৩. স্ক্রিপ্টটি রান করুন:
-
-**পদ্ধতি ক: সরাসরি রান করা (Interactive Mode)**
-উইন্ডোজে `run.bat` ফাইলে ডাবল ক্লিক করুন অথবা টার্মিনালে রান করুন:
-```bash
-python tracker.py
-```
-স্ক্রিন আসলে:
-1. আপনার Competitor ওয়েবসাইটের URL দিন (যেমন: `https://competitorsite.com`)
-2. আজকের তারিখের জন্য সরাসরি `Enter` চাপুন।
-3. ফ্রি মোডে চালাতে API Key ছাড়াই সরাসরি `Enter` চাপুন।
-
-**পদ্ধতি খ: কমান্ড লাইনের মাধ্যমে সরাসরি:**
-```bash
-python tracker.py https://competitorsite.com
-```
+### 2. 🕵️‍♂️ 360° Deep Competitor Spy & Reverse-Engineering Engine
+- **"Why It Ranked" Deconstruction:** Analyzes the exact factors allowing a competitor URL to rank on Google Page 1.
+- **Content Gap & Weakness Detection:** Identifies critical deficiencies, missing subtopics, thin content sections, and unaddressed consumer questions.
+- **Backlink & Authority Estimation:** Gauges referral link potential, anchor text distributions, and domain authority signals.
+- **On-Page Architecture Breakdown:** Audits heading structures, readability levels, word count benchmarks, schema implementations, and image optimization.
 
 ---
 
-## 📊 আউটপুট ও রিপোর্ট (Output Reports)
-
-স্ক্রিপ্ট রান সম্পন্ন হলে কনসোলে সুন্দর রেজাল্ট দেখানোর পাশাপাশি স্বয়ংক্রিয়ভাবে `reports/` ফোল্ডারে নিচের ৩টি ফাইল সেভ হবে:
-
-1. **`competitor_<domain>_<date>.csv`** - এক্সেল (Excel) বা গুগল শিটে ওপেন করার উপযোগী ফাইল।
-2. **`competitor_<domain>_<date>.json`** - ডেটাবেজ বা অটোমেশনে ব্যবহারের উপযোগী JSON ফরম্যাট।
-3. **`competitor_<domain>_<date>.md`** - পড়ার জন্য পরিচ্ছন্ন সামারি রিপোর্ট।
-
-### CSV ফাইলের কলামসমূহ:
-| Date | Competitor URL | Article Title | Target Product | Main Keyword | LSI Keywords | Search Intent | Summary |
-|---|---|---|---|---|---|---|---|
-| 2026-10-05 | https://... | ... | ... | ... | ... | ... | ... |
+### 3. ⚔️ 5 vs 1 Master SERP Outranker
+- **Multi-Competitor Cross-Auditing:** Simultaneously evaluates up to 5 top-ranking competitor URLs for any target search query.
+- **Comparative Feature Matrix:** Benchmarks word counts, heading coverage, entity density, and pricing depth across all 5 competitors.
+- **Master Outranking Article Generation:** Combines the strengths of all 5 competitors while resolving every identified weakness, producing a single comprehensive master article that out-ranks the competition.
 
 ---
 
-## 💡 টিপস (SEO Pro Tips)
-- প্রতিযোগী দিনে পোস্ট না করে থাকলে তারিখের জায়গায় আগের দিনের তারিখ (যেমন `2026-10-04`) দিয়ে তাদের সর্বশেষ পোস্টের কিওয়ার্ড দেখতে পারেন।
-- LSI কিওয়ার্ডগুলো আপনার নিজস্ব কনটেন্ট প্ল্যানিংয়ে ব্যবহার করে প্রতিযোগীকে সহজে আউটর‍্যাঙ্ক করতে পারবেন।
+### 4. ✍️ AI Content Studio & Google AI Overview Optimizer
+- **Duplicate Word & Redundancy Removal:** An intelligent text-cleaning engine that automatically detects and eliminates consecutive duplicate words (e.g., `the the`, `camera camera`), repeated sentences, and redundant sub-headings.
+- **Google AI Overview (SGE) Snippet Capture:** Automatically embeds structured summary callout boxes (`> [!TIP]`) directly beneath the `H1` tag, formatted to capture Google AI Overview direct answers.
+- **Diverse High-Converting Content Formats:**
+  - **Comprehensive Pillar Guides** (~2,500–3,500 words) for broad topical authority.
+  - **Commercial Roundups & Comparisons** with side-by-side spec sheets and pricing tables.
+  - **In-Depth Product Reviews** with pros, cons, and performance benchmarks.
+  - **Buying Decision Guides** with counterfeit verification and warranty checklists.
+  - **Social Media Authority Posts** tailored for LinkedIn, Facebook, and Twitter/X syndication.
+- **Strict Meta Tag Validation:** Generates pixel-perfect Meta Titles (50–60 characters) and Meta Descriptions (150–160 characters) targeting exact search intent.
+- **Localized Currency & Entity Adaptation:** Automatically applies localized currencies (BDT ৳, USD $, GBP £, EUR €, INR ₹, CAD $, AUD $) and authorized dealer contexts based on the selected target country.
+- **One-Click Direct Publishing:** Publishes directly as Draft or Published posts to **WordPress** (via REST API) or **Custom Websites** (via secure Webhooks) complete with JSON-LD `FAQPage` schemas.
+
+---
+
+### 5. 🤖 Hands-Free Autopilot AI Agent
+- **Autonomous SEO Worker:** Set target brand name, competitor domains, and target market—then walk away.
+- **End-to-End Pipeline:** Competitor Scan ➜ Gap Identification ➜ High-Intent Topic Selection ➜ Master Content Generation ➜ Direct Website Publishing.
+- **30-Day Topical Authority Expansion Roadmap:** Automatically charts an entire month of scheduled pillar and supporting content across all tiers of the buyer journey.
+
+---
+
+### 6. 🧠 Personal SEO Director Agent (10-Day Autonomous Full-Stack Engine)
+- **Multi-Company / Multi-Client Workspace:** Save and manage multiple client profiles (brand name, domain, target market, keyword lists, and custom directives) with permanent browser storage.
+- **Structured 10-Day Master SEO Campaign:**
+  - **Day 1 (Strategy & On-Page):** Search Intent Mapping, Keyword Clustering, and Topical Gap Analysis.
+  - **Day 2 (On-Page SEO):** Core Topical Pillar Guide (AI Overview Ready, ~2,500–3,500 words).
+  - **Day 3 (Technical SEO):** JSON-LD Schema Architecture (`Organization`, `WebSite`) and `Robots.txt` rules.
+  - **Day 4 (On-Page SEO):** Commercial Investigation Article & Side-by-Side Pricing Matrix.
+  - **Day 5 (On-Page SEO):** Internal Linking Silo Graph & Semantic Contextual Anchor Text Mapping.
+  - **Day 6 (On-Page SEO):** Buying Decision Guide, Holographic Verification & Warranty Checklists.
+  - **Day 7 (Technical SEO):** SERP Rich Snippet Schemas (`FAQPage`, `BreadcrumbList`) & OpenGraph Meta.
+  - **Day 8 (Off-Page SEO):** Skyscraper Backlink Outreach Email Pitch Templates & Prospecting Framework.
+  - **Day 9 (Off-Page SEO):** Digital PR Press Release Copy & Community Authority Answers (Reddit/Quora).
+  - **Day 10 (CRO & Growth):** Google Search Console KPI Audit, Conversion Call-to-Actions (CRO) & 30-Day Scaling Blueprint.
+- **Live Mission Terminal & Deliverable Inspector:** View live execution logs, inspect rendered markdown deliverables, copy technical schema scripts, or export the entire 10-day campaign as a single Markdown dossier.
