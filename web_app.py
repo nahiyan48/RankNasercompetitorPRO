@@ -917,8 +917,8 @@ HTML_PAGE = """<!DOCTYPE html>
                 <p class="subtitle" style="margin: 0; color: #64748b; font-size: 13.5px;">Autonomous Competitor Spy, 5 vs 1 SERP Outranker & AI Content Publishing Machine</p>
             </div>
             <div style="display: flex; gap: 9px; align-items: center; flex-wrap: wrap;">
-                <button type="button" id="homeTopBtn" onclick="goBackToHome();" style="background: #ffffff; color: #1e3a8a; border: 1.5px solid #cbd5e1; font-weight: 700; border-radius: 10px; padding: 10px 15px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); font-size: 12.5px; transition: all 0.2s;" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#cbd5e1'">
-                    <span>🏠 Home / Tracker</span>
+                <button type="button" id="homeTopBtn" onclick="goBackToHome();" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; font-weight: 700; border-radius: 10px; padding: 10px 16px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(2,132,199,0.3); font-size: 12.5px; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                    <span>🏠 Home (Tracker)</span>
                 </button>
                 <button type="button" id="roadmapBtn" onclick="openRoadmapModal()" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; font-weight: 700; border-radius: 10px; padding: 10px 15px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(2,132,199,0.3); font-size: 12.5px;">
                     <span>🗺️ 30-Day Content Roadmap</span>
@@ -937,7 +937,7 @@ HTML_PAGE = """<!DOCTYPE html>
         <!-- Tab Nav: 6 Equal Columns Grid -->
         <div class="tabs-nav">
             <button class="tab-btn active daily" id="tabDailyBtn" onclick="switchTab('daily')">
-                <span>📅 1. Daily Tracker</span>
+                <span>🏠 1. Home (Daily Tracker)</span>
             </button>
             <button class="tab-btn spy" id="tabSpyBtn" onclick="switchTab('spy')">
                 <span>🕵️‍♂️ 2. 360° Deep Spy</span>
@@ -2616,15 +2616,9 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             // Update floating button label and action
             const floatBtn = document.getElementById('floatingHomeBtn');
             if (floatBtn) {
-                if (tab === 'daily') {
-                    floatBtn.innerHTML = '<span>⬆️ Back to Top</span>';
-                    floatBtn.title = 'Scroll to top of Daily Tracker';
-                    floatBtn.onclick = function() { window.scrollTo({ top: 0, behavior: 'smooth' }); };
-                } else {
-                    floatBtn.innerHTML = '<span>🏠 Back to Home</span>';
-                    floatBtn.title = 'Return to Home (Daily Tracker)';
-                    floatBtn.onclick = goBackToHome;
-                }
+                floatBtn.innerHTML = '<span>🏠 Home</span>';
+                floatBtn.title = 'Return to Home (Daily Tracker)';
+                floatBtn.onclick = goBackToHome;
             }
 
             if (updateHistory) {
@@ -5062,8 +5056,8 @@ async def receive_article(request: Request, authorization: str = Header(None)):
 
     <!-- Persistent Floating Return / Back to Home Button -->
     <div id="floatingHomeBtnContainer" style="position: fixed; bottom: 22px; right: 22px; z-index: 99999;">
-        <button id="floatingHomeBtn" type="button" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; border: 2px solid rgba(255,255,255,0.4); border-radius: 30px; padding: 11px 19px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 6px 20px rgba(30,58,138,0.45); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px) scale(1.04)';" onmouseout="this.style.transform='none';" title="Scroll to top of Daily Tracker">
-            <span>⬆️ Back to Top</span>
+        <button id="floatingHomeBtn" type="button" onclick="goBackToHome();" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; border-radius: 30px; padding: 11px 20px; font-weight: 700; font-size: 13.5px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 4px 16px rgba(2,132,199,0.4); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px) scale(1.04)';" onmouseout="this.style.transform='none';" title="Return to Home (Daily Tracker)">
+            <span>🏠 Home</span>
         </button>
     </div>
 </body>
