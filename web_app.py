@@ -917,9 +917,6 @@ HTML_PAGE = """<!DOCTYPE html>
                 <p class="subtitle" style="margin: 0; color: #64748b; font-size: 13.5px;">Autonomous Competitor Spy, 5 vs 1 SERP Outranker & AI Content Publishing Machine</p>
             </div>
             <div style="display: flex; gap: 9px; align-items: center; flex-wrap: wrap;">
-                <button type="button" id="homeTopBtn" onclick="goBackToHome();" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; font-weight: 700; border-radius: 10px; padding: 10px 16px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(2,132,199,0.3); font-size: 12.5px; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-                    <span>🏠 Home (Tracker)</span>
-                </button>
                 <button type="button" id="roadmapBtn" onclick="openRoadmapModal()" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; font-weight: 700; border-radius: 10px; padding: 10px 15px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(2,132,199,0.3); font-size: 12.5px;">
                     <span>🗺️ 30-Day Content Roadmap</span>
                 </button>
@@ -937,7 +934,7 @@ HTML_PAGE = """<!DOCTYPE html>
         <!-- Tab Nav: 6 Equal Columns Grid -->
         <div class="tabs-nav">
             <button class="tab-btn active daily" id="tabDailyBtn" onclick="switchTab('daily')">
-                <span>🏠 1. Home (Daily Tracker)</span>
+                <span>🏠 Home / Tracker</span>
             </button>
             <button class="tab-btn spy" id="tabSpyBtn" onclick="switchTab('spy')">
                 <span>🕵️‍♂️ 2. 360° Deep Spy</span>
