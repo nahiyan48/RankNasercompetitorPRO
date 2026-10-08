@@ -983,6 +983,9 @@ HTML_PAGE = """<!DOCTYPE html>
                             <label>Content Format</label>
                             <select id="multiFormat">
                                 <option value="long_form_seo">📖 Definitive Guide & Review (SEO)</option>
+                                <option value="informational_article">💡 Informational Article (How-To / Educational)</option>
+                                <option value="commercial_article">🏆 Commercial Article (Top Picks & Market Roundup)</option>
+                                <option value="buying_guide">🛒 Buying Guide (Checklist & Purchase Decision)</option>
                                 <option value="comparison_article">⚔️ Head-to-Head Comparison Battle</option>
                                 <option value="product_review">⭐ In-Depth Product Review</option>
                             </select>
@@ -1108,6 +1111,9 @@ HTML_PAGE = """<!DOCTYPE html>
                             <label>Content Format</label>
                             <select id="wFormat">
                                 <option value="long_form_seo">📖 Long-Form SEO Guide (1,500-3,500w)</option>
+                                <option value="informational_article">💡 Informational Article (Educational & How-To)</option>
+                                <option value="commercial_article">🏆 Commercial Article (Best Picks & Market Roundup)</option>
+                                <option value="buying_guide">🛒 Buying Guide (Checklist & Purchase Decision)</option>
                                 <option value="product_review">⭐ In-Depth Product Review & Rating</option>
                                 <option value="comparison_article">⚔️ Head-to-Head Comparison (A vs B)</option>
                                 <option value="viral_social_post">🚀 Viral Social Media / Facebook Post</option>
@@ -1198,8 +1204,10 @@ HTML_PAGE = """<!DOCTYPE html>
                 <div class="meta-package-card">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                         <h4 style="font-size:15px; color:#065f46; font-weight:700;">🎯 SEO & Meta Optimization Package</h4>
-                        <div style="display:flex; gap:8px;">
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
                             <span class="product-tag" id="metaBadgeEngine" style="background:#dcfce7; color:#166534; border-color:#86efac;">AI Engine</span>
+                            <span class="product-tag" id="metaBadgeIntent" style="background:#eff6ff; color:#1e40af; border-color:#bfdbfe;">🎯 Intent: Analyzed</span>
+                            <span class="product-tag" id="metaBadgeAiOverview" style="background:#fef3c7; color:#92400e; border-color:#fde68a;">⚡ AI Overview Ready</span>
                             <span class="product-tag" id="metaBadgeWords">0 Words</span>
                             <span class="product-tag" id="metaBadgeRead">0 min read</span>
                         </div>
@@ -2550,6 +2558,9 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                             <label>Content Format</label>
                             <select id="inlineFormat">
                                 <option value="long_form_seo">📖 Long-Form SEO Guide</option>
+                                <option value="informational_article">💡 Informational Article</option>
+                                <option value="commercial_article">🏆 Commercial Article</option>
+                                <option value="buying_guide">🛒 Buying Guide</option>
                                 <option value="product_review">⭐ Detailed Product Review</option>
                                 <option value="comparison_article">⚔️ Head-to-Head Comparison</option>
                             </select>
@@ -2672,6 +2683,7 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                         target_words: words,
                         competitor_url: audit.url,
                         brand_name: brandName,
+                        country: audit.country || document.getElementById('spyCountrySelect')?.value || 'Bangladesh',
                         gemini_key: geminiKey
                     })
                 });
@@ -2944,6 +2956,12 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             document.getElementById('resSlug').innerText = res.slug ? `/${res.slug}/` : '';
             
             document.getElementById('metaBadgeEngine').innerText = res.engine || 'AI Engine';
+            if (document.getElementById('metaBadgeIntent')) {
+                document.getElementById('metaBadgeIntent').innerText = `🎯 Intent: ${res.search_intent || 'Analyzed'}`;
+            }
+            if (document.getElementById('metaBadgeAiOverview')) {
+                document.getElementById('metaBadgeAiOverview').innerText = `⚡ AI Overview Ready`;
+            }
             document.getElementById('metaBadgeWords').innerText = `${res.actual_word_count || 0} Words`;
             document.getElementById('metaBadgeRead').innerText = res.estimated_reading_time || '5 min read';
 
@@ -3926,7 +3944,7 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                     intentClass: "intent-comm",
                     keywords: `${topic} price in ${country}, budget ${topic}, buying tips`,
                     words: 2200,
-                    type: "long_form_seo"
+                    type: "buying_guide"
                 },
                 {
                     day: "Day 8 (Week 2)",
@@ -3936,7 +3954,7 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                     intentClass: "intent-comm",
                     keywords: `best ${topic} review, top rated ${topic}, comparison`,
                     words: 2800,
-                    type: "product_review"
+                    type: "commercial_article"
                 },
                 {
                     day: "Day 12 (Week 2)",
@@ -3956,7 +3974,7 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                     intentClass: "intent-info",
                     keywords: `${topic} mistakes, how to choose ${topic}`,
                     words: 1800,
-                    type: "long_form_seo"
+                    type: "informational_article"
                 },
                 {
                     day: "Day 20 (Week 3)",
@@ -3966,7 +3984,7 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                     intentClass: "intent-info",
                     keywords: `how to use ${topic}, ${topic} setup guide, tutorial`,
                     words: 2000,
-                    type: "long_form_seo"
+                    type: "informational_article"
                 },
                 {
                     day: "Day 24 (Week 4)",
@@ -4148,7 +4166,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 tone = data.get('tone', 'Authoritative & Expert')
                 target_words = int(data.get('target_words', 2000))
                 competitor_url = data.get('competitor_url', '').strip()
-                country = data.get('country', 'Bangladesh').strip()
+                country = (data.get('country') or data.get('target_country') or 'Bangladesh').strip()
                 gemini_key = data.get('gemini_key', '').strip() or os.environ.get('GEMINI_API_KEY', '').strip()
 
                 writer_agent = ContentWritingAgent(gemini_api_key=gemini_key if gemini_key else None)
