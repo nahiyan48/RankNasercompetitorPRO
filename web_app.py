@@ -27,6 +27,50 @@ from webhook_publisher import CustomWebhookPublisher
 from autopilot_agent import AutopilotAgent
 from seo_director_agent import PersonalSEODirector
 
+import base64
+
+USERS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ranknaser_users.json')
+PHOTO_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ranknaser_profile.jpg')
+
+def load_registered_users():
+    if os.path.exists(USERS_FILE):
+        try:
+            with open(USERS_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {
+        "admin": {"name": "RankNaser Admin", "password": "AGENTNASER", "domain": "ranknaser.com"},
+        "ADMIN": {"name": "RankNaser Admin", "password": "AGENTNASER", "domain": "ranknaser.com"},
+        "admin@ranknaser.com": {"name": "RankNaser Admin", "password": "AGENTNASER", "domain": "ranknaser.com"}
+    }
+
+def save_registered_users(users_dict):
+    try:
+        with open(USERS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(users_dict, f, indent=2)
+    except Exception as e:
+        print("Error saving users:", e)
+
+def get_ranknaser_photo_uri():
+    photo_b64_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'photo_b64.txt')
+    if os.path.exists(photo_b64_file):
+        try:
+            with open(photo_b64_file, 'r', encoding='utf-8') as f:
+                c = f.read().strip()
+                if c:
+                    return c
+        except Exception:
+            pass
+    if os.path.exists(PHOTO_FILE):
+        try:
+            with open(PHOTO_FILE, 'rb') as f:
+                return "data:image/jpeg;base64," + base64.b64encode(f.read()).decode('utf-8')
+        except Exception:
+            pass
+    return "/static/ranknaser.jpg"
+
+
 
 HTML_PAGE = """<!DOCTYPE html>
 <html lang="en">
@@ -904,9 +948,601 @@ HTML_PAGE = """<!DOCTYPE html>
         .intent-info { background: #e0f2fe; color: #0369a1; }
         .intent-comm { background: #fef3c7; color: #92400e; }
         .intent-trans { background: #dcfce7; color: #166534; }
+
+        /* ================= AUTHENTICATION & ORBITAL GLOBE SHOWCASE ================= */
+        #authScreen {
+            background: radial-gradient(circle at 50% 12%, #0b1329 0%, #030712 100%);
+            min-height: 100vh;
+            color: #f8fafc;
+            padding: 30px 20px 80px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .auth-container {
+            max-width: 1140px;
+            margin: 0 auto;
+        }
+        .auth-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 18px;
+        }
+        .auth-live-status {
+            font-size: 11px;
+            font-weight: 700;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .auth-btn-quick {
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            color: white;
+            border: none;
+            font-weight: 700;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 12.5px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
+            transition: all 0.2s;
+        }
+        .auth-btn-quick:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.5);
+        }
+        .auth-hero-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+        .auth-hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 20px;
+            padding: 5px 16px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 12px;
+        }
+        .auth-hero-title {
+            font-size: 38px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 25%, #38bdf8 70%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 12px 0;
+            letter-spacing: -0.8px;
+            line-height: 1.22;
+        }
+        .auth-hero-subtitle {
+            font-size: 15px;
+            color: #94a3b8;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .auth-split-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 24px;
+            align-items: stretch;
+            margin-bottom: 50px;
+        }
+        @media (max-width: 860px) {
+            .auth-split-grid { grid-template-columns: 1fr; }
+            .auth-hero-title { font-size: 27px; }
+        }
+        .profile-side-card {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1.5px solid rgba(56, 189, 248, 0.35);
+            border-radius: 20px;
+            padding: 28px 22px;
+            text-align: center;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-side-card::before {
+            content: '';
+            position: absolute;
+            top: -60px; left: -60px;
+            width: 140px; height: 140px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.22), transparent 70%);
+            pointer-events: none;
+        }
+        .profile-badge-float {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #38bdf8;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .profile-img-wrap {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 6px 0 14px 0;
+            border: 3.5px solid #38bdf8;
+            box-shadow: 0 0 28px rgba(56, 189, 248, 0.45);
+            position: relative;
+            background: #0f172a;
+        }
+        .profile-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .profile-name-badge {
+            font-size: 26px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 1.8px;
+            margin: 0 0 4px 0;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            justify-content: center;
+        }
+        .profile-role-title {
+            font-size: 11.5px;
+            font-weight: 800;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .profile-bio-text {
+            font-size: 12.5px;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+        .profile-pill-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+            color: #cbd5e1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 7px 12px;
+            width: 100%;
+            margin-bottom: 6px;
+            text-align: left;
+            box-sizing: border-box;
+        }
+        .login-box-card {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 28px 30px;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .auth-tab-nav {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: rgba(2, 6, 23, 0.6);
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .auth-tab-btn {
+            padding: 9px;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #94a3b8;
+            background: transparent;
+        }
+        .auth-tab-btn.active {
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+        }
+        .auth-input-group {
+            margin-bottom: 14px;
+        }
+        .auth-input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 5px;
+        }
+        .auth-input-group input {
+            width: 100%;
+            padding: 11px 14px;
+            background: rgba(2, 6, 23, 0.7);
+            border: 1.5px solid #334155;
+            border-radius: 10px;
+            color: #f8fafc;
+            font-size: 13.5px;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+        .auth-input-group input:focus {
+            outline: none;
+            border-color: #38bdf8 !important;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+        }
+        .auth-submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            color: white;
+            border: none;
+            font-weight: 800;
+            border-radius: 10px;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+            transition: all 0.2s;
+            margin-top: 6px;
+        }
+        .auth-submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5);
+        }
+
+        /* 3D Circular Orbital Globe SEO Agent Showcase */
+        .globe-showcase-section {
+            margin-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 45px;
+        }
+        .globe-section-title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        .globe-orb-wrapper {
+            position: relative;
+            max-width: 860px;
+            height: 480px;
+            margin: 0 auto 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @media (max-width: 820px) {
+            .globe-orb-wrapper {
+                height: auto;
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+        .globe-central-core {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #38bdf8 0%, #1e3a8a 60%, #030712 100%);
+            box-shadow: 0 0 60px rgba(56, 189, 248, 0.5), inset 0 0 30px rgba(255,255,255,0.4);
+            border: 3px solid rgba(56, 189, 248, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 16px;
+            z-index: 10;
+            animation: coreFloat 4s ease-in-out infinite;
+        }
+        @keyframes coreFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-6px) scale(1.02); }
+        }
+        .globe-node-card {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1.5px solid rgba(56, 189, 248, 0.35);
+            border-radius: 14px;
+            padding: 12px 16px;
+            max-width: 235px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.45);
+            transition: all 0.25s ease;
+            z-index: 5;
+        }
+        .globe-node-card:hover {
+            transform: scale(1.04);
+            border-color: #38bdf8;
+            box-shadow: 0 14px 30px rgba(56, 189, 248, 0.35);
+        }
+        @media (max-width: 820px) {
+            .globe-node-card {
+                position: static !important;
+                max-width: 100%;
+                width: 100%;
+                margin-bottom: 6px;
+            }
+        }
+        .globe-node-card .gn-icon { font-size: 20px; margin-bottom: 4px; }
+        .globe-node-card .gn-title { font-size: 13px; font-weight: 800; color: #ffffff; margin-bottom: 3px; }
+        .globe-node-card .gn-desc { font-size: 11.5px; color: #94a3b8; line-height: 1.4; }
+
+        /* Feature Matrix Grid */
+        .feature-matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 18px;
+            margin-top: 30px;
+        }
+        .fm-card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 14px;
+            padding: 22px;
+            transition: all 0.2s;
+        }
+        .fm-card:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            background: rgba(15, 23, 42, 0.9);
+            transform: translateY(-2px);
+        }
+        .fm-icon-badge {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; margin-bottom: 12px;
+        }
+        .fm-title { font-size: 15.5px; font-weight: 800; color: #ffffff; margin-bottom: 6px; }
+        .fm-desc { font-size: 12.5px; color: #94a3b8; line-height: 1.55; }
+
     </style>
 </head>
 <body>
+
+    <!-- ================= RANKNASER AUTHENTICATION GATEWAY ================= -->
+    <div id="authScreen">
+        <div class="auth-container">
+            <!-- Top Branding Bar -->
+            <div class="auth-topbar">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 28px;">🚀</span>
+                    <div>
+                        <div style="font-size: 20px; font-weight: 900; letter-spacing: 1.2px; color: #ffffff;">RANKNASER<span style="color: #38bdf8;">PRO</span></div>
+                        <div style="font-size: 11px; color: #94a3b8; font-weight: 600;">Autonomous SEO Intelligence Platform</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                    <span class="auth-live-status">● Live Engine v3.5</span>
+                    <button type="button" onclick="handleInstantDemoLogin()" class="auth-btn-quick">
+                        ⚡ Instant Demo (1-Click)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Killer English Headline -->
+            <div class="auth-hero-header">
+                <div class="auth-hero-eyebrow">⚡ NEXT-GEN AUTONOMOUS AI SEO ENGINE</div>
+                <h1 class="auth-hero-title">The Autonomous AI Weapon to Outrank Any Competitor on Google</h1>
+                <p class="auth-hero-subtitle">
+                    Deploy multi-agent AI spies, reverse-engineer top-ranking SERPs, orchestrate 10-day topical authority roadmaps, and auto-publish content with surgical precision.
+                </p>
+            </div>
+
+            <!-- 2-Column Split: RankNaser Profile Card + Compact Sign In Box -->
+            <div class="auth-split-grid">
+                <!-- Left: RankNaser Profile Card -->
+                <div class="profile-side-card">
+                    <div class="profile-badge-float">Verified Architect</div>
+                    <div class="profile-img-wrap">
+                        <img src="__RANKNASER_PHOTO_URI__" alt="RankNaser" id="ranknaserHeroPhoto" onerror="this.src='/static/ranknaser.jpg'">
+                    </div>
+                    <div class="profile-name-badge">
+                        <span>RANKNASER</span>
+                        <span style="color: #38bdf8; font-size: 18px;" title="Verified System Architect">☑️</span>
+                    </div>
+                    <div class="profile-role-title">Lead Architect & SEO Director</div>
+                    <div class="profile-bio-text">
+                        Autonomous SEO agent architecture designed to dominate organic search results, reverse-engineer competitive authority, and automate end-to-end rank velocity.
+                    </div>
+                    <div style="width: 100%; margin-top: 4px;">
+                        <div class="profile-pill-item">
+                            <span>🎯</span>
+                            <span>Multi-Competitor SERP Infiltration</span>
+                        </div>
+                        <div class="profile-pill-item">
+                            <span>🤖</span>
+                            <span>Autonomous Autopilot Pipeline</span>
+                        </div>
+                        <div class="profile-pill-item">
+                            <span>⚡</span>
+                            <span>Zero-Click Direct CMS Publishing</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 14px; font-size: 11px; color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                        <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>
+                        Online & Ready to Execute
+                    </div>
+                </div>
+
+                <!-- Right: Direct Admin Login Box -->
+                <div class="login-box-card">
+                    <div style="margin-bottom: 22px; text-align: center;">
+                        <div style="display: inline-flex; align-items: center; gap: 7px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 20px; padding: 5px 15px; font-size: 11px; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px;">
+                            🔐 DIRECT SYSTEM ACCESS
+                        </div>
+                        <h3 style="margin: 9px 0 4px 0; font-size: 21px; font-weight: 800; color: #ffffff;">Admin Gateway Sign In</h3>
+                        <p style="margin: 0; font-size: 12.5px; color: #94a3b8;">Enter your Admin User ID & Password to access the suite</p>
+                    </div>
+
+                    <div id="authAlertBox" style="display:none; padding: 10px 14px; border-radius: 8px; font-size: 12.5px; margin-bottom: 14px; font-weight: 600;"></div>
+
+                    <!-- Direct Admin Login Form -->
+                    <form id="loginForm" onsubmit="handleAuthLogin(event)">
+                        <div class="auth-input-group">
+                            <label for="loginUsername">User / Admin ID</label>
+                            <input type="text" id="loginUsername" placeholder="ADMIN" required value="ADMIN" autocomplete="username" style="font-weight: 700; letter-spacing: 0.5px;">
+                        </div>
+                        <div class="auth-input-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" placeholder="AGENTNASER" required value="AGENTNASER" autocomplete="current-password">
+                        </div>
+                        <button type="submit" id="btnSubmitLogin" class="auth-submit-btn">
+                            <span>🚀 Login & Enter Dashboard</span>
+                        </button>
+                    </form>
+
+                    <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); text-align: center;">
+                        <button type="button" onclick="handleInstantDemoLogin()" style="background: rgba(56, 189, 248, 0.12); border: 1.5px dashed rgba(56, 189, 248, 0.4); color: #38bdf8; font-weight: 700; border-radius: 8px; padding: 9px 16px; cursor: pointer; font-size: 12.5px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 7px; transition: all 0.2s;">
+                            <span>⚡ 1-Click Instant Enter (ADMIN / AGENTNASER)</span>
+                        </button>
+                        <div style="font-size: 12px; color: #cbd5e1; margin-top: 10px; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+                            🔑 <strong>Credentials:</strong> User: <span style="color:#38bdf8; font-weight:800;">ADMIN</span> | Password: <span style="color:#38bdf8; font-weight:800;">AGENTNASER</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3D Circular Orbital Globe SEO Agent Showcase -->
+            <div class="globe-showcase-section">
+                <div class="globe-section-title">
+                    <span class="auth-hero-eyebrow">🌐 360° AUTONOMOUS SEO INTELLIGENCE</span>
+                    <h2 style="font-size: 30px; font-weight: 900; color: #ffffff; margin: 8px 0 10px 0; letter-spacing: -0.5px;">
+                        How the RankNaser SEO Agent Dominates Search Engines
+                    </h2>
+                    <p style="font-size: 14.5px; color: #94a3b8; max-width: 720px; margin: 0 auto;">
+                        A unified autonomous neural intelligence loop executing 24/7 surveillance, competitive gap synthesis, keyword tracking, and direct CMS publishing.
+                    </p>
+                </div>
+
+                <!-- Central Globe & Orbital Ring Architecture -->
+                <div class="globe-orb-wrapper">
+                    <!-- Center Core -->
+                    <div class="globe-central-core">
+                        <div style="font-size: 34px; margin-bottom: 4px;">🧠</div>
+                        <div style="font-size: 15px; font-weight: 900; color: #ffffff; letter-spacing: 1px;">RANKNASER</div>
+                        <div style="font-size: 11px; font-weight: 700; color: #38bdf8; text-transform: uppercase;">AI AGENT CORE</div>
+                        <div style="font-size: 10px; color: #e2e8f0; margin-top: 6px; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 10px;">Autopilot Active</div>
+                    </div>
+
+                    <!-- 6 Orbital Nodes positioned around the globe -->
+                    <div class="globe-node-card" style="top: 10px; left: 6%;">
+                        <div class="gn-icon">🛰️</div>
+                        <div class="gn-title">1. Daily SERP Radar</div>
+                        <div class="gn-desc">Tracks target domain against competitors, monitoring rank positions #1-10 with keyword velocity alerts.</div>
+                    </div>
+
+                    <div class="globe-node-card" style="top: 10px; right: 6%;">
+                        <div class="gn-icon">🕵️‍♂️</div>
+                        <div class="gn-title">2. 360° Deep Spy</div>
+                        <div class="gn-desc">Scrapes competitor headers, meta signals, exact word counts, and content gaps instantly.</div>
+                    </div>
+
+                    <div class="globe-node-card" style="top: 44%; right: -2%;">
+                        <div class="gn-icon">⚔️</div>
+                        <div class="gn-title">3. 5 vs 1 SERP Outranker</div>
+                        <div class="gn-desc">Analyzes top 5 competitors simultaneously to extract universal patterns and synthesize unbeatable content.</div>
+                    </div>
+
+                    <div class="globe-node-card" style="bottom: 10px; right: 8%;">
+                        <div class="gn-icon">✍️</div>
+                        <div class="gn-title">4. Full-Auto AI Writer</div>
+                        <div class="gn-desc">Generates human-grade 2,500+ word rank-ready articles infused with FAQ, Schema markup, and LSI entities.</div>
+                    </div>
+
+                    <div class="globe-node-card" style="bottom: 10px; left: 8%;">
+                        <div class="gn-icon">🤖</div>
+                        <div class="gn-title">5. Autonomous Autopilot</div>
+                        <div class="gn-desc">Self-driving keyword scraper, content generator, and auto-publisher directly to WordPress & Custom APIs.</div>
+                    </div>
+
+                    <div class="globe-node-card" style="top: 44%; left: -2%;">
+                        <div class="gn-icon">🎯</div>
+                        <div class="gn-title">6. SEO Director Agent</div>
+                        <div class="gn-desc">Architects bespoke 10-day campaign roadmaps with execution deliverables ready in 1 click.</div>
+                    </div>
+                </div>
+
+                <!-- Deep Feature Breakdown Matrix Grid -->
+                <div class="feature-matrix-grid">
+                    <div class="fm-card">
+                        <div class="fm-icon-badge">📅</div>
+                        <div class="fm-title">Daily Competitor SERP Radar</div>
+                        <div class="fm-desc">Scan target domains against competitors on Google SERP. Automatically detect ranking movement, new keyword appearances, and competitive drops.</div>
+                    </div>
+                    <div class="fm-card">
+                        <div class="fm-icon-badge">🕵️‍♂️</div>
+                        <div class="fm-title">360° Deep Competitive Infiltration</div>
+                        <div class="fm-desc">Extract competitor title tags, H1-H3 heading hierarchies, exact word counts, intent classifications, and uncovered topical blindspots.</div>
+                    </div>
+                    <div class="fm-card">
+                        <div class="fm-icon-badge">⚔️</div>
+                        <div class="fm-title">5 vs 1 SERP Synthesis Engine</div>
+                        <div class="fm-desc">Compare up to 5 ranking rivals side-by-side. Spot common themes, identify missing topics across the SERP, and generate master outranking briefs.</div>
+                    </div>
+                    <div class="fm-card">
+                        <div class="fm-icon-badge">✍️</div>
+                        <div class="fm-title">Elite Long-Form AI Content Studio</div>
+                        <div class="fm-desc">Generate comprehensive 2,500+ word guides with humanized flow, FAQ schema, meta descriptions, and live formatting previews.</div>
+                    </div>
+                    <div class="fm-card">
+                        <div class="fm-icon-badge">🤖</div>
+                        <div class="fm-title">Autopilot Scheduling & Multi-CMS Push</div>
+                        <div class="fm-desc">Connect WordPress via REST API or Custom Webhooks. Push articles to Draft or Publish mode instantly with 100% zero manual copy-pasting.</div>
+                    </div>
+                    <div class="fm-card">
+                        <div class="fm-icon-badge">🎯</div>
+                        <div class="fm-title">10-Day SEO Director Master Blueprint</div>
+                        <div class="fm-desc">Input brand niche and target country to receive an actionable 10-day execution campaign complete with generated meta tags, briefs, and code.</div>
+                    </div>
+                </div>
+
+                <!-- Bottom Jump to Login Bar -->
+                <div style="margin-top: 36px; text-align: center; background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 16px; padding: 24px;">
+                    <h3 style="margin: 0 0 8px 0; font-size: 19px; font-weight: 800; color: #ffffff;">Ready to dominate Google search results?</h3>
+                    <p style="margin: 0 0 14px 0; font-size: 13.5px; color: #94a3b8;">Log in above to access your autonomous RankNaserPro Intelligence Suite.</p>
+                    <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); document.getElementById('loginEmail').focus();" class="auth-btn-quick" style="padding: 10px 22px; font-size: 13px;">
+                        ⬆️ Return to Login Box
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= DASHBOARD MAIN WRAPPER ================= -->
+    <div id="dashboardWrapper" style="display: none;">
     <div class="container">
         <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 16px;">
             <div style="text-align: left;">
@@ -928,6 +1564,15 @@ HTML_PAGE = """<!DOCTYPE html>
                     <span>🌐 Custom Site API</span>
                     <span id="customApiBadge" style="font-size: 10.5px; background: rgba(255,255,255,0.22); padding: 2px 6px; border-radius: 4px; font-weight: 600;">Not Configured</span>
                 </button>
+                
+                <div id="currentUserBadge" style="display: inline-flex; align-items: center; gap: 8px; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; color: #1e293b;">
+                    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px #10b981;"></span>
+                    <span id="currentUserNameDisplay">👤 RankNaser</span>
+                </div>
+                <button type="button" id="logoutBtn" onclick="handleLogout()" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; font-weight: 700; border-radius: 10px; padding: 10px 16px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(220,38,38,0.25); font-size: 12.5px; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'" title="Logout and return to Login Screen">
+                    <span>🚪 Logout</span>
+                </button>
+
                 <button type="button" id="returnDashboardBtn" onclick="goBackToHome();" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; font-weight: 700; border-radius: 10px; padding: 10px 16px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(2,132,199,0.3); font-size: 12.5px; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" title="Return to Dashboard">
                     <span>⬅️ Return Dashboard</span>
                 </button>
@@ -2002,6 +2647,7 @@ https://techlandbd.com</textarea>
             </div>
         </div>
     </div>
+    </div> <!-- end #dashboardWrapper -->
 
     <script>
         document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
@@ -5037,8 +5683,206 @@ async def receive_article(request: Request, authorization: str = Header(None)):
         // Initialize Director company pills on page load
         renderCompanyPills();
 
+
+        // ================= AUTHENTICATION & SESSION LOGIC =================
+        function checkAuthOnLoad() {
+            const authUser = localStorage.getItem('ranknaser_auth_user');
+            if (authUser) {
+                try {
+                    const user = JSON.parse(authUser);
+                    showDashboardView(user);
+                    return;
+                } catch(e) {
+                    localStorage.removeItem('ranknaser_auth_user');
+                }
+            }
+            showAuthView();
+        }
+
+        function showAuthView() {
+            const authSc = document.getElementById('authScreen');
+            const dashWrap = document.getElementById('dashboardWrapper');
+            if (authSc) authSc.style.display = 'block';
+            if (dashWrap) dashWrap.style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showDashboardView(user) {
+            const authSc = document.getElementById('authScreen');
+            const dashWrap = document.getElementById('dashboardWrapper');
+            if (authSc) authSc.style.display = 'none';
+            if (dashWrap) dashWrap.style.display = 'block';
+            
+            const nameDisp = document.getElementById('currentUserNameDisplay');
+            if (nameDisp && user && user.name) {
+                nameDisp.textContent = '👤 ' + user.name;
+            }
+        }
+
+        function switchAuthTab(tab) {
+            const tabLogin = document.getElementById('tabLoginBtn');
+            const tabReg = document.getElementById('tabRegisterBtn');
+            const formLogin = document.getElementById('loginForm');
+            const formReg = document.getElementById('registerForm');
+            const alertBox = document.getElementById('authAlertBox');
+            if (alertBox) alertBox.style.display = 'none';
+
+            if (tab === 'login') {
+                tabLogin.classList.add('active');
+                tabReg.classList.remove('active');
+                formLogin.style.display = 'block';
+                formReg.style.display = 'none';
+            } else {
+                tabReg.classList.add('active');
+                tabLogin.classList.remove('active');
+                formReg.style.display = 'block';
+                formLogin.style.display = 'none';
+            }
+        }
+
+        function showAuthAlert(msg, isSuccess = false) {
+            const alertBox = document.getElementById('authAlertBox');
+            if (!alertBox) return;
+            alertBox.style.display = 'block';
+            alertBox.style.background = isSuccess ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+            alertBox.style.border = isSuccess ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(239, 68, 68, 0.4)';
+            alertBox.style.color = isSuccess ? '#34d399' : '#f87171';
+            alertBox.innerHTML = (isSuccess ? '✅ ' : '⚠️ ') + msg;
+        }
+
+        async function handleAuthLogin(e) {
+            if (e) e.preventDefault();
+            const uInput = document.getElementById('loginUsername') || document.getElementById('loginEmail');
+            const username = (uInput ? uInput.value : '').trim();
+            const password = (document.getElementById('loginPassword').value || '').trim();
+            const submitBtn = document.getElementById('btnSubmitLogin');
+
+            if (!username || !password) {
+                showAuthAlert('Please enter both User ID and Password.');
+                return;
+            }
+
+            // Direct instant verification for ADMIN / AGENTNASER
+            if ((username.toUpperCase() === 'ADMIN' || username.toLowerCase() === 'admin@ranknaser.com') && 
+                (password === 'AGENTNASER' || password.toUpperCase() === 'AGENTNASER')) {
+                const adminUser = {
+                    name: 'RankNaser Admin',
+                    username: 'ADMIN',
+                    email: 'admin@ranknaser.com',
+                    domain: 'ranknaser.com'
+                };
+                showAuthAlert('Login successful! Welcome Admin...', true);
+                localStorage.setItem('ranknaser_auth_user', JSON.stringify(adminUser));
+                setTimeout(() => {
+                    showDashboardView(adminUser);
+                }, 250);
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Verifying credentials...';
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ username: username, password: password })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    showAuthAlert('Login successful! Welcome, ' + (data.user.name || 'RankNaser Admin') + '!', true);
+                    localStorage.setItem('ranknaser_auth_user', JSON.stringify(data.user));
+                    setTimeout(() => {
+                        showDashboardView(data.user);
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<span>🚀 Login & Enter Dashboard</span>';
+                    }, 350);
+                } else {
+                    showAuthAlert(data.message || 'Invalid credentials! User: ADMIN | Password: AGENTNASER');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span>🚀 Login & Enter Dashboard</span>';
+                }
+            } catch(err) {
+                // Offline fallback
+                if (username.toUpperCase() === 'ADMIN' && (password === 'AGENTNASER' || password.toUpperCase() === 'AGENTNASER')) {
+                    const fallbackUser = { username: 'ADMIN', name: 'RankNaser Admin', email: 'admin@ranknaser.com' };
+                    localStorage.setItem('ranknaser_auth_user', JSON.stringify(fallbackUser));
+                    showDashboardView(fallbackUser);
+                } else {
+                    showAuthAlert('Invalid credentials! Use User: ADMIN | Password: AGENTNASER');
+                }
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>🚀 Login & Enter Dashboard</span>';
+            }
+        }
+
+        async function handleAuthRegister(e) {
+            if (e) e.preventDefault();
+            const name = (document.getElementById('regName').value || '').trim();
+            const email = (document.getElementById('regEmail').value || '').trim();
+            const domain = (document.getElementById('regDomain').value || '').trim();
+            const password = (document.getElementById('regPassword').value || '').trim();
+            const submitBtn = document.getElementById('btnSubmitRegister');
+
+            if (!name || !email || !password) {
+                showAuthAlert('Please fill out all required fields.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Creating account...';
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ name: name, email: email, domain: domain, password: password })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    showAuthAlert('Account created successfully! Welcome, ' + name + '!', true);
+                    localStorage.setItem('ranknaser_auth_user', JSON.stringify(data.user));
+                    setTimeout(() => {
+                        showDashboardView(data.user);
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<span>✨ Create Free Account & Enter</span>';
+                    }, 500);
+                } else {
+                    showAuthAlert(data.message || 'Registration failed.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span>✨ Create Free Account & Enter</span>';
+                }
+            } catch(err) {
+                // Local fallback registration
+                const newUser = { name: name, email: email, domain: domain };
+                localStorage.setItem('ranknaser_auth_user', JSON.stringify(newUser));
+                showDashboardView(newUser);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>✨ Create Free Account & Enter</span>';
+            }
+        }
+
+        function handleInstantDemoLogin() {
+            const adminUser = {
+                name: 'RankNaser Admin',
+                username: 'ADMIN',
+                email: 'admin@ranknaser.com',
+                domain: 'ranknaser.com'
+            };
+            localStorage.setItem('ranknaser_auth_user', JSON.stringify(adminUser));
+            showDashboardView(adminUser);
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to log out from RankNaserPro?')) {
+                localStorage.removeItem('ranknaser_auth_user');
+                showAuthView();
+            }
+        }
+
         // Check URL hash on load for deep linking & initial tab setup
         window.addEventListener('DOMContentLoaded', function() {
+            checkAuthOnLoad();
             const hash = window.location.hash.replace('#', '');
             if (hash && ['daily', 'spy', 'multi', 'writer', 'autopilot', 'director'].includes(hash)) {
                 switchTab(hash, false);
@@ -5055,7 +5899,20 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-Type', 'text/html; charset=utf-8')
             self.end_headers()
-            self.wfile.write(HTML_PAGE.encode('utf-8'))
+            photo_uri = get_ranknaser_photo_uri()
+            rendered_html = HTML_PAGE.replace('__RANKNASER_PHOTO_URI__', photo_uri)
+            self.wfile.write(rendered_html.encode('utf-8'))
+        elif self.path == '/static/ranknaser.jpg':
+            if os.path.exists(PHOTO_FILE):
+                self.send_response(200)
+                self.send_header('Content-Type', 'image/jpeg')
+                self.send_header('Cache-Control', 'public, max-age=86400')
+                self.end_headers()
+                with open(PHOTO_FILE, 'rb') as pf:
+                    self.wfile.write(pf.read())
+            else:
+                self.send_response(404)
+                self.end_headers()
         else:
             self.send_response(404)
             self.end_headers()
@@ -5064,7 +5921,106 @@ class RequestHandler(BaseHTTPRequestHandler):
         length = int(self.headers.get('Content-Length', 0))
         body = self.rfile.read(length).decode('utf-8')
         
-        if self.path == '/api/scan':
+        if self.path == '/api/auth/login':
+            try:
+                data = json.loads(body)
+                u = data.get('username') or data.get('email', '')
+                username = u.strip()
+                password = data.get('password', '').strip()
+                users = load_registered_users()
+                
+                is_valid = False
+                matched_user = None
+
+                # Primary credentials check for ADMIN / AGENTNASER
+                if (username.upper() == 'ADMIN' or username.lower() == 'admin@ranknaser.com') and \
+                   (password == 'AGENTNASER' or password.upper() == 'AGENTNASER'):
+                    is_valid = True
+                    matched_user = {
+                        "username": "ADMIN",
+                        "email": "admin@ranknaser.com",
+                        "name": "RankNaser Admin",
+                        "domain": "ranknaser.com"
+                    }
+                elif username.lower() in users and users[username.lower()].get('password') == password:
+                    is_valid = True
+                    uinfo = users[username.lower()]
+                    matched_user = {
+                        "username": username,
+                        "email": username,
+                        "name": uinfo.get("name", "RankNaser Admin"),
+                        "domain": uinfo.get("domain", "ranknaser.com")
+                    }
+
+                if is_valid:
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json; charset=utf-8')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({
+                        "status": "success",
+                        "user": matched_user
+                    }).encode('utf-8'))
+                else:
+                    self.send_response(401)
+                    self.send_header('Content-Type', 'application/json; charset=utf-8')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({
+                        "status": "error",
+                        "message": "Invalid credentials! User: ADMIN | Password: AGENTNASER"
+                    }).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode('utf-8'))
+            return
+
+        elif self.path == '/api/auth/register':
+            try:
+                data = json.loads(body)
+                email = data.get('email', '').strip().lower()
+                name = data.get('name', '').strip()
+                password = data.get('password', '').strip()
+                domain = data.get('domain', '').strip()
+
+                if not email or not password or not name:
+                    self.send_response(400)
+                    self.send_header('Content-Type', 'application/json; charset=utf-8')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"status": "error", "message": "All fields required."}).encode('utf-8'))
+                    return
+
+                users = load_registered_users()
+                if email in users:
+                    self.send_response(400)
+                    self.send_header('Content-Type', 'application/json; charset=utf-8')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"status": "error", "message": "Email already registered. Please login."}).encode('utf-8'))
+                    return
+
+                users[email] = {
+                    "name": name,
+                    "password": password,
+                    "domain": domain,
+                    "registered_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+                save_registered_users(users)
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    "status": "success",
+                    "user": {"email": email, "name": name, "domain": domain}
+                }).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode('utf-8'))
+            return
+
+        elif self.path == '/api/scan':
             try:
                 data = json.loads(body)
                 url = data.get('url', '').strip()
