@@ -4364,8 +4364,8 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                 name: 'Star Tech BD',
                 domain: 'https://www.startech.com.bd',
                 country: 'Bangladesh',
-                keywords: 'laptop price in bd\nbest gaming laptop bd\nbudget laptop in bangladesh\nasus rog gaming laptop bd',
-                competitors: 'https://www.ryanscomputers.com\nhttps://techlandbd.com',
+                keywords: ['laptop price in bd', 'best gaming laptop bd', 'budget laptop in bangladesh', 'asus rog gaming laptop bd'].join('\\n'),
+                competitors: ['https://www.ryanscomputers.com', 'https://techlandbd.com'].join('\\n'),
                 instructions: 'Ensure accurate price ranges in BDT, prioritize authorized warranty verification, and optimize all H2s for Google AI Overview.'
             },
             {
@@ -4373,8 +4373,8 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                 name: 'Apex Footwear',
                 domain: 'https://www.apex4u.com',
                 country: 'Bangladesh',
-                keywords: 'leather shoes price in bangladesh\nformal shoes bd\nbest sneakers in bd\nmen leather footwear',
-                competitors: 'https://www.batabd.com\nhttps://lottobd.com',
+                keywords: ['leather shoes price in bangladesh', 'formal shoes bd', 'best sneakers in bd', 'men leather footwear'].join('\\n'),
+                competitors: ['https://www.batabd.com', 'https://lottobd.com'].join('\\n'),
                 instructions: 'Highlight genuine leather durability, size measurement guide, and official retail outlets across Bangladesh.'
             },
             {
@@ -4382,8 +4382,8 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                 name: 'SaaS Pulse Analytics',
                 domain: 'https://saaspulse.io',
                 country: 'United States',
-                keywords: 'customer churn prediction ai\nsaas metrics dashboard\nbest b2b analytics software\nsaas churn reduction tools',
-                competitors: 'https://baremetrics.com\nhttps://profitwell.com',
+                keywords: ['customer churn prediction ai', 'saas metrics dashboard', 'best b2b analytics software', 'saas churn reduction tools'].join('\\n'),
+                competitors: ['https://baremetrics.com', 'https://profitwell.com'].join('\\n'),
                 instructions: 'Focus on enterprise ROI, SOC2 compliance, API integrations, and direct comparison tables against legacy software.'
             }
         ];
@@ -4476,7 +4476,7 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                 name: 'New Client / Company',
                 domain: 'https://newclient.com',
                 country: 'Bangladesh',
-                keywords: 'primary keyword\nsecondary keyword\nbest product review',
+                keywords: ['primary keyword', 'secondary keyword', 'best product review'].join('\\n'),
                 competitors: 'https://competitor.com',
                 instructions: 'Focus on search intent, pricing transparency, and Google AI Overview snippets.'
             };
