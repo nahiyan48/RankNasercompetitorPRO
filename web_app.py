@@ -25,6 +25,7 @@ from multi_competitor import MultiCompetitorEngine
 from wordpress_publisher import WordPressPublisher
 from webhook_publisher import CustomWebhookPublisher
 from autopilot_agent import AutopilotAgent
+from seo_director_agent import PersonalSEODirector
 
 
 HTML_PAGE = """<!DOCTYPE html>
@@ -88,11 +89,11 @@ HTML_PAGE = """<!DOCTYPE html>
         }
         p.subtitle { color: var(--text-muted); font-size: 14px; }
 
-        /* Tabs Navigation - 5 Symmetrical Equal Columns */
+        /* Tabs Navigation - 6 Equal Symmetrical Columns */
         .tabs-nav {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 11px;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
             margin-bottom: 22px;
             border-bottom: 2px solid var(--border);
             padding-bottom: 14px;
@@ -120,9 +121,9 @@ HTML_PAGE = """<!DOCTYPE html>
         .tab-btn:hover {
             transform: translateY(-1px);
         }
-        @media (max-width: 1024px) {
+        @media (max-width: 1100px) {
             .tabs-nav {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                grid-template-columns: repeat(3, 1fr);
             }
         }
         @media (max-width: 640px) {
@@ -136,7 +137,8 @@ HTML_PAGE = """<!DOCTYPE html>
         .tab-btn.spy,
         .tab-btn.multi,
         .tab-btn.writer,
-        .tab-btn.autopilot {
+        .tab-btn.autopilot,
+        .tab-btn.director {
             background: linear-gradient(135deg, #38bdf8, #0ea5e9);
             border: 1px solid #0284c7;
             color: #ffffff;
@@ -147,7 +149,8 @@ HTML_PAGE = """<!DOCTYPE html>
         .tab-btn.spy:hover,
         .tab-btn.multi:hover,
         .tab-btn.writer:hover,
-        .tab-btn.autopilot:hover {
+        .tab-btn.autopilot:hover,
+        .tab-btn.director:hover {
             background: linear-gradient(135deg, #0ea5e9, #0284c7);
             border-color: #0369a1;
             color: #ffffff;
@@ -159,12 +162,103 @@ HTML_PAGE = """<!DOCTYPE html>
         .tab-btn.active.spy,
         .tab-btn.active.multi,
         .tab-btn.active.writer,
-        .tab-btn.active.autopilot {
+        .tab-btn.active.autopilot,
+        .tab-btn.active.director {
             background: linear-gradient(135deg, #0284c7, #1d4ed8) !important;
             color: #ffffff !important;
             border-color: #0369a1 !important;
             box-shadow: 0 4px 14px rgba(2, 132, 199, 0.45) !important;
             outline: 2px solid #bae6fd !important;
+        }
+
+        /* SEO Director Category Badges & Cards */
+        .badge-onpage {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-technical {
+            background: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-offpage {
+            background: #fdf2f8;
+            color: #9d174d;
+            border: 1px solid #fbcfe8;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-cro {
+            background: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fde68a;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .day-mission-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+        }
+        .day-mission-card:hover {
+            box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+            border-color: #cbd5e1;
+        }
+        .day-mission-card.completed {
+            border-left: 5px solid #10b981;
+            background: #fcfdfd;
+        }
+        .day-mission-card.running {
+            border-left: 5px solid #3b82f6;
+            background: #f0f9ff;
+        }
+        .company-pill {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .company-pill:hover {
+            border-color: #0284c7;
+            color: #0284c7;
+            background: #f0f9ff;
+        }
+        .company-pill.active {
+            background: #0284c7;
+            border-color: #0284c7;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
         }
 
         .serp-preview-box {
@@ -837,22 +931,25 @@ HTML_PAGE = """<!DOCTYPE html>
             </div>
         </header>
 
-        <!-- Tab Nav: 5 Equal Columns Grid -->
+        <!-- Tab Nav: 6 Equal Columns Grid -->
         <div class="tabs-nav">
             <button class="tab-btn active daily" id="tabDailyBtn" onclick="switchTab('daily')">
-                <span>📅 1. Daily Keyword Tracker</span>
+                <span>📅 1. Daily Tracker</span>
             </button>
             <button class="tab-btn spy" id="tabSpyBtn" onclick="switchTab('spy')">
                 <span>🕵️‍♂️ 2. 360° Deep Spy</span>
             </button>
             <button class="tab-btn multi" id="tabMultiBtn" onclick="switchTab('multi')">
-                <span>⚔️ 3. 5 vs 1 Master Outranker</span>
+                <span>⚔️ 3. 5 vs 1 Outrank</span>
             </button>
             <button class="tab-btn writer" id="tabWriterBtn" onclick="switchTab('writer')">
                 <span>✍️ 4. AI Content Studio</span>
             </button>
             <button class="tab-btn autopilot" id="tabAutopilotBtn" onclick="switchTab('autopilot')">
-                <span>🤖 5. Autopilot AI Agent</span>
+                <span>🤖 5. Autopilot Agent</span>
+            </button>
+            <button class="tab-btn director" id="tabDirectorBtn" onclick="switchTab('director')">
+                <span>🧠 6. Personal SEO Agent</span>
             </button>
         </div>
 
@@ -1637,6 +1734,175 @@ HTML_PAGE = """<!DOCTYPE html>
                 </div>
             </div>
         </div>
+
+        <!-- TAB 6: Personal SEO Director Agent (10-Day Autonomous Multi-Company SEO) -->
+        <div id="tabDirector" style="display: none;">
+            <!-- Hero Banner -->
+            <div style="background: linear-gradient(135deg, #1e1b4b, #312e81, #1e3a8a); color: white; border-radius: 16px; padding: 24px 28px; margin-bottom: 22px; box-shadow: 0 4px 20px rgba(49, 46, 129, 0.25);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+                    <div>
+                        <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 20px; padding: 4px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;">
+                            <span>🧠 Autonomous Senior SEO Director Agent</span>
+                        </div>
+                        <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px; color: #ffffff;">Your Personal 24/7 Multi-Client SEO Expert</h2>
+                        <p style="font-size: 13.5px; color: #cbd5e1; max-width: 780px; line-height: 1.5;">
+                            Give directives for any company or multiple clients and walk away. This agent autonomously maps search intent, writes AI Overview-ready pillar content, engineers JSON-LD technical schemas, builds internal link silos, drafts Skyscraper backlink pitches, and crafts Digital PR syndicates over a complete <strong>10-Day SEO Roadmap</strong>.
+                        </p>
+                    </div>
+                    <div style="text-align: right; background: rgba(255,255,255,0.08); padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
+                        <div style="font-size: 11px; color: #93c5fd; text-transform: uppercase; font-weight: 700;">Director Status</div>
+                        <div style="font-size: 18px; font-weight: 800; color: #34d399; display: flex; align-items: center; gap: 6px; justify-content: flex-end;">
+                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #34d399; box-shadow: 0 0 8px #34d399;"></span> Active & Ready
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multi-Company Profile Manager & Directive Input Form -->
+            <div class="search-card" style="margin-bottom: 22px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                    <div>
+                        <h3 style="font-size: 17px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+                            <span>🏢 Multi-Company / Client Workspace</span>
+                        </h3>
+                        <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Switch between saved clients or create a new campaign profile</p>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button type="button" class="btn-action" onclick="addNewCompanyProfile()" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; font-size: 12px; padding: 7px 12px;">
+                            <span>➕ Add New Client</span>
+                        </button>
+                        <button type="button" class="btn-action" onclick="saveCurrentCompanyProfile()" style="background: #0284c7; color: white; border: none; font-size: 12px; padding: 7px 14px;">
+                            <span>💾 Save Profile</span>
+                        </button>
+                        <button type="button" class="btn-action" onclick="deleteCurrentCompanyProfile()" style="background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; font-size: 12px; padding: 7px 10px;" title="Delete current profile">
+                            <span>🗑️</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Client Selector Quick Pills -->
+                <div style="margin-bottom: 18px;">
+                    <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Select Active Company:</div>
+                    <div id="companyProfilesList" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+
+                <!-- Active Company Configuration Fields -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Company / Brand Name *</label>
+                        <input type="text" id="dirCompanyName" placeholder="e.g. Star Tech, Apex Footwear, TechWave Inc" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px;" value="Star Tech BD">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Website URL / Domain</label>
+                        <input type="url" id="dirDomain" placeholder="https://www.startech.com.bd" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px;" value="https://www.startech.com.bd">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Target Market / Country</label>
+                        <select id="dirCountry" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; background: white;">
+                            <option value="Bangladesh" selected>🇧🇩 Bangladesh (BDT ৳)</option>
+                            <option value="United States">🇺🇸 United States (USD $)</option>
+                            <option value="United Kingdom">🇬🇧 United Kingdom (GBP £)</option>
+                            <option value="Canada">🇨🇦 Canada (CAD $)</option>
+                            <option value="Australia">🇦🇺 Australia (AUD $)</option>
+                            <option value="India">🇮🇳 India (INR ₹)</option>
+                            <option value="Germany">🇩🇪 Germany (EUR €)</option>
+                            <option value="Global">🌐 Global / International</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Target Keywords (One per line or comma separated) *</label>
+                        <textarea id="dirKeywords" rows="4" placeholder="laptop price in bd&#10;best gaming laptop bd&#10;budget laptop in bangladesh&#10;asus tuf gaming f15 review" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: monospace; resize: vertical;">laptop price in bd
+best gaming laptop bd
+budget laptop in bangladesh
+asus rog gaming laptop bd</textarea>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Competitor URLs (Optional for Benchmarking)</label>
+                        <textarea id="dirCompetitors" rows="4" placeholder="https://www.ryanscomputers.com&#10;https://techlandbd.com" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: monospace; resize: vertical;">https://www.ryanscomputers.com
+https://techlandbd.com</textarea>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Director Instructions & Specific Business Directives (Optional)</label>
+                    <input type="text" id="dirInstructions" placeholder="e.g. Focus on price transparency in BDT, warranty verification, official dealer stamps, and capturing Google AI Overview" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px;" value="Ensure accurate price ranges in BDT, prioritize authorized warranty verification, and optimize all H2s for Google AI Overview.">
+                </div>
+
+                <!-- Action Button Controls -->
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button type="button" id="btnGenDirectorPlan" class="btn-scan" onclick="generateDirectorPlan()" style="flex: 1; min-width: 240px; background: linear-gradient(135deg, #2563eb, #1d4ed8); justify-content: center;">
+                        <span>🚀 1. Generate 10-Day Master Roadmap</span>
+                    </button>
+                    <button type="button" id="btnExecAllDirector" class="btn-scan" onclick="executeAllDirectorDays()" style="flex: 1; min-width: 240px; background: linear-gradient(135deg, #059669, #047857); justify-content: center;">
+                        <span>⚡ 2. Execute Entire 10-Day Campaign Autonomously</span>
+                    </button>
+                    <button type="button" class="btn-action" onclick="downloadDirectorCampaignReport()" style="background: #ffffff; border: 1px solid #cbd5e1; color: #334155; font-weight: 700; padding: 10px 16px;">
+                        <span>📥 Download 10-Day Plan (.MD)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Campaign Progress & Metrics Bar -->
+            <div id="dirCampaignProgressBox" style="display: none; background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 16px; font-weight: 800; color: #0f172a;" id="dirCampaignHeaderTitle">Campaign: Star Tech BD</span>
+                        <span id="dirCampaignStatusPill" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">10 Days Planned</span>
+                    </div>
+                    <div style="font-size: 13px; font-weight: 700; color: var(--text-muted);" id="dirCompletionText">0 of 10 Days Executed</div>
+                </div>
+                <div style="background: #e2e8f0; border-radius: 8px; height: 10px; overflow: hidden; margin-bottom: 6px;">
+                    <div id="dirProgressBar" style="background: linear-gradient(90deg, #3b82f6, #10b981); height: 100%; width: 0%; transition: width 0.4s ease;"></div>
+                </div>
+            </div>
+
+            <!-- Director Activity Stream Console -->
+            <div id="dirConsoleBox" style="display: none; background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 22px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; max-height: 180px; overflow-y: auto; border: 1px solid #334155;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid #334155; padding-bottom: 4px;">
+                    <span style="color: #38bdf8; font-weight: 700;">📡 Personal SEO Agent Execution Stream</span>
+                    <span id="dirLiveSpinner" style="color: #34d399; font-size: 11px; display: none;">● Running...</span>
+                </div>
+                <div id="dirConsoleLogs"></div>
+            </div>
+
+            <!-- 10-Day Action Mission Cards Grid -->
+            <div id="dirDaysGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin-bottom: 30px;">
+                <!-- 10 Day Cards Injected Dynamically Here -->
+            </div>
+        </div>
+
+        <!-- Deliverable Inspector Modal -->
+        <div id="dirDeliverableModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.7); backdrop-filter: blur(4px); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
+            <div style="background: white; border-radius: 16px; max-width: 900px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); overflow: hidden;">
+                <div style="padding: 16px 22px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span id="dirModalDayBadge" style="background: #2563eb; color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;">DAY 1</span>
+                        <h3 id="dirModalTitle" style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 0;">Deliverable Preview</h3>
+                    </div>
+                    <button type="button" onclick="closeDirectorModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #64748b;">✕</button>
+                </div>
+                <div style="display: flex; gap: 8px; padding: 10px 22px; background: #f1f5f9; border-bottom: 1px solid var(--border); align-items: center; flex-wrap: wrap;">
+                    <button type="button" class="btn-action" onclick="copyDirectorDeliverable()" style="background: #ffffff; border: 1px solid #cbd5e1; color: #334155; font-size: 12px; padding: 6px 12px;">
+                        <span>📋 Copy Markdown / Code</span>
+                    </button>
+                    <button type="button" id="btnDirSendToStudio" class="btn-action" onclick="sendDirectorArticleToStudio()" style="display: none; background: #059669; color: white; border: none; font-size: 12px; padding: 6px 12px;">
+                        <span>✍️ Open in AI Content Studio</span>
+                    </button>
+                    <button type="button" id="btnDirSendToWp" class="btn-action" onclick="publishDirectorDeliverableToWp()" style="display: none; background: #0073aa; color: white; border: none; font-size: 12px; padding: 6px 12px;">
+                        <span>🌐 Send to WordPress</span>
+                    </button>
+                    <span id="dirModalCopyAlert" style="font-size: 11px; color: #059669; font-weight: 700; display: none;">Copied to clipboard!</span>
+                </div>
+                <div id="dirModalContent" style="padding: 22px; overflow-y: auto; flex: 1; font-size: 13.5px; line-height: 1.6; color: #1e293b;">
+                    <!-- Rendered HTML / Markdown preview -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -2229,12 +2495,14 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             document.getElementById('tabMulti').style.display = (tab === 'multi') ? 'block' : 'none';
             document.getElementById('tabWriter').style.display = (tab === 'writer') ? 'block' : 'none';
             document.getElementById('tabAutopilot').style.display = (tab === 'autopilot') ? 'block' : 'none';
+            document.getElementById('tabDirector').style.display = (tab === 'director') ? 'block' : 'none';
 
             document.getElementById('tabDailyBtn').className = 'tab-btn daily' + (tab === 'daily' ? ' active' : '');
             document.getElementById('tabSpyBtn').className = 'tab-btn spy' + (tab === 'spy' ? ' active' : '');
             document.getElementById('tabMultiBtn').className = 'tab-btn multi' + (tab === 'multi' ? ' active' : '');
             document.getElementById('tabWriterBtn').className = 'tab-btn writer' + (tab === 'writer' ? ' active' : '');
             document.getElementById('tabAutopilotBtn').className = 'tab-btn autopilot' + (tab === 'autopilot' ? ' active' : '');
+            document.getElementById('tabDirectorBtn').className = 'tab-btn director' + (tab === 'director' ? ' active' : '');
         }
 
         // Tracker Form Submit
@@ -4072,6 +4340,549 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             if (document.getElementById('wWordCount')) document.getElementById('wWordCount').value = words >= 3000 ? '3500' : (words >= 2000 ? '2500' : '1500');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // ==========================================
+        // TAB 6: Personal SEO Director Agent Logic
+        // ==========================================
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        let currentDirectorCampaign = null;
+        let directorDeliverables = {};
+        let activeDirectorModalDay = null;
+
+        const defaultDirectorProfiles = [
+            {
+                id: 'prof_startech',
+                name: 'Star Tech BD',
+                domain: 'https://www.startech.com.bd',
+                country: 'Bangladesh',
+                keywords: 'laptop price in bd\nbest gaming laptop bd\nbudget laptop in bangladesh\nasus rog gaming laptop bd',
+                competitors: 'https://www.ryanscomputers.com\nhttps://techlandbd.com',
+                instructions: 'Ensure accurate price ranges in BDT, prioritize authorized warranty verification, and optimize all H2s for Google AI Overview.'
+            },
+            {
+                id: 'prof_apex',
+                name: 'Apex Footwear',
+                domain: 'https://www.apex4u.com',
+                country: 'Bangladesh',
+                keywords: 'leather shoes price in bangladesh\nformal shoes bd\nbest sneakers in bd\nmen leather footwear',
+                competitors: 'https://www.batabd.com\nhttps://lottobd.com',
+                instructions: 'Highlight genuine leather durability, size measurement guide, and official retail outlets across Bangladesh.'
+            },
+            {
+                id: 'prof_global',
+                name: 'SaaS Pulse Analytics',
+                domain: 'https://saaspulse.io',
+                country: 'United States',
+                keywords: 'customer churn prediction ai\nsaas metrics dashboard\nbest b2b analytics software\nsaas churn reduction tools',
+                competitors: 'https://baremetrics.com\nhttps://profitwell.com',
+                instructions: 'Focus on enterprise ROI, SOC2 compliance, API integrations, and direct comparison tables against legacy software.'
+            }
+        ];
+
+        let activeProfileId = 'prof_startech';
+
+        function getDirectorProfiles() {
+            try {
+                const stored = localStorage.getItem('seo_director_profiles');
+                if (stored) return JSON.parse(stored);
+            } catch(e) {}
+            return defaultDirectorProfiles;
+        }
+
+        function saveDirectorProfiles(profiles) {
+            localStorage.setItem('seo_director_profiles', JSON.stringify(profiles));
+        }
+
+        function renderCompanyPills() {
+            const profiles = getDirectorProfiles();
+            const container = document.getElementById('companyProfilesList');
+            if (!container) return;
+
+            let html = '';
+            profiles.forEach(p => {
+                const isActive = (p.id === activeProfileId);
+                html += `<div class="company-pill ${isActive ? 'active' : ''}" onclick="selectCompanyProfile('${p.id}')">
+                    <span>🏢 ${escapeHtml(p.name)}</span>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function selectCompanyProfile(profileId) {
+            activeProfileId = profileId;
+            const profiles = getDirectorProfiles();
+            const p = profiles.find(item => item.id === profileId);
+            if (!p) return;
+
+            if (document.getElementById('dirCompanyName')) document.getElementById('dirCompanyName').value = p.name || '';
+            if (document.getElementById('dirDomain')) document.getElementById('dirDomain').value = p.domain || '';
+            if (document.getElementById('dirCountry')) document.getElementById('dirCountry').value = p.country || 'Bangladesh';
+            if (document.getElementById('dirKeywords')) document.getElementById('dirKeywords').value = p.keywords || '';
+            if (document.getElementById('dirCompetitors')) document.getElementById('dirCompetitors').value = p.competitors || '';
+            if (document.getElementById('dirInstructions')) document.getElementById('dirInstructions').value = p.instructions || '';
+
+            renderCompanyPills();
+            appendDirectorLog(`[PROFILE] Switched to company profile: ${p.name}`);
+        }
+
+        function saveCurrentCompanyProfile() {
+            const name = document.getElementById('dirCompanyName').value.trim() || 'My Business';
+            const domain = document.getElementById('dirDomain').value.trim();
+            const country = document.getElementById('dirCountry').value;
+            const keywords = document.getElementById('dirKeywords').value.trim();
+            const competitors = document.getElementById('dirCompetitors').value.trim();
+            const instructions = document.getElementById('dirInstructions').value.trim();
+
+            let profiles = getDirectorProfiles();
+            let idx = profiles.findIndex(p => p.id === activeProfileId);
+
+            const updatedProfile = {
+                id: activeProfileId || ('prof_' + Date.now()),
+                name: name,
+                domain: domain,
+                country: country,
+                keywords: keywords,
+                competitors: competitors,
+                instructions: instructions
+            };
+
+            if (idx >= 0) {
+                profiles[idx] = updatedProfile;
+            } else {
+                profiles.push(updatedProfile);
+                activeProfileId = updatedProfile.id;
+            }
+
+            saveDirectorProfiles(profiles);
+            renderCompanyPills();
+            alert(`✅ Company profile for "${name}" saved successfully!`);
+        }
+
+        function addNewCompanyProfile() {
+            const newId = 'prof_' + Date.now();
+            activeProfileId = newId;
+            let profiles = getDirectorProfiles();
+            const newProf = {
+                id: newId,
+                name: 'New Client / Company',
+                domain: 'https://newclient.com',
+                country: 'Bangladesh',
+                keywords: 'primary keyword\nsecondary keyword\nbest product review',
+                competitors: 'https://competitor.com',
+                instructions: 'Focus on search intent, pricing transparency, and Google AI Overview snippets.'
+            };
+            profiles.push(newProf);
+            saveDirectorProfiles(profiles);
+            selectCompanyProfile(newId);
+        }
+
+        function deleteCurrentCompanyProfile() {
+            let profiles = getDirectorProfiles();
+            if (profiles.length <= 1) {
+                alert('Cannot delete the last company profile. You must have at least one profile.');
+                return;
+            }
+            if (!confirm(`Are you sure you want to delete the active company profile?`)) return;
+
+            profiles = profiles.filter(p => p.id !== activeProfileId);
+            activeProfileId = profiles[0].id;
+            saveDirectorProfiles(profiles);
+            selectCompanyProfile(activeProfileId);
+        }
+
+        function appendDirectorLog(msg) {
+            const consoleBox = document.getElementById('dirConsoleBox');
+            const logBox = document.getElementById('dirConsoleLogs');
+            if (consoleBox) consoleBox.style.display = 'block';
+            if (logBox) {
+                const time = new Date().toLocaleTimeString();
+                logBox.innerHTML += `<div><span style="color:#64748b;">[${time}]</span> ${escapeHtml(msg)}</div>`;
+                consoleBox.scrollTop = consoleBox.scrollHeight;
+            }
+        }
+
+        async function generateDirectorPlan() {
+            const companyName = document.getElementById('dirCompanyName').value.trim();
+            const domain = document.getElementById('dirDomain').value.trim();
+            const country = document.getElementById('dirCountry').value;
+            const kwRaw = document.getElementById('dirKeywords').value.trim();
+            const compRaw = document.getElementById('dirCompetitors').value.trim();
+
+            if (!companyName) {
+                alert('Please enter a Company / Brand Name.');
+                return;
+            }
+            if (!kwRaw) {
+                alert('Please enter at least one target keyword.');
+                return;
+            }
+
+            const keywords = kwRaw.split(/[\r\n,]+/).map(k => k.trim()).filter(k => k.length > 0);
+            const competitor_urls = compRaw.split(/[\r\n,]+/).map(u => u.trim()).filter(u => u.length > 0);
+            const geminiKey = localStorage.getItem('gemini_api_key') || '';
+
+            const btn = document.getElementById('btnGenDirectorPlan');
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳ Synthesizing 10-Day Plan...</span>';
+            appendDirectorLog(`[DIRECTOR] Generating 10-Day Master SEO Strategy for "${companyName}" (${keywords.length} keywords)...`);
+
+            try {
+                const resp = await fetch('/api/seo-director/plan', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        company_name: companyName,
+                        domain: domain,
+                        keywords: keywords,
+                        target_country: country,
+                        competitor_urls: competitor_urls,
+                        gemini_key: geminiKey
+                    })
+                });
+                const data = await resp.json();
+                btn.disabled = false;
+                btn.innerHTML = '<span>🚀 1. Generate 10-Day Master Roadmap</span>';
+
+                if (data.status === 'success' && data.campaign) {
+                    currentDirectorCampaign = data.campaign;
+                    directorDeliverables = {};
+                    renderDirectorCards(currentDirectorCampaign.roadmap);
+                    updateDirectorProgress();
+                    appendDirectorLog(`✅ 10-Day Master Campaign roadmap generated successfully! 10 Missions loaded.`);
+                } else {
+                    alert('Error: ' + (data.message || 'Failed to generate plan.'));
+                }
+            } catch(e) {
+                btn.disabled = false;
+                btn.innerHTML = '<span>🚀 1. Generate 10-Day Master Roadmap</span>';
+                alert('Request failed: ' + e.message);
+                appendDirectorLog(`❌ Error: ${e.message}`);
+            }
+        }
+
+        function renderDirectorCards(roadmap) {
+            const grid = document.getElementById('dirDaysGrid');
+            if (!grid) return;
+
+            let html = '';
+            roadmap.forEach(day => {
+                const hasDeliverable = !!directorDeliverables[day.day];
+                const statusText = hasDeliverable ? 'Completed ✅' : (day.status || 'Ready to Execute');
+                const cardClass = hasDeliverable ? 'completed' : '';
+
+                html += `
+                <div class="day-mission-card ${cardClass}" id="dirCardDay_${day.day}">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="font-size: 15px; font-weight: 800; color: #1e3a8a;">${day.icon} Day ${day.day}</span>
+                            <span class="${day.badge_class || 'badge-onpage'}">${day.category}</span>
+                        </div>
+                        <h4 style="font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 6px; line-height: 1.35;">${escapeHtml(day.title)}</h4>
+                        <p style="font-size: 12.5px; color: #475569; margin-bottom: 12px; line-height: 1.45;">${escapeHtml(day.objective)}</p>
+                        
+                        <div style="margin-bottom: 12px;">
+                            <div style="font-size: 10.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Target Keywords:</div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                                ${(day.target_keywords || []).map(k => `<span style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 11px; padding: 2px 7px; border-radius: 4px; font-weight: 600;">${escapeHtml(k)}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="border-top: 1px solid var(--border); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <span id="dirCardStatus_${day.day}" style="font-size: 12px; font-weight: 700; color: ${hasDeliverable ? '#059669' : '#64748b'};">${statusText}</span>
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" class="btn-action" id="btnDirExecDay_${day.day}" onclick="executeDirectorDay(${day.day})" style="background: #0284c7; color: white; border: none; font-size: 11.5px; padding: 6px 11px;">
+                                <span>▶️ ${hasDeliverable ? 'Re-Run' : 'Run Mission'}</span>
+                            </button>
+                            ${hasDeliverable ? `
+                            <button type="button" class="btn-action" onclick="openDirectorModal(${day.day})" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; font-size: 11.5px; padding: 6px 11px;">
+                                <span>👁️ View</span>
+                            </button>` : ''}
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        function updateDirectorProgress() {
+            const pBox = document.getElementById('dirCampaignProgressBox');
+            if (!pBox) return;
+            pBox.style.display = 'block';
+
+            const compTitle = document.getElementById('dirCampaignHeaderTitle');
+            if (compTitle && currentDirectorCampaign) {
+                compTitle.innerText = `Campaign: ${currentDirectorCampaign.company_name} (${currentDirectorCampaign.target_country})`;
+            }
+
+            const total = 10;
+            const completedCount = Object.keys(directorDeliverables).length;
+            const pct = Math.round((completedCount / total) * 100);
+
+            const pBar = document.getElementById('dirProgressBar');
+            if (pBar) pBar.style.width = pct + '%';
+
+            const cText = document.getElementById('dirCompletionText');
+            if (cText) cText.innerText = `${completedCount} of 10 Days Executed (${pct}%)`;
+
+            const pill = document.getElementById('dirCampaignStatusPill');
+            if (pill) {
+                if (completedCount === 10) {
+                    pill.innerText = 'Completed 100% 🏆';
+                    pill.style.background = '#d1fae5';
+                    pill.style.color = '#065f46';
+                } else {
+                    pill.innerText = `${completedCount}/10 Missions Live`;
+                }
+            }
+        }
+
+        async function executeDirectorDay(dayNumber) {
+            if (!currentDirectorCampaign) {
+                await generateDirectorPlan();
+                if (!currentDirectorCampaign) return;
+            }
+
+            const card = document.getElementById(`dirCardDay_${dayNumber}`);
+            const statusElem = document.getElementById(`dirCardStatus_${dayNumber}`);
+            const btnExec = document.getElementById(`btnDirExecDay_${dayNumber}`);
+
+            if (card) {
+                card.className = 'day-mission-card running';
+            }
+            if (statusElem) {
+                statusElem.innerText = 'Executing ⚙️...';
+                statusElem.style.color = '#2563eb';
+            }
+            if (btnExec) {
+                btnExec.disabled = true;
+                btnExec.innerHTML = '<span>⏳ Running</span>';
+            }
+
+            appendDirectorLog(`[MISSION] Launching Day ${dayNumber} autonomous task...`);
+
+            const geminiKey = localStorage.getItem('gemini_api_key') || '';
+            const wpCreds = getWpCredentials();
+            const customCreds = getCustomCredentials();
+
+            try {
+                const resp = await fetch('/api/seo-director/execute-day', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        day_number: dayNumber,
+                        campaign_info: currentDirectorCampaign,
+                        wp_config: wpCreds.url ? wpCreds : null,
+                        custom_webhook_config: customCreds.url ? customCreds : null,
+                        gemini_key: geminiKey
+                    })
+                });
+
+                const data = await resp.json();
+
+                if (btnExec) btnExec.disabled = false;
+
+                if (data.status === 'success' && data.deliverable) {
+                    directorDeliverables[dayNumber] = data.deliverable;
+                    if (data.logs) {
+                        data.logs.forEach(l => appendDirectorLog(l));
+                    }
+                    if (card) card.className = 'day-mission-card completed';
+                    if (statusElem) {
+                        statusElem.innerText = 'Completed ✅';
+                        statusElem.style.color = '#059669';
+                    }
+                    renderDirectorCards(currentDirectorCampaign.roadmap);
+                    updateDirectorProgress();
+                    openDirectorModal(dayNumber);
+                } else {
+                    if (card) card.className = 'day-mission-card';
+                    if (statusElem) {
+                        statusElem.innerText = 'Failed ❌';
+                        statusElem.style.color = '#dc2626';
+                    }
+                    alert('Error executing day ' + dayNumber + ': ' + (data.message || 'Unknown error'));
+                    appendDirectorLog(`❌ Error executing day ${dayNumber}: ${data.message || 'Unknown error'}`);
+                }
+            } catch(e) {
+                if (btnExec) btnExec.disabled = false;
+                if (card) card.className = 'day-mission-card';
+                alert('Request failed: ' + e.message);
+                appendDirectorLog(`❌ Request error: ${e.message}`);
+            }
+        }
+
+        async function executeAllDirectorDays() {
+            if (!currentDirectorCampaign) {
+                await generateDirectorPlan();
+                if (!currentDirectorCampaign) return;
+            }
+
+            const btn = document.getElementById('btnExecAllDirector');
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳ Executing All 10 Days...</span>';
+
+            const spinner = document.getElementById('dirLiveSpinner');
+            if (spinner) spinner.style.display = 'inline';
+
+            appendDirectorLog(`[AUTONOMOUS BATCH] Starting sequential execution of all 10 days for "${currentDirectorCampaign.company_name}"...`);
+
+            for (let d = 1; d <= 10; d++) {
+                appendDirectorLog(`▶️ Commencing Day ${d} of 10...`);
+                await executeDirectorDay(d);
+            }
+
+            if (spinner) spinner.style.display = 'none';
+            btn.disabled = false;
+            btn.innerHTML = '<span>⚡ 2. Execute Entire 10-Day Campaign Autonomously</span>';
+            appendDirectorLog(`🎉 All 10 Days successfully executed! Full SEO portfolio ready for download.`);
+            alert('🎉 Congratulations! All 10 days of your SEO campaign have been successfully executed!');
+        }
+
+        function openDirectorModal(dayNumber) {
+            activeDirectorModalDay = dayNumber;
+            const deliv = directorDeliverables[dayNumber];
+            if (!deliv) return;
+
+            const modal = document.getElementById('dirDeliverableModal');
+            const dayBadge = document.getElementById('dirModalDayBadge');
+            const titleElem = document.getElementById('dirModalTitle');
+            const contentElem = document.getElementById('dirModalContent');
+            const btnStudio = document.getElementById('btnDirSendToStudio');
+            const btnWp = document.getElementById('btnDirSendToWp');
+
+            if (dayBadge) dayBadge.innerText = `DAY ${dayNumber}`;
+            if (titleElem) titleElem.innerText = deliv.title || `Deliverable for Day ${dayNumber}`;
+
+            let htmlContent = '';
+            if (deliv.html) {
+                htmlContent = deliv.html;
+            } else if (deliv.markdown) {
+                htmlContent = (typeof marked !== 'undefined') ? marked.parse(deliv.markdown) : `<pre>${escapeHtml(deliv.markdown)}</pre>`;
+            } else if (deliv.schema_json) {
+                htmlContent = `<pre style="background:#0f172a; color:#38bdf8; padding:16px; border-radius:8px; overflow-x:auto;">${escapeHtml(deliv.schema_json)}</pre>`;
+            } else {
+                htmlContent = `<pre>${escapeHtml(JSON.stringify(deliv, null, 2))}</pre>`;
+            }
+
+            if (contentElem) contentElem.innerHTML = htmlContent;
+
+            // Show Send to Studio if day produces articles (Day 2, 4, 6)
+            if (btnStudio) {
+                btnStudio.style.display = ([2, 4, 6].includes(dayNumber) && deliv.article) ? 'inline-block' : 'none';
+            }
+            if (btnWp) {
+                btnWp.style.display = ([2, 4, 6].includes(dayNumber)) ? 'inline-block' : 'none';
+            }
+
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeDirectorModal() {
+            const modal = document.getElementById('dirDeliverableModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function copyDirectorDeliverable() {
+            if (!activeDirectorModalDay) return;
+            const deliv = directorDeliverables[activeDirectorModalDay];
+            if (!deliv) return;
+
+            let textToCopy = deliv.markdown || deliv.schema_json || JSON.stringify(deliv, null, 2);
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const alert = document.getElementById('dirModalCopyAlert');
+                if (alert) {
+                    alert.style.display = 'inline';
+                    setTimeout(() => alert.style.display = 'none', 3000);
+                }
+            });
+        }
+
+        function sendDirectorArticleToStudio() {
+            if (!activeDirectorModalDay) return;
+            const deliv = directorDeliverables[activeDirectorModalDay];
+            if (!deliv || !deliv.article) return;
+
+            closeDirectorModal();
+            switchTab('writer');
+
+            const a = deliv.article;
+            if (document.getElementById('wTopic')) document.getElementById('wTopic').value = a.topic || '';
+            if (document.getElementById('wKeyword')) document.getElementById('wKeyword').value = a.main_keyword || '';
+            if (document.getElementById('wFormat')) document.getElementById('wFormat').value = a.content_type || 'long_form_seo';
+
+            generatedData = a;
+            renderVisualView(a);
+            updateWordPressPostFields();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function publishDirectorDeliverableToWp() {
+            if (!activeDirectorModalDay) return;
+            const deliv = directorDeliverables[activeDirectorModalDay];
+            if (!deliv) return;
+
+            if ([2, 4, 6].includes(activeDirectorModalDay) && deliv.article) {
+                generatedData = deliv.article;
+                publishToWordPress('single');
+            } else {
+                alert('Direct WordPress publishing is supported for articles (Days 2, 4, 6). For schemas, copy and paste into your site header.');
+            }
+        }
+
+        function downloadDirectorCampaignReport() {
+            if (!currentDirectorCampaign) {
+                alert('Please generate a 10-day roadmap first.');
+                return;
+            }
+
+            const c = currentDirectorCampaign;
+            let md = `# 10-Day Master SEO Campaign Roadmap: ${c.company_name}\n`;
+            md += `**Target Domain:** ${c.domain} | **Country:** ${c.target_country}\n`;
+            md += `**Primary Focus Keyword:** ${c.primary_keyword}\n`;
+            md += `**All Target Keywords:** ${c.all_keywords.join(', ')}\n`;
+            md += `**Created Date:** ${c.created_at}\n\n`;
+            md += `---\n\n`;
+
+            c.roadmap.forEach(day => {
+                md += `## Day ${day.day}: ${day.title} (${day.category})\n`;
+                md += `**Objective:** ${day.objective}\n`;
+                md += `**Target Keywords:** ${(day.target_keywords || []).join(', ')}\n\n`;
+
+                const deliv = directorDeliverables[day.day];
+                if (deliv) {
+                    md += `### Executed Deliverable:\n\n`;
+                    if (deliv.markdown) {
+                        md += deliv.markdown + `\n\n`;
+                    } else if (deliv.schema_json) {
+                        md += "```json\n" + deliv.schema_json + "\n```\n\n";
+                    }
+                } else {
+                    md += `*Deliverable status: Ready to execute*\n\n`;
+                }
+                md += `---\n\n`;
+            });
+
+            const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `SEO_10_Day_Campaign_${c.company_name.replace(/[^a-zA-Z0-9]/g, '_')}.md`;
+            link.click();
+        }
+
+        // Initialize Director company pills on page load
+        renderCompanyPills();
     </script>
 </body>
 </html>
@@ -4373,6 +5184,84 @@ class RequestHandler(BaseHTTPRequestHandler):
                     specific_topic=specific_topic,
                     target_words=target_words,
                     tone=tone,
+                    wp_config=wp_config,
+                    custom_webhook_config=custom_webhook_config
+                )
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps(res, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/seo-director/plan':
+            try:
+                data = json.loads(body)
+                company_name = data.get('company_name', '').strip()
+                domain = data.get('domain', '').strip()
+                keywords = data.get('keywords', [])
+                target_country = data.get('target_country', 'Bangladesh').strip()
+                competitor_urls = data.get('competitor_urls', [])
+                gemini_key = data.get('gemini_key', '').strip() or os.environ.get('GEMINI_API_KEY', '').strip()
+
+                director = PersonalSEODirector(gemini_api_key=gemini_key if gemini_key else None)
+                plan = director.generate_10_day_roadmap(
+                    company_name=company_name,
+                    domain=domain,
+                    keywords=keywords,
+                    target_country=target_country,
+                    competitor_urls=competitor_urls
+                )
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "success", "campaign": plan}, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/seo-director/execute-day':
+            try:
+                data = json.loads(body)
+                day_number = int(data.get('day_number', 1))
+                campaign_info = data.get('campaign_info', {})
+                wp_config = data.get('wp_config', None)
+                custom_webhook_config = data.get('custom_webhook_config', None)
+                gemini_key = data.get('gemini_key', '').strip() or os.environ.get('GEMINI_API_KEY', '').strip()
+
+                director = PersonalSEODirector(gemini_api_key=gemini_key if gemini_key else None)
+                res = director.execute_day_mission(
+                    day_number=day_number,
+                    campaign_info=campaign_info,
+                    wp_config=wp_config,
+                    custom_webhook_config=custom_webhook_config
+                )
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps(res, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/seo-director/execute-all':
+            try:
+                data = json.loads(body)
+                campaign_info = data.get('campaign_info', {})
+                wp_config = data.get('wp_config', None)
+                custom_webhook_config = data.get('custom_webhook_config', None)
+                gemini_key = data.get('gemini_key', '').strip() or os.environ.get('GEMINI_API_KEY', '').strip()
+
+                director = PersonalSEODirector(gemini_api_key=gemini_key if gemini_key else None)
+                res = director.execute_full_campaign(
+                    campaign_info=campaign_info,
                     wp_config=wp_config,
                     custom_webhook_config=custom_webhook_config
                 )
