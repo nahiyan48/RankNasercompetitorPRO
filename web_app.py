@@ -1467,9 +1467,149 @@ HTML_PAGE = """<!DOCTYPE html>
             <div id="autoResults" style="display: none; margin-top: 24px;"></div>
         </div>
 
+        <!-- TAB 6: Personal SEO Director Agent (10-Day Autonomous Multi-Company SEO) -->
+        <div id="tabDirector" style="display: none;">
+            <!-- Hero Banner -->
+            <div style="background: linear-gradient(135deg, #1e1b4b, #312e81, #1e3a8a); color: white; border-radius: 16px; padding: 24px 28px; margin-bottom: 22px; box-shadow: 0 4px 20px rgba(49, 46, 129, 0.25);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+                    <div>
+                        <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 20px; padding: 4px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;">
+                            <span>🧠 Autonomous Senior SEO Director Agent</span>
+                        </div>
+                        <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px; color: #ffffff;">Your Personal 24/7 Multi-Client SEO Expert</h2>
+                        <p style="font-size: 13.5px; color: #cbd5e1; max-width: 780px; line-height: 1.5;">
+                            Give directives for any company or multiple clients and walk away. This agent autonomously maps search intent, writes AI Overview-ready pillar content, engineers JSON-LD technical schemas, builds internal link silos, drafts Skyscraper backlink pitches, and crafts Digital PR syndicates over a complete <strong>10-Day SEO Roadmap</strong>.
+                        </p>
+                    </div>
+                    <div style="text-align: right; background: rgba(255,255,255,0.08); padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
+                        <div style="font-size: 11px; color: #93c5fd; text-transform: uppercase; font-weight: 700;">Director Status</div>
+                        <div style="font-size: 18px; font-weight: 800; color: #34d399; display: flex; align-items: center; gap: 6px; justify-content: flex-end;">
+                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #34d399; box-shadow: 0 0 8px #34d399;"></span> Active & Ready
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multi-Company Profile Manager & Directive Input Form -->
+            <div class="search-card" style="margin-bottom: 22px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                    <div>
+                        <h3 style="font-size: 17px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+                            <span>🏢 Multi-Company / Client Workspace</span>
+                        </h3>
+                        <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Switch between saved clients or create a new campaign profile</p>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button type="button" class="btn-action" onclick="addNewCompanyProfile()" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; font-size: 12px; padding: 7px 12px;">
+                            <span>➕ Add New Client</span>
+                        </button>
+                        <button type="button" class="btn-action" onclick="saveCurrentCompanyProfile()" style="background: #0284c7; color: white; border: none; font-size: 12px; padding: 7px 14px;">
+                            <span>💾 Save Profile</span>
+                        </button>
+                        <button type="button" class="btn-action" onclick="deleteCurrentCompanyProfile()" style="background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; font-size: 12px; padding: 7px 10px;" title="Delete current profile">
+                            <span>🗑️</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Client Selector Quick Pills -->
+                <div style="margin-bottom: 18px;">
+                    <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Select Active Company:</div>
+                    <div id="companyProfilesList" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+
+                <!-- Active Company Configuration Fields -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Company / Brand Name *</label>
+                        <input type="text" id="dirCompanyName" placeholder="e.g. Star Tech, Apex Footwear, TechWave Inc" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px;" value="Star Tech BD">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Website URL / Domain</label>
+                        <input type="url" id="dirDomain" placeholder="https://www.startech.com.bd" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px;" value="https://www.startech.com.bd">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Target Market / Country</label>
+                        <select id="dirCountry" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; background: white;">
+                            <option value="Bangladesh" selected>🇧🇩 Bangladesh (BDT ৳)</option>
+                            <option value="United States">🇺🇸 United States (USD $)</option>
+                            <option value="United Kingdom">🇬🇧 United Kingdom (GBP £)</option>
+                            <option value="Canada">🇨🇦 Canada (CAD $)</option>
+                            <option value="Australia">🇦🇺 Australia (AUD $)</option>
+                            <option value="India">🇮🇳 India (INR ₹)</option>
+                            <option value="Germany">🇩🇪 Germany (EUR €)</option>
+                            <option value="Global">🌐 Global / International</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Target Keywords (One per line or comma separated) *</label>
+                        <textarea id="dirKeywords" rows="4" placeholder="laptop price in bd&#10;best gaming laptop bd&#10;budget laptop in bangladesh&#10;asus tuf gaming f15 review" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: monospace; resize: vertical;">laptop price in bd
+best gaming laptop bd
+budget laptop in bangladesh
+asus rog gaming laptop bd</textarea>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Competitor URLs (Optional for Benchmarking)</label>
+                        <textarea id="dirCompetitors" rows="4" placeholder="https://www.ryanscomputers.com&#10;https://techlandbd.com" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: monospace; resize: vertical;">https://www.ryanscomputers.com
+https://techlandbd.com</textarea>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Director Instructions & Specific Business Directives (Optional)</label>
+                    <input type="text" id="dirInstructions" placeholder="e.g. Focus on price transparency in BDT, warranty verification, official dealer stamps, and capturing Google AI Overview" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px;" value="Ensure accurate price ranges in BDT, prioritize authorized warranty verification, and optimize all H2s for Google AI Overview.">
+                </div>
+
+                <!-- Action Button Controls -->
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button type="button" id="btnGenDirectorPlan" class="btn-scan" onclick="generateDirectorPlan()" style="flex: 1; min-width: 240px; background: linear-gradient(135deg, #2563eb, #1d4ed8); justify-content: center;">
+                        <span>🚀 1. Generate 10-Day Master Roadmap</span>
+                    </button>
+                    <button type="button" id="btnExecAllDirector" class="btn-scan" onclick="executeAllDirectorDays()" style="flex: 1; min-width: 240px; background: linear-gradient(135deg, #059669, #047857); justify-content: center;">
+                        <span>⚡ 2. Execute Entire 10-Day Campaign Autonomously</span>
+                    </button>
+                    <button type="button" class="btn-action" onclick="downloadDirectorCampaignReport()" style="background: #ffffff; border: 1px solid #cbd5e1; color: #334155; font-weight: 700; padding: 10px 16px;">
+                        <span>📥 Download 10-Day Plan (.MD)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Campaign Progress & Metrics Bar -->
+            <div id="dirCampaignProgressBox" style="display: none; background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 16px; font-weight: 800; color: #0f172a;" id="dirCampaignHeaderTitle">Campaign: Star Tech BD</span>
+                        <span id="dirCampaignStatusPill" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">10 Days Planned</span>
+                    </div>
+                    <div style="font-size: 13px; font-weight: 700; color: var(--text-muted);" id="dirCompletionText">0 of 10 Days Executed</div>
+                </div>
+                <div style="background: #e2e8f0; border-radius: 8px; height: 10px; overflow: hidden; margin-bottom: 6px;">
+                    <div id="dirProgressBar" style="background: linear-gradient(90deg, #3b82f6, #10b981); height: 100%; width: 0%; transition: width 0.4s ease;"></div>
+                </div>
+            </div>
+
+            <!-- Director Activity Stream Console -->
+            <div id="dirConsoleBox" style="display: none; background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 22px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; max-height: 180px; overflow-y: auto; border: 1px solid #334155;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid #334155; padding-bottom: 4px;">
+                    <span style="color: #38bdf8; font-weight: 700;">📡 Personal SEO Agent Execution Stream</span>
+                    <span id="dirLiveSpinner" style="color: #34d399; font-size: 11px; display: none;">● Running...</span>
+                </div>
+                <div id="dirConsoleLogs"></div>
+            </div>
+
+            <!-- 10-Day Action Mission Cards Grid -->
+            <div id="dirDaysGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin-bottom: 30px;">
+                <!-- 10 Day Cards Injected Dynamically Here -->
+            </div>
+        </div>
     </div>
 
-    <!-- WordPress Integration Modal -->
+<!-- WordPress Integration Modal -->
     <div id="wpModal" class="modal-overlay" style="display:none;">
         <div class="modal-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
@@ -1666,6 +1806,8 @@ HTML_PAGE = """<!DOCTYPE html>
                 <!-- Dynamic report content rendered via JS -->
             </div>
         </div>
+
+
     </div>
 
     <!-- Hidden dedicated container used exclusively for high-fidelity printing -->
@@ -1734,149 +1876,9 @@ HTML_PAGE = """<!DOCTYPE html>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- TAB 6: Personal SEO Director Agent (10-Day Autonomous Multi-Company SEO) -->
-        <div id="tabDirector" style="display: none;">
-            <!-- Hero Banner -->
-            <div style="background: linear-gradient(135deg, #1e1b4b, #312e81, #1e3a8a); color: white; border-radius: 16px; padding: 24px 28px; margin-bottom: 22px; box-shadow: 0 4px 20px rgba(49, 46, 129, 0.25);">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
-                    <div>
-                        <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 20px; padding: 4px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;">
-                            <span>🧠 Autonomous Senior SEO Director Agent</span>
-                        </div>
-                        <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px; color: #ffffff;">Your Personal 24/7 Multi-Client SEO Expert</h2>
-                        <p style="font-size: 13.5px; color: #cbd5e1; max-width: 780px; line-height: 1.5;">
-                            Give directives for any company or multiple clients and walk away. This agent autonomously maps search intent, writes AI Overview-ready pillar content, engineers JSON-LD technical schemas, builds internal link silos, drafts Skyscraper backlink pitches, and crafts Digital PR syndicates over a complete <strong>10-Day SEO Roadmap</strong>.
-                        </p>
-                    </div>
-                    <div style="text-align: right; background: rgba(255,255,255,0.08); padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
-                        <div style="font-size: 11px; color: #93c5fd; text-transform: uppercase; font-weight: 700;">Director Status</div>
-                        <div style="font-size: 18px; font-weight: 800; color: #34d399; display: flex; align-items: center; gap: 6px; justify-content: flex-end;">
-                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #34d399; box-shadow: 0 0 8px #34d399;"></span> Active & Ready
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Multi-Company Profile Manager & Directive Input Form -->
-            <div class="search-card" style="margin-bottom: 22px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
-                    <div>
-                        <h3 style="font-size: 17px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px;">
-                            <span>🏢 Multi-Company / Client Workspace</span>
-                        </h3>
-                        <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Switch between saved clients or create a new campaign profile</p>
-                    </div>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button type="button" class="btn-action" onclick="addNewCompanyProfile()" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; font-size: 12px; padding: 7px 12px;">
-                            <span>➕ Add New Client</span>
-                        </button>
-                        <button type="button" class="btn-action" onclick="saveCurrentCompanyProfile()" style="background: #0284c7; color: white; border: none; font-size: 12px; padding: 7px 14px;">
-                            <span>💾 Save Profile</span>
-                        </button>
-                        <button type="button" class="btn-action" onclick="deleteCurrentCompanyProfile()" style="background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; font-size: 12px; padding: 7px 10px;" title="Delete current profile">
-                            <span>🗑️</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Client Selector Quick Pills -->
-                <div style="margin-bottom: 18px;">
-                    <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Select Active Company:</div>
-                    <div id="companyProfilesList" style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        <!-- Injected via JS -->
-                    </div>
-                </div>
-
-                <!-- Active Company Configuration Fields -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 16px;">
-                    <div>
-                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Company / Brand Name *</label>
-                        <input type="text" id="dirCompanyName" placeholder="e.g. Star Tech, Apex Footwear, TechWave Inc" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px;" value="Star Tech BD">
-                    </div>
-                    <div>
-                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Website URL / Domain</label>
-                        <input type="url" id="dirDomain" placeholder="https://www.startech.com.bd" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px;" value="https://www.startech.com.bd">
-                    </div>
-                    <div>
-                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Target Market / Country</label>
-                        <select id="dirCountry" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; background: white;">
-                            <option value="Bangladesh" selected>🇧🇩 Bangladesh (BDT ৳)</option>
-                            <option value="United States">🇺🇸 United States (USD $)</option>
-                            <option value="United Kingdom">🇬🇧 United Kingdom (GBP £)</option>
-                            <option value="Canada">🇨🇦 Canada (CAD $)</option>
-                            <option value="Australia">🇦🇺 Australia (AUD $)</option>
-                            <option value="India">🇮🇳 India (INR ₹)</option>
-                            <option value="Germany">🇩🇪 Germany (EUR €)</option>
-                            <option value="Global">🌐 Global / International</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-                    <div>
-                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Target Keywords (One per line or comma separated) *</label>
-                        <textarea id="dirKeywords" rows="4" placeholder="laptop price in bd&#10;best gaming laptop bd&#10;budget laptop in bangladesh&#10;asus tuf gaming f15 review" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: monospace; resize: vertical;">laptop price in bd
-best gaming laptop bd
-budget laptop in bangladesh
-asus rog gaming laptop bd</textarea>
-                    </div>
-                    <div>
-                        <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Competitor URLs (Optional for Benchmarking)</label>
-                        <textarea id="dirCompetitors" rows="4" placeholder="https://www.ryanscomputers.com&#10;https://techlandbd.com" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: monospace; resize: vertical;">https://www.ryanscomputers.com
-https://techlandbd.com</textarea>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 18px;">
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Director Instructions & Specific Business Directives (Optional)</label>
-                    <input type="text" id="dirInstructions" placeholder="e.g. Focus on price transparency in BDT, warranty verification, official dealer stamps, and capturing Google AI Overview" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px;" value="Ensure accurate price ranges in BDT, prioritize authorized warranty verification, and optimize all H2s for Google AI Overview.">
-                </div>
-
-                <!-- Action Button Controls -->
-                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                    <button type="button" id="btnGenDirectorPlan" class="btn-scan" onclick="generateDirectorPlan()" style="flex: 1; min-width: 240px; background: linear-gradient(135deg, #2563eb, #1d4ed8); justify-content: center;">
-                        <span>🚀 1. Generate 10-Day Master Roadmap</span>
-                    </button>
-                    <button type="button" id="btnExecAllDirector" class="btn-scan" onclick="executeAllDirectorDays()" style="flex: 1; min-width: 240px; background: linear-gradient(135deg, #059669, #047857); justify-content: center;">
-                        <span>⚡ 2. Execute Entire 10-Day Campaign Autonomously</span>
-                    </button>
-                    <button type="button" class="btn-action" onclick="downloadDirectorCampaignReport()" style="background: #ffffff; border: 1px solid #cbd5e1; color: #334155; font-weight: 700; padding: 10px 16px;">
-                        <span>📥 Download 10-Day Plan (.MD)</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Campaign Progress & Metrics Bar -->
-            <div id="dirCampaignProgressBox" style="display: none; background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 16px; font-weight: 800; color: #0f172a;" id="dirCampaignHeaderTitle">Campaign: Star Tech BD</span>
-                        <span id="dirCampaignStatusPill" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">10 Days Planned</span>
-                    </div>
-                    <div style="font-size: 13px; font-weight: 700; color: var(--text-muted);" id="dirCompletionText">0 of 10 Days Executed</div>
-                </div>
-                <div style="background: #e2e8f0; border-radius: 8px; height: 10px; overflow: hidden; margin-bottom: 6px;">
-                    <div id="dirProgressBar" style="background: linear-gradient(90deg, #3b82f6, #10b981); height: 100%; width: 0%; transition: width 0.4s ease;"></div>
-                </div>
-            </div>
-
-            <!-- Director Activity Stream Console -->
-            <div id="dirConsoleBox" style="display: none; background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 22px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; max-height: 180px; overflow-y: auto; border: 1px solid #334155;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid #334155; padding-bottom: 4px;">
-                    <span style="color: #38bdf8; font-weight: 700;">📡 Personal SEO Agent Execution Stream</span>
-                    <span id="dirLiveSpinner" style="color: #34d399; font-size: 11px; display: none;">● Running...</span>
-                </div>
-                <div id="dirConsoleLogs"></div>
-            </div>
-
-            <!-- 10-Day Action Mission Cards Grid -->
-            <div id="dirDaysGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin-bottom: 30px;">
-                <!-- 10 Day Cards Injected Dynamically Here -->
-            </div>
-        </div>
-
-        <!-- Deliverable Inspector Modal -->
+    <!-- Deliverable Inspector Modal -->
         <div id="dirDeliverableModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.7); backdrop-filter: blur(4px); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
             <div style="background: white; border-radius: 16px; max-width: 900px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); overflow: hidden;">
                 <div style="padding: 16px 22px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
@@ -1903,7 +1905,6 @@ https://techlandbd.com</textarea>
                 </div>
             </div>
         </div>
-    </div>
 
     <script>
         document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
