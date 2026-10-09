@@ -1400,9 +1400,24 @@ HTML_PAGE = """<!DOCTYPE html>
         }
         .fm-title { font-size: 15.5px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
         .fm-desc { font-size: 12.5px; color: #475569; line-height: 1.55; }
-    </style>
+    
+        /* ================= BULLETPROOF INTELLECTUAL PROPERTY & ANTI-COPY PROTECTION ================= */
+        *, *::before, *::after {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+        }
+        input, textarea, [contenteditable="true"] {
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
+        }
+</style>
 </head>
-<body>
+<body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
 
     <!-- ================= RANKNASER AUTHENTICATION GATEWAY ================= -->
     <div id="authScreen">
@@ -2925,6 +2940,98 @@ https://techlandbd.com</textarea>
     </div> <!-- end #dashboardWrapper -->
 
     <script>
+        // ================= BULLETPROOF CODE PROTECTION, ANTI-INSPECT & ANTI-STEAL ENGINE =================
+        (function() {
+            'use strict';
+
+            function blockContextMenu(e) {
+                const tag = (e.target && e.target.tagName ? e.target.tagName : '').toLowerCase();
+                if (tag !== 'input' && tag !== 'textarea') {
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
+                    return false;
+                }
+            }
+            document.addEventListener('contextmenu', blockContextMenu, true);
+            window.addEventListener('contextmenu', blockContextMenu, true);
+            document.oncontextmenu = blockContextMenu;
+
+            function blockInspectKeys(e) {
+                const code = e.keyCode || e.which;
+                const key = (e.key || '').toLowerCase();
+
+                // F12
+                if (key === 'f12' || code === 123) {
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
+                    return false;
+                }
+
+                // Ctrl+Shift+I (Inspect), Ctrl+Shift+J (Console), Ctrl+Shift+C (Inspect Element), Ctrl+Shift+K (DevTools)
+                if (e.ctrlKey && e.shiftKey) {
+                    if (key === 'i' || key === 'j' || key === 'c' || key === 'k' || code === 73 || code === 74 || code === 67 || code === 75) {
+                        if (e.preventDefault) e.preventDefault();
+                        if (e.stopPropagation) e.stopPropagation();
+                        return false;
+                    }
+                }
+
+                // Ctrl+U (View Source)
+                if (e.ctrlKey && (key === 'u' || code === 85)) {
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
+                    return false;
+                }
+
+                // Ctrl+S (Save Webpage)
+                if (e.ctrlKey && (key === 's' || code === 83)) {
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
+                    return false;
+                }
+
+                // Mac Command+Option+I / J / C
+                if (e.metaKey && (e.altKey || e.shiftKey)) {
+                    if (key === 'i' || key === 'j' || key === 'c' || code === 73 || code === 74 || code === 67) {
+                        if (e.preventDefault) e.preventDefault();
+                        if (e.stopPropagation) e.stopPropagation();
+                        return false;
+                    }
+                }
+            }
+            document.addEventListener('keydown', blockInspectKeys, true);
+            window.addEventListener('keydown', blockInspectKeys, true);
+            document.onkeydown = blockInspectKeys;
+
+            // Block copy & drag outside inputs
+            function blockSelectionCopy(e) {
+                const tag = (document.activeElement && document.activeElement.tagName ? document.activeElement.tagName : '').toLowerCase();
+                if (tag !== 'input' && tag !== 'textarea') {
+                    if (e.preventDefault) e.preventDefault();
+                    return false;
+                }
+            }
+            document.addEventListener('copy', blockSelectionCopy, true);
+            document.addEventListener('dragstart', blockSelectionCopy, true);
+
+            // Silence and guard console
+            if (window.console) {
+                const emptyFn = function() {};
+                console.log = emptyFn;
+                console.info = emptyFn;
+                console.warn = emptyFn;
+                console.debug = emptyFn;
+            }
+
+            // Anti-DevTools dimension discrepancy watcher
+            setInterval(function() {
+                const wDiff = window.outerWidth - window.innerWidth > 160;
+                const hDiff = window.outerHeight - window.innerHeight > 160;
+                if (wDiff || hDiff) {
+                    try { console.clear(); } catch(err) {}
+                }
+            }, 800);
+        })();
         document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
         
         // Load saved Gemini Key
@@ -6372,9 +6479,23 @@ async def receive_article(request: Request, authorization: str = Header(None)):
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
+        # SECURITY FIREWALL: Block any direct attempts to read source code, config, or hidden files
+        req_clean = self.path.split('?')[0].lower()
+        if any(req_clean.endswith(ext) for ext in ['.py', '.json', '.env', '.sh', '.bat', '.yaml', '.yml', '.md', '.txt', '.git']):
+            self.send_response(403)
+            self.send_header('Content-Type', 'text/plain; charset=utf-8')
+            self.send_header('X-Content-Type-Options', 'nosniff')
+            self.end_headers()
+            self.wfile.write(b"403 Forbidden: Source files are protected and secret.")
+            return
+
         if self.path == '/' or self.path == '/index.html':
             self.send_response(200)
             self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.send_header('X-Content-Type-Options', 'nosniff')
+            self.send_header('X-Frame-Options', 'DENY')
+            self.send_header('X-XSS-Protection', '1; mode=block')
+            self.send_header('Referrer-Policy', 'no-referrer')
             self.end_headers()
             photo_uri = get_ranknaser_photo_uri()
             rendered_html = HTML_PAGE.replace('__RANKNASER_PHOTO_URI__', photo_uri)
