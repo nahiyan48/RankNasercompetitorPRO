@@ -1986,6 +1986,9 @@ HTML_PAGE = """<!DOCTYPE html>
                     <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px #10b981;"></span>
                     <span id="currentUserNameDisplay">👤 RankNaser</span>
                 </div>
+                <button type="button" id="userGuideHeaderBtn" onclick="openUserGuideModal()" style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border: none; font-weight: 700; border-radius: 10px; padding: 10px 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(124,58,237,0.3); font-size: 12.5px; transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'" title="View & Download Official User Guide (English & বাংলা PDF)">
+                    <span>📘 User Guide (PDF)</span>
+                </button>
                 <button type="button" id="logoutBtn" onclick="handleLogout()" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; font-weight: 700; border-radius: 10px; padding: 10px 16px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(220,38,38,0.25); font-size: 12.5px; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'" title="Logout and return to Login Screen">
                     <span>🚪 Logout</span>
                 </button>
