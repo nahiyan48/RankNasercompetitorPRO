@@ -1,0 +1,17 @@
+{
+  "admin": {
+    "name": "RankNaser Admin",
+    "password": "AGENTNASER",
+    "domain": "ranknaser.com"
+  },
+  "ADMIN": {
+    "name": "RankNaser Admin",
+    "password": "AGENTNASER",
+    "domain": "ranknaser.com"
+  },
+  "admin@ranknaser.com": {
+    "name": "RankNaser Admin",
+    "password": "AGENTNASER",
+    "domain": "ranknaser.com"
+  }
+}

@@ -949,34 +949,34 @@ HTML_PAGE = """<!DOCTYPE html>
         .intent-comm { background: #fef3c7; color: #92400e; }
         .intent-trans { background: #dcfce7; color: #166534; }
 
-        /* ================= AUTHENTICATION & ORBITAL GLOBE SHOWCASE ================= */
+        /* ================= WORLD-CLASS RANKNASERPRO AUTHENTICATION & SHOWCASE (WHITE THEME) ================= */
         #authScreen {
-            background: radial-gradient(circle at 50% 12%, #0b1329 0%, #030712 100%);
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
             min-height: 100vh;
-            color: #f8fafc;
-            padding: 30px 20px 80px;
+            color: #0f172a;
+            padding: 24px 20px 80px;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
         .auth-container {
-            max-width: 1140px;
+            max-width: 1180px;
             margin: 0 auto;
         }
         .auth-topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 28px;
             flex-wrap: wrap;
             gap: 14px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            padding-bottom: 18px;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 16px;
         }
         .auth-live-status {
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 700;
-            color: #10b981;
-            background: rgba(16, 185, 129, 0.12);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #059669;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
             border-radius: 20px;
             padding: 4px 12px;
             display: inline-flex;
@@ -992,28 +992,28 @@ HTML_PAGE = """<!DOCTYPE html>
             padding: 8px 16px;
             font-size: 12.5px;
             cursor: pointer;
-            box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
+            box-shadow: 0 2px 10px rgba(2, 132, 199, 0.25);
             transition: all 0.2s;
         }
         .auth-btn-quick:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.5);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
         }
         .auth-hero-header {
             text-align: center;
-            margin-bottom: 36px;
+            margin-bottom: 28px;
         }
         .auth-hero-eyebrow {
             display: inline-flex;
             align-items: center;
             gap: 7px;
-            background: rgba(56, 189, 248, 0.12);
-            border: 1px solid rgba(56, 189, 248, 0.3);
+            background: #e0f2fe;
+            border: 1px solid #bae6fd;
             border-radius: 20px;
             padding: 5px 16px;
             font-size: 11px;
             font-weight: 800;
-            color: #38bdf8;
+            color: #0284c7;
             text-transform: uppercase;
             letter-spacing: 1.2px;
             margin-bottom: 12px;
@@ -1021,7 +1021,7 @@ HTML_PAGE = """<!DOCTYPE html>
         .auth-hero-title {
             font-size: 38px;
             font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 25%, #38bdf8 70%, #60a5fa 100%);
+            background: linear-gradient(135deg, #0f172a 35%, #0369a1 80%, #0284c7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin: 0 0 12px 0;
@@ -1029,31 +1029,76 @@ HTML_PAGE = """<!DOCTYPE html>
             line-height: 1.22;
         }
         .auth-hero-subtitle {
-            font-size: 15px;
-            color: #94a3b8;
-            max-width: 800px;
+            font-size: 15.5px;
+            color: #475569;
+            max-width: 820px;
             margin: 0 auto;
             line-height: 1.6;
         }
+
+        /* 4-Item Live Capability Highlight Strip */
+        .auth-capability-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 34px;
+        }
+        @media (max-width: 860px) {
+            .auth-capability-strip { grid-template-columns: repeat(2, 1fr); }
+            .auth-hero-title { font-size: 28px; }
+        }
+        @media (max-width: 520px) {
+            .auth-capability-strip { grid-template-columns: 1fr; }
+        }
+        .cap-strip-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+        .cap-strip-card:hover {
+            border-color: #0284c7;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.1);
+        }
+        .cap-strip-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .cap-strip-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+        .cap-strip-desc {
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.35;
+        }
+
+        /* 2-Column Split Grid */
         .auth-split-grid {
             display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 24px;
+            grid-template-columns: 360px 1fr;
+            gap: 26px;
             align-items: stretch;
             margin-bottom: 50px;
         }
-        @media (max-width: 860px) {
+        @media (max-width: 880px) {
             .auth-split-grid { grid-template-columns: 1fr; }
-            .auth-hero-title { font-size: 27px; }
         }
         .profile-side-card {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1.5px solid rgba(56, 189, 248, 0.35);
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
             border-radius: 20px;
             padding: 28px 22px;
             text-align: center;
-            backdrop-filter: blur(14px);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1061,21 +1106,13 @@ HTML_PAGE = """<!DOCTYPE html>
             position: relative;
             overflow: hidden;
         }
-        .profile-side-card::before {
-            content: '';
-            position: absolute;
-            top: -60px; left: -60px;
-            width: 140px; height: 140px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.22), transparent 70%);
-            pointer-events: none;
-        }
         .profile-badge-float {
             position: absolute;
             top: 14px;
             right: 14px;
-            background: rgba(56, 189, 248, 0.15);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            color: #38bdf8;
+            background: #e0f2fe;
+            border: 1px solid #bae6fd;
+            color: #0284c7;
             font-size: 10px;
             font-weight: 800;
             padding: 3px 9px;
@@ -1084,15 +1121,15 @@ HTML_PAGE = """<!DOCTYPE html>
             letter-spacing: 0.5px;
         }
         .profile-img-wrap {
-            width: 140px;
-            height: 140px;
+            width: 144px;
+            height: 144px;
             border-radius: 50%;
             overflow: hidden;
             margin: 6px 0 14px 0;
-            border: 3.5px solid #38bdf8;
-            box-shadow: 0 0 28px rgba(56, 189, 248, 0.45);
+            border: 3.5px solid #0284c7;
+            box-shadow: 0 0 24px rgba(2, 132, 199, 0.28);
             position: relative;
-            background: #0f172a;
+            background: #f1f5f9;
         }
         .profile-img-wrap img {
             width: 100%;
@@ -1103,7 +1140,7 @@ HTML_PAGE = """<!DOCTYPE html>
         .profile-name-badge {
             font-size: 26px;
             font-weight: 900;
-            color: #ffffff;
+            color: #0f172a;
             letter-spacing: 1.8px;
             margin: 0 0 4px 0;
             text-transform: uppercase;
@@ -1115,14 +1152,14 @@ HTML_PAGE = """<!DOCTYPE html>
         .profile-role-title {
             font-size: 11.5px;
             font-weight: 800;
-            color: #38bdf8;
+            color: #0284c7;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 10px;
         }
         .profile-bio-text {
             font-size: 12.5px;
-            color: #94a3b8;
+            color: #475569;
             line-height: 1.5;
             margin-bottom: 16px;
         }
@@ -1131,78 +1168,53 @@ HTML_PAGE = """<!DOCTYPE html>
             align-items: center;
             gap: 8px;
             font-size: 11.5px;
-            color: #cbd5e1;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
+            color: #1e293b;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
             padding: 7px 12px;
             width: 100%;
             margin-bottom: 6px;
             text-align: left;
             box-sizing: border-box;
+            font-weight: 600;
         }
         .login-box-card {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
             border-radius: 20px;
             padding: 28px 30px;
-            backdrop-filter: blur(14px);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07);
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
-        .auth-tab-nav {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 20px;
-            background: rgba(2, 6, 23, 0.6);
-            padding: 4px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .auth-tab-btn {
-            padding: 9px;
-            font-size: 13px;
-            font-weight: 700;
-            border: none;
-            border-radius: 7px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #94a3b8;
-            background: transparent;
-        }
-        .auth-tab-btn.active {
-            background: linear-gradient(135deg, #0284c7, #2563eb);
-            color: #ffffff;
-            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
-        }
         .auth-input-group {
-            margin-bottom: 14px;
+            margin-bottom: 15px;
         }
         .auth-input-group label {
             display: block;
-            font-size: 12px;
+            font-size: 12.5px;
             font-weight: 700;
-            color: #cbd5e1;
-            margin-bottom: 5px;
+            color: #1e293b;
+            margin-bottom: 6px;
         }
         .auth-input-group input {
             width: 100%;
-            padding: 11px 14px;
-            background: rgba(2, 6, 23, 0.7);
-            border: 1.5px solid #334155;
+            padding: 12px 14px;
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
             border-radius: 10px;
-            color: #f8fafc;
-            font-size: 13.5px;
+            color: #0f172a;
+            font-size: 14px;
             box-sizing: border-box;
             transition: all 0.2s;
+            font-weight: 600;
         }
         .auth-input-group input:focus {
             outline: none;
-            border-color: #38bdf8 !important;
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+            border-color: #0284c7 !important;
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18) !important;
         }
         .auth-submit-btn {
             width: 100%;
@@ -1214,19 +1226,80 @@ HTML_PAGE = """<!DOCTYPE html>
             padding: 12px;
             cursor: pointer;
             font-size: 14px;
-            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
             transition: all 0.2s;
             margin-top: 6px;
         }
         .auth-submit-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5);
+            box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
         }
 
-        /* 3D Circular Orbital Globe SEO Agent Showcase */
+        /* 3-Step Autonomous Workflow Pipeline */
+        .workflow-pipeline-section {
+            margin-bottom: 50px;
+            padding: 26px;
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+        }
+        .workflow-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 6px 0;
+        }
+        .workflow-subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            margin: 0 0 22px 0;
+        }
+        .pipeline-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 768px) {
+            .pipeline-grid { grid-template-columns: 1fr; }
+        }
+        .pipeline-card {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 18px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+        }
+        .pipeline-step-badge {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0284c7;
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .pipeline-card h4 {
+            margin: 0 0 6px 0;
+            font-size: 14.5px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+        .pipeline-card p {
+            margin: 0;
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        /* 3D Circular Orbital Globe SEO Agent Showcase (White Theme) */
         .globe-showcase-section {
             margin-top: 25px;
-            border-top: 1px solid rgba(255,255,255,0.08);
+            border-top: 1.5px solid #e2e8f0;
             padding-top: 45px;
         }
         .globe-section-title {
@@ -1253,9 +1326,9 @@ HTML_PAGE = """<!DOCTYPE html>
             width: 200px;
             height: 200px;
             border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #38bdf8 0%, #1e3a8a 60%, #030712 100%);
-            box-shadow: 0 0 60px rgba(56, 189, 248, 0.5), inset 0 0 30px rgba(255,255,255,0.4);
-            border: 3px solid rgba(56, 189, 248, 0.6);
+            background: radial-gradient(circle at 35% 35%, #38bdf8 0%, #0284c7 40%, #1e3a8a 85%, #0f172a 100%);
+            box-shadow: 0 0 50px rgba(2, 132, 199, 0.45), inset 0 0 25px rgba(255,255,255,0.4);
+            border: 3px solid rgba(56, 189, 248, 0.7);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1271,20 +1344,19 @@ HTML_PAGE = """<!DOCTYPE html>
         }
         .globe-node-card {
             position: absolute;
-            background: rgba(15, 23, 42, 0.92);
-            border: 1.5px solid rgba(56, 189, 248, 0.35);
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
             border-radius: 14px;
             padding: 12px 16px;
             max-width: 235px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 24px rgba(0,0,0,0.45);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
             transition: all 0.25s ease;
             z-index: 5;
         }
         .globe-node-card:hover {
             transform: scale(1.04);
-            border-color: #38bdf8;
-            box-shadow: 0 14px 30px rgba(56, 189, 248, 0.35);
+            border-color: #0284c7;
+            box-shadow: 0 12px 30px rgba(2, 132, 199, 0.2);
         }
         @media (max-width: 820px) {
             .globe-node-card {
@@ -1295,10 +1367,10 @@ HTML_PAGE = """<!DOCTYPE html>
             }
         }
         .globe-node-card .gn-icon { font-size: 20px; margin-bottom: 4px; }
-        .globe-node-card .gn-title { font-size: 13px; font-weight: 800; color: #ffffff; margin-bottom: 3px; }
-        .globe-node-card .gn-desc { font-size: 11.5px; color: #94a3b8; line-height: 1.4; }
+        .globe-node-card .gn-title { font-size: 13.5px; font-weight: 800; color: #0f172a; margin-bottom: 3px; }
+        .globe-node-card .gn-desc { font-size: 11.5px; color: #475569; line-height: 1.45; }
 
-        /* Feature Matrix Grid */
+        /* Feature Matrix Grid (White Theme) */
         .feature-matrix-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -1306,28 +1378,28 @@ HTML_PAGE = """<!DOCTYPE html>
             margin-top: 30px;
         }
         .fm-card {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.09);
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
             border-radius: 14px;
             padding: 22px;
             transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
         }
         .fm-card:hover {
-            border-color: rgba(56, 189, 248, 0.4);
-            background: rgba(15, 23, 42, 0.9);
+            border-color: #0284c7;
             transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(2, 132, 199, 0.12);
         }
         .fm-icon-badge {
             width: 40px; height: 40px;
             border-radius: 10px;
-            background: rgba(56, 189, 248, 0.15);
-            border: 1px solid rgba(56, 189, 248, 0.3);
+            background: #e0f2fe;
+            border: 1px solid #bae6fd;
             display: flex; align-items: center; justify-content: center;
             font-size: 20px; margin-bottom: 12px;
         }
-        .fm-title { font-size: 15.5px; font-weight: 800; color: #ffffff; margin-bottom: 6px; }
-        .fm-desc { font-size: 12.5px; color: #94a3b8; line-height: 1.55; }
-
+        .fm-title { font-size: 15.5px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
+        .fm-desc { font-size: 12.5px; color: #475569; line-height: 1.55; }
     </style>
 </head>
 <body>
@@ -1340,25 +1412,57 @@ HTML_PAGE = """<!DOCTYPE html>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 28px;">🚀</span>
                     <div>
-                        <div style="font-size: 20px; font-weight: 900; letter-spacing: 1.2px; color: #ffffff;">RANKNASER<span style="color: #38bdf8;">PRO</span></div>
-                        <div style="font-size: 11px; color: #94a3b8; font-weight: 600;">Autonomous SEO Intelligence Platform</div>
+                        <div style="font-size: 20px; font-weight: 900; letter-spacing: 1.2px; color: #0f172a;">RANKNASER<span style="color: #0284c7;">PRO</span></div>
+                        <div style="font-size: 11px; color: #64748b; font-weight: 600;">Autonomous SEO Intelligence & Organic Domination Engine</div>
                     </div>
                 </div>
                 <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-                    <span class="auth-live-status">● Live Engine v3.5</span>
+                    <span class="auth-live-status">● Live Engine v3.5 Active</span>
                     <button type="button" onclick="handleInstantDemoLogin()" class="auth-btn-quick">
-                        ⚡ Instant Demo (1-Click)
+                        ⚡ Instant Enter (1-Click)
                     </button>
                 </div>
             </div>
 
             <!-- Killer English Headline -->
             <div class="auth-hero-header">
-                <div class="auth-hero-eyebrow">⚡ NEXT-GEN AUTONOMOUS AI SEO ENGINE</div>
-                <h1 class="auth-hero-title">The Autonomous AI Weapon to Outrank Any Competitor on Google</h1>
+                <div class="auth-hero-eyebrow">⚡ AUTONOMOUS SEARCH INTELLIGENCE & SERP OUTRANKER</div>
+                <h1 class="auth-hero-title">Outrank Any Competitor on Google with Autonomous AI Agents</h1>
                 <p class="auth-hero-subtitle">
-                    Deploy multi-agent AI spies, reverse-engineer top-ranking SERPs, orchestrate 10-day topical authority roadmaps, and auto-publish content with surgical precision.
+                    Deploy 6 specialized AI agents to track rival rankings, reverse-engineer top Google SERPs, write 2,500+ word master articles, and auto-publish to your CMS on 100% autopilot.
                 </p>
+            </div>
+
+            <!-- 4-Item Live Capability Highlight Strip (Immediately Explains What the Suite Does) -->
+            <div class="auth-capability-strip">
+                <div class="cap-strip-card">
+                    <div class="cap-strip-icon">🛰️</div>
+                    <div>
+                        <div class="cap-strip-title">SERP Radar Surveillance</div>
+                        <div class="cap-strip-desc">Tracks top 1-10 rankings & detects keyword moves</div>
+                    </div>
+                </div>
+                <div class="cap-strip-card">
+                    <div class="cap-strip-icon">⚔️</div>
+                    <div>
+                        <div class="cap-strip-title">5 vs 1 SERP Outranker</div>
+                        <div class="cap-strip-desc">Reverse-engineers 5 ranking rivals into 1 master brief</div>
+                    </div>
+                </div>
+                <div class="cap-strip-card">
+                    <div class="cap-strip-icon">✍️</div>
+                    <div>
+                        <div class="cap-strip-title">2,500+ Word AI Studio</div>
+                        <div class="cap-strip-desc">Generates rank-ready articles with FAQ Schema</div>
+                    </div>
+                </div>
+                <div class="cap-strip-card">
+                    <div class="cap-strip-icon">🤖</div>
+                    <div>
+                        <div class="cap-strip-title">Direct CMS Auto-Publish</div>
+                        <div class="cap-strip-desc">Zero-click publishing straight to WordPress & APIs</div>
+                    </div>
+                </div>
             </div>
 
             <!-- 2-Column Split: RankNaser Profile Card + Compact Sign In Box -->
@@ -1371,40 +1475,48 @@ HTML_PAGE = """<!DOCTYPE html>
                     </div>
                     <div class="profile-name-badge">
                         <span>RANKNASER</span>
-                        <span style="color: #38bdf8; font-size: 18px;" title="Verified System Architect">☑️</span>
+                        <span style="color: #0284c7; font-size: 19px;" title="Verified System Architect">☑️</span>
                     </div>
                     <div class="profile-role-title">Lead Architect & SEO Director</div>
                     <div class="profile-bio-text">
-                        Autonomous SEO agent architecture designed to dominate organic search results, reverse-engineer competitive authority, and automate end-to-end rank velocity.
+                        Pioneered autonomous AI agent pipelines that monitor competitive search landscapes 24/7, synthesize top-ranking SERP signals, and eliminate months of manual SEO labor.
                     </div>
                     <div style="width: 100%; margin-top: 4px;">
                         <div class="profile-pill-item">
-                            <span>🎯</span>
-                            <span>Multi-Competitor SERP Infiltration</span>
+                            <span>🛰️</span>
+                            <span>Autonomous SERP Radar & Keyword Tracking</span>
+                        </div>
+                        <div class="profile-pill-item">
+                            <span>🕵️‍♂️</span>
+                            <span>Deep Competitor Infiltration & Headings Spy</span>
+                        </div>
+                        <div class="profile-pill-item">
+                            <span>⚔️</span>
+                            <span>5 vs 1 Outranking Master Synthesis</span>
+                        </div>
+                        <div class="profile-pill-item">
+                            <span>✍️</span>
+                            <span>Long-Form Content Generation with Schema</span>
                         </div>
                         <div class="profile-pill-item">
                             <span>🤖</span>
-                            <span>Autonomous Autopilot Pipeline</span>
-                        </div>
-                        <div class="profile-pill-item">
-                            <span>⚡</span>
-                            <span>Zero-Click Direct CMS Publishing</span>
+                            <span>Zero-Click Direct CMS Auto-Publishing</span>
                         </div>
                     </div>
-                    <div style="margin-top: 14px; font-size: 11px; color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                    <div style="margin-top: 14px; font-size: 11.5px; color: #059669; font-weight: 700; display: flex; align-items: center; gap: 6px;">
                         <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>
-                        Online & Ready to Execute
+                        System Online & Ready to Execute
                     </div>
                 </div>
 
                 <!-- Right: Direct Admin Login Box -->
                 <div class="login-box-card">
                     <div style="margin-bottom: 22px; text-align: center;">
-                        <div style="display: inline-flex; align-items: center; gap: 7px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 20px; padding: 5px 15px; font-size: 11px; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px;">
+                        <div style="display: inline-flex; align-items: center; gap: 7px; background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 20px; padding: 5px 15px; font-size: 11px; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 1px;">
                             🔐 DIRECT SYSTEM ACCESS
                         </div>
-                        <h3 style="margin: 9px 0 4px 0; font-size: 21px; font-weight: 800; color: #ffffff;">Admin Gateway Sign In</h3>
-                        <p style="margin: 0; font-size: 12.5px; color: #94a3b8;">Enter your Admin User ID & Password to access the suite</p>
+                        <h3 style="margin: 9px 0 4px 0; font-size: 21px; font-weight: 800; color: #0f172a;">Admin Gateway Sign In</h3>
+                        <p style="margin: 0; font-size: 12.5px; color: #64748b;">Enter your Admin User ID & Password to access the suite</p>
                     </div>
 
                     <div id="authAlertBox" style="display:none; padding: 10px 14px; border-radius: 8px; font-size: 12.5px; margin-bottom: 14px; font-weight: 600;"></div>
@@ -1420,17 +1532,40 @@ HTML_PAGE = """<!DOCTYPE html>
                             <input type="password" id="loginPassword" placeholder="AGENTNASER" required value="AGENTNASER" autocomplete="current-password">
                         </div>
                         <button type="submit" id="btnSubmitLogin" class="auth-submit-btn">
-                            <span>🚀 Login & Enter Dashboard</span>
+                            <span>🚀 Launch RankNaserPro Dashboard</span>
                         </button>
                     </form>
 
-                    <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); text-align: center;">
-                        <button type="button" onclick="handleInstantDemoLogin()" style="background: rgba(56, 189, 248, 0.12); border: 1.5px dashed rgba(56, 189, 248, 0.4); color: #38bdf8; font-weight: 700; border-radius: 8px; padding: 9px 16px; cursor: pointer; font-size: 12.5px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 7px; transition: all 0.2s;">
+                    <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: center;">
+                        <button type="button" onclick="handleInstantDemoLogin()" style="background: #f0f9ff; border: 1.5px dashed #0284c7; color: #0284c7; font-weight: 700; border-radius: 8px; padding: 9px 16px; cursor: pointer; font-size: 12.5px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 7px; transition: all 0.2s;">
                             <span>⚡ 1-Click Instant Enter (ADMIN / AGENTNASER)</span>
                         </button>
-                        <div style="font-size: 12px; color: #cbd5e1; margin-top: 10px; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
-                            🔑 <strong>Credentials:</strong> User: <span style="color:#38bdf8; font-weight:800;">ADMIN</span> | Password: <span style="color:#38bdf8; font-weight:800;">AGENTNASER</span>
+                        <div style="font-size: 12px; color: #334155; margin-top: 10px; background: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            🔑 <strong>Credentials:</strong> User: <span style="color:#0284c7; font-weight:800;">ADMIN</span> | Password: <span style="color:#0284c7; font-weight:800;">AGENTNASER</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3-Step Autonomous Workflow Pipeline Section -->
+            <div class="workflow-pipeline-section">
+                <h3 class="workflow-title">⚡ How The 6 Autonomous Tools Work Together</h3>
+                <p class="workflow-subtitle">A synchronized multi-agent pipeline from competitive espionage to front-page dominance</p>
+                <div class="pipeline-grid">
+                    <div class="pipeline-card">
+                        <span class="pipeline-step-badge">Phase 1: Spy & Infiltrate</span>
+                        <h4>🛰️ SERP Radar + 360° Deep Spy</h4>
+                        <p>Monitors keyword movement #1-10 on Google, detects new ranking rivals, and scrapes full heading trees (H1-H3), word counts, and search intents in seconds.</p>
+                    </div>
+                    <div class="pipeline-card">
+                        <span class="pipeline-step-badge">Phase 2: Synthesize & Outrank</span>
+                        <h4>⚔️ 5 vs 1 SERP + AI Studio</h4>
+                        <p>Takes the top 5 ranking competitors simultaneously, pinpoints their shared patterns and missing topics, then writes an elite 2,500+ word master article with FAQ Schema.</p>
+                    </div>
+                    <div class="pipeline-card">
+                        <span class="pipeline-step-badge">Phase 3: Autopilot & Direct Publish</span>
+                        <h4>🤖 Autopilot + SEO Director</h4>
+                        <p>Automatically publishes articles to WordPress CMS or Custom Webhooks without manual copying, and generates a structured 10-day execution campaign.</p>
                     </div>
                 </div>
             </div>
@@ -1439,10 +1574,10 @@ HTML_PAGE = """<!DOCTYPE html>
             <div class="globe-showcase-section">
                 <div class="globe-section-title">
                     <span class="auth-hero-eyebrow">🌐 360° AUTONOMOUS SEO INTELLIGENCE</span>
-                    <h2 style="font-size: 30px; font-weight: 900; color: #ffffff; margin: 8px 0 10px 0; letter-spacing: -0.5px;">
+                    <h2 style="font-size: 30px; font-weight: 900; color: #0f172a; margin: 8px 0 10px 0; letter-spacing: -0.5px;">
                         How the RankNaser SEO Agent Dominates Search Engines
                     </h2>
-                    <p style="font-size: 14.5px; color: #94a3b8; max-width: 720px; margin: 0 auto;">
+                    <p style="font-size: 14.5px; color: #475569; max-width: 720px; margin: 0 auto;">
                         A unified autonomous neural intelligence loop executing 24/7 surveillance, competitive gap synthesis, keyword tracking, and direct CMS publishing.
                     </p>
                 </div>
@@ -1530,10 +1665,10 @@ HTML_PAGE = """<!DOCTYPE html>
                 </div>
 
                 <!-- Bottom Jump to Login Bar -->
-                <div style="margin-top: 36px; text-align: center; background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 16px; padding: 24px;">
-                    <h3 style="margin: 0 0 8px 0; font-size: 19px; font-weight: 800; color: #ffffff;">Ready to dominate Google search results?</h3>
-                    <p style="margin: 0 0 14px 0; font-size: 13.5px; color: #94a3b8;">Log in above to access your autonomous RankNaserPro Intelligence Suite.</p>
-                    <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); document.getElementById('loginEmail').focus();" class="auth-btn-quick" style="padding: 10px 22px; font-size: 13px;">
+                <div style="margin-top: 36px; text-align: center; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 24px;">
+                    <h3 style="margin: 0 0 8px 0; font-size: 19px; font-weight: 800; color: #0f172a;">Ready to dominate Google search results?</h3>
+                    <p style="margin: 0 0 14px 0; font-size: 13.5px; color: #475569;">Log in above to access your autonomous RankNaserPro Intelligence Suite.</p>
+                    <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); document.getElementById('loginUsername').focus();" class="auth-btn-quick" style="padding: 10px 22px; font-size: 13px;">
                         ⬆️ Return to Login Box
                     </button>
                 </div>
