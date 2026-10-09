@@ -354,6 +354,11 @@ HTML_PAGE = """<!DOCTYPE html>
             --warning: #d97706;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        #trialCountdownBadge, #trialCountdownBadge *, #currentUserBadge, #currentUserBadge * {
+            pointer-events: none !important;
+            cursor: default !important;
+            user-select: none !important;
+        }
         body {
             font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
             background-color: var(--bg);
@@ -1973,11 +1978,11 @@ HTML_PAGE = """<!DOCTYPE html>
                     <span id="customApiBadge" style="font-size: 10.5px; background: rgba(255,255,255,0.22); padding: 2px 6px; border-radius: 4px; font-weight: 600;">Not Configured</span>
                 </button>
                 
-                <div id="trialCountdownBadge" style="cursor: default; pointer-events: none; user-select: none; display: inline-flex; align-items: center; gap: 7px; background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 10px; padding: 7px 13px; font-size: 12px; font-weight: 800; color: #047857; box-shadow: 0 2px 8px rgba(16,185,129,0.18);">
+                <div id="trialCountdownBadge" style="cursor: default !important; pointer-events: none !important; user-select: none !important; display: inline-flex; align-items: center; gap: 7px; background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 10px; padding: 7px 13px; font-size: 12px; font-weight: 800; color: #047857; box-shadow: 0 2px 8px rgba(16,185,129,0.18);">
                     <span style="font-size: 14px;">⏱️</span>
                     <span id="trialCountdownText">7-Day Free Trial: Day 1 of 7</span>
                 </div>
-                <div id="currentUserBadge" style="cursor: default; pointer-events: none; user-select: none; display: inline-flex; align-items: center; gap: 8px; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; color: #1e293b;">
+                <div id="currentUserBadge" style="cursor: default !important; pointer-events: none !important; user-select: none !important; display: inline-flex; align-items: center; gap: 8px; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; color: #1e293b;">
                     <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px #10b981;"></span>
                     <span id="currentUserNameDisplay">👤 RankNaser</span>
                 </div>
@@ -6634,6 +6639,11 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             const text = document.getElementById('trialCountdownText');
             if (!badge || !text) return;
 
+            badge.style.pointerEvents = 'none';
+            badge.style.cursor = 'default';
+            badge.removeAttribute('onclick');
+            badge.onclick = null;
+
             // Master Admin check
             if (user && (user.username === 'ADMIN' || (user.email && user.email.toLowerCase() === 'admin@ranknaser.com'))) {
                 badge.style.background = '#e0f2fe';
@@ -6685,6 +6695,7 @@ async def receive_article(request: Request, authorization: str = Header(None)):
         }
 
         function openTrialModal() {
+            return false; // Disabled completely for 7 days
             const modal = document.getElementById('trialInfoModal');
             const body = document.getElementById('trialInfoModalBody');
             const adminBar = document.getElementById('adminTrialControlBar');
