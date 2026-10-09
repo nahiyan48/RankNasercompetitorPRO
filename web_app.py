@@ -52,6 +52,259 @@ def save_registered_users(users_dict):
     except Exception as e:
         print("Error saving users:", e)
 
+
+def render_printable_guide(lang="en") -> str:
+    """Renders a standalone, high-res A4 print-optimized PDF document with auto-print."""
+    is_bn = (lang == "bn")
+    title = "RankNaserPro Intelligence Suite — ব্যবহারকারী নির্দেশিকা (User Guide)" if is_bn else "RankNaserPro Intelligence Suite — Official User Guide"
+    subtitle = "সম্পূর্ণ এসইও অটোমেশন ও অটোনোমাস সার্চ ইন্টেলিজেন্স ম্যানুয়াল" if is_bn else "Complete Autonomous Search Intelligence & Execution Manual"
+    author = "RankNaser (Lead Architect & SEO Director)"
+    
+    # Body content based on language
+    if is_bn:
+        body_content = """
+        <div class="chapter">
+            <h2>১. লগইন ও ১ সপ্তাহের ফ্রি ট্রায়াল</h2>
+            <p><strong>অ্যাক্সেস:</strong> ইউজার বা অ্যাডমিন ক্রেডেনশিয়াল (<code>ADMIN</code> / <code>AGENTNASER</code>) দিয়ে লগইন করুন। ১ম বার লগইন করার পর ইউজারকে <strong>৭ দিনের সম্পূর্ণ ফ্রি আনলিমিটেড অ্যাক্সেস</strong> দেওয়া হবে।</p>
+            <p><strong>স্বয়ংক্রিয় লক:</strong> ৭ দিন পার হয়ে গেলে প্ল্যাটফর্ম স্বয়ংক্রিয়ভাবে লক হয়ে যাবে এবং লাইসেন্স রিনিউ করার নোটিশ দেখাবে।</p>
+        </div>
+        <div class="chapter">
+            <h2>২. ইঞ্জিন ১ — ডেইলি এসইআরপি রাডার (র‍্যাংক ট্র্যাকিং)</h2>
+            <p>আপনার টার্গেটেড কিওয়ার্ডগুলো গুগলের ১ থেকে ১০ নম্বর পজিশনে কোথায় আছে, প্রতিদ্বন্দ্বীরা কীভাবে পজিশন বদলাচ্ছে এবং সার্চ ভলিউম কেমন—তা ২৪/৭ মনিটর করতে এই ইঞ্জিন ব্যবহার করুন। দেশ সিলেক্ট করে কিওয়ার্ড ও কম্পিটিটর ডোমেন দিলে লাইভ রাডার কার্ড ওপেন হবে।</p>
+        </div>
+        <div class="chapter">
+            <h2>৩. ইঞ্জিন ২ — ৩৬০° ডিপ কম্পিটিটর স্পাই</h2>
+            <p>গুগলে এক নম্বরে থাকা প্রতিদ্বন্দ্বীর ইউআরএল ইনপুট দিলে তাদের H1, H2, H3 হেডিংস, মোট শব্দসংখ্যা ও কনটেন্ট গ্যাপ (Content Gap) মুহূর্তের মধ্যে স্ক্র্যাপ করে আপনার সামনে তুলে ধরবে।</p>
+        </div>
+        <div class="chapter">
+            <h2>৪. ইঞ্জিন ৩ — ৫ বনাম ১ আউট-র‍্যাঙ্কার</h2>
+            <p>শীর্ষ ৫ জন প্রতিদ্বন্দ্বীর আর্টিকেল লিংক দিলে সিস্টেম তাদের সবার সেরা তথ্যগুলো নিয়ে একক একটি সুপিরিয়র মাস্টার আউটলাইন তৈরি করে দেয় যা গুগলে তাদের আউট-র‍্যাংক করতে সক্ষম।</p>
+        </div>
+        <div class="chapter">
+            <h2>৫. ইঞ্জিন ৪ — এআই কনটেন্ট স্টুডিও (২৫০০+ শব্দ, হিউম্যান রাইটার কোয়ালিটি)</h2>
+            <p>• <strong>০% ডাবল ওয়ার্ড:</strong> কোনো রোবোটিক পুনরাবৃত্তি বা একই শব্দের পুনরাবৃত্তি থাকবে না।<br>
+            • <strong>মেইন কিওয়ার্ড ও LSI ইন্টিগ্রেশন:</strong> টাইটেল, প্রথম ৬০-৮০ শব্দ এবং প্রতিটি LSI কিওয়ার্ডের জন্য আলাদা ডেডিকেটেড সাব-সেকশন তৈরি হবে।<br>
+            • <strong>গুগল AI ওভারভিউ ও FAQ স্কিমা:</strong> গুগলের নতুন সার্চ ফিচারে আসার জন্য কম্প্যারিজন টেবিল এবং FAQPage স্কিমা কোড সংযুক্ত থাকবে।</p>
+        </div>
+        <div class="chapter">
+            <h2>৬. ইঞ্জিন ৫ — অটোনোমাস অটোপাইলট এজেন্ট (হ্যান্ডস-ফ্রি এসইও)</h2>
+            <p>শুধু ব্র্যান্ড নেম ও কম্পিটিটর ডোমেন দিন; এজেন্ট নিজে নিজে কম্পিটিটরদের স্ক্যান করবে, হাই-ইনটেন্ট কিওয়ার্ড বের করবে, আর্টিকেল লিখবে এবং সরাসরি আপনার ওয়েবসাইটে পাবলিশ করবে।</p>
+        </div>
+        <div class="chapter">
+            <h2>৭. ইঞ্জিন ৬ — এসইও ডিরেক্টর ক্যাম্পেইন ও ৩০ দিনের রোডম্যাপ</h2>
+            <p>সিনিয়র এসইও ডিরেক্টরের তৈরি ১০ দিনের মাস্টার এক্সিকিউশন ক্যাম্পেইন ও ৩০ দিনের কন্টেন্ট ক্যালেন্ডার ডাউনলোড করে সরাসরি ব্যবহার করুন।</p>
+        </div>
+        <div class="chapter">
+            <h2>৮. ওয়ার্ডপ্রেস ও কাস্টম সাইট অটো-পাবলিশিং</h2>
+            <p>হেডারের 🔌 WordPress অপশনে গিয়ে সাইট লিংক, ইউজারনেম এবং Application Password দিয়ে ১ ক্লিকে কানেক্ট করুন এবং কনটেন্ট ড্রাফট হিসেবে অটো-পাবলিশ করুন।</p>
+        </div>
+        <div class="chapter">
+            <h2>৯. গুগলে ১ নম্বরে র‍্যাংক করার সেরা এসইও সিক্রেটস</h2>
+            <p>১. প্রথম ১০০ শব্দের ভেতর ইউজারের সার্চ প্রশ্নের সরাসরি উত্তর দিন।<br>
+            ২. প্রতিটি LSI কিওয়ার্ডের সঠিক ব্যাখ্যা ও তথ্যবহুল অনুচ্ছেদ রাখুন।<br>
+            ৩. কম্প্যারিজন টেবিল ব্যবহার করুন যাতে গুগল ফিচার্ড স্নsnippet দেয়।<br>
+            ৪. অটোপাইলট এজেন্ট দিয়ে প্রতি সপ্তাহে কমপক্ষে ৩-৫টি মাস্টার আর্টিকেল পাবলিশ করুন।</p>
+        </div>
+        """
+    else:
+        body_content = """
+        <div class="chapter">
+            <h2>1. System Access & 7-Day Free Trial</h2>
+            <p><strong>Gateway Access:</strong> Log in using Admin credentials (<code>ADMIN</code> / <code>AGENTNASER</code>) or registered user credentials. First-time users receive <strong>7 Days of 100% Unlimited Free Access</strong> to all 6 engines.</p>
+            <p><strong>Automated Lockout:</strong> When the 7 days elapse, access automatically locks with a renewal prompt. Master administrators can bypass or reset the timer at any time.</p>
+        </div>
+        <div class="chapter">
+            <h2>2. Engine 1 — Daily SERP Radar (Keyword Surveillance)</h2>
+            <p>Monitors Google rankings (#1 through #10), search volume, keyword difficulty, and competitor position fluctuations 24/7 across multiple countries (Bangladesh, US, UK, Global).</p>
+        </div>
+        <div class="chapter">
+            <h2>3. Engine 2 — 360° Deep Competitor Infiltration</h2>
+            <p>Enter any rival article URL to reverse-engineer their heading hierarchy (H1, H2, H3), total word count benchmark, keyword density, and actionable content gaps.</p>
+        </div>
+        <div class="chapter">
+            <h2>4. Engine 3 — 5 vs 1 SERP Outranker</h2>
+            <p>Crawl up to 5 competing URLs simultaneously. The engine synthesizes their combined best insights into one superior, outranking master brief.</p>
+        </div>
+        <div class="chapter">
+            <h2>5. Engine 4 — Elite AI Content Studio (2,500+ Words EEAT)</h2>
+            <p>• <strong>0 Double Words:</strong> Elite multi-tier deduplication guarantees zero repetitive phrases or stutter tokens.<br>
+            • <strong>Main & LSI Keyword Precision:</strong> Prominently featured in H1, intro hook, and dedicated analytical subsections for every provided LSI keyword.<br>
+            • <strong>Google AI Overview & FAQ Schema:</strong> Structured comparison tables, SGE snippet blocks, and valid JSON-LD schema.</p>
+        </div>
+        <div class="chapter">
+            <h2>6. Engine 5 — Autonomous Autopilot Agent (Hands-Free SEO)</h2>
+            <p>Enter your brand name and competitor domains; the agent autonomously scans ranking opportunities, generates outranking content, and publishes straight to your CMS.</p>
+        </div>
+        <div class="chapter">
+            <h2>7. Engine 6 — SEO Director Campaign & 30-Day Roadmap</h2>
+            <p>A structured 10-day execution campaign and downloadable 30-day content calendar designed by senior architects to systematically build domain authority.</p>
+        </div>
+        <div class="chapter">
+            <h2>8. One-Click WordPress & Webhook Auto-Publishing</h2>
+            <p>Connect your WordPress site via REST API Application Passwords or custom webhooks to publish generated articles straight to your website in seconds.</p>
+        </div>
+        <div class="chapter">
+            <h2>9. RankNaser's Golden Rules for #1 Google Ranking</h2>
+            <p>1. Satisfy search intent directly within the opening 100 words.<br>
+            2. Cover every semantic LSI entity thoroughly.<br>
+            3. Include structured comparison tables to win Featured Snippets.<br>
+            4. Maintain consistent publishing of 3-5 comprehensive guides per week.</p>
+        </div>
+        """
+
+    return f"""<!DOCTYPE html>
+<html lang="{'bn' if is_bn else 'en'}">
+<head>
+    <meta charset="utf-8">
+    <title>{title}</title>
+    <style>
+        @page {{
+            size: A4;
+            margin: 18mm 16mm;
+            @bottom-right {{
+                content: counter(page);
+            }}
+        }}
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            color: #0f172a;
+            line-height: 1.65;
+            font-size: 13.5px;
+            background: #ffffff;
+            margin: 0;
+            padding: 24px;
+        }}
+        .print-toolbar {{
+            background: #1e1b4b;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }}
+        .btn-print {{
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+        }}
+        .cover {{
+            text-align: center;
+            padding: 30px 20px 25px 20px;
+            background: linear-gradient(135deg, #f8fafc, #eff6ff);
+            border-radius: 14px;
+            border: 2px solid #cbd5e1;
+            margin-bottom: 30px;
+        }}
+        .logo-badge {{
+            display: inline-block;
+            background: #1e3a8a;
+            color: white;
+            font-weight: 800;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }}
+        h1 {{
+            font-size: 26px;
+            margin: 6px 0;
+            color: #0f172a;
+            font-weight: 900;
+        }}
+        .sub {{
+            font-size: 14px;
+            color: #475569;
+            margin: 0 0 14px 0;
+        }}
+        .author-box {{
+            display: inline-block;
+            background: #ffffff;
+            border: 1px solid #bfdbfe;
+            border-radius: 20px;
+            padding: 4px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #1e40af;
+        }}
+        .chapter {{
+            margin-bottom: 22px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #e2e8f0;
+            page-break-inside: avoid;
+        }}
+        h2 {{
+            font-size: 16px;
+            color: #1e3a8a;
+            margin: 0 0 8px 0;
+            font-weight: 800;
+        }}
+        p {{
+            margin: 0 0 8px 0;
+        }}
+        code {{
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #0f172a;
+        }}
+        @media print {{
+            .print-toolbar {{
+                display: none !important;
+            }}
+            body {{
+                padding: 0;
+            }}
+            .cover {{
+                border-color: #94a3b8;
+            }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="print-toolbar">
+        <div>
+            <strong>📘 RankNaserPro Intelligence Suite — PDF Export Ready</strong>
+            <span style="font-size: 12px; opacity: 0.85; margin-left: 10px;">Click Print to save as PDF</span>
+        </div>
+        <button class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    </div>
+
+    <div class="cover">
+        <div class="logo-badge">🚀 RANKNASERPRO INTELLIGENCE SUITE</div>
+        <h1>{title}</h1>
+        <div class="sub">{subtitle}</div>
+        <div class="author-box">👑 {author}</div>
+    </div>
+
+    {body_content}
+
+    <div style="text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #cbd5e1; font-size: 11px; color: #64748b;">
+        © {title.split('—')[0]} • Lead Architect & SEO Director: RankNaser • All Rights Reserved.
+    </div>
+
+    <script>
+        // Auto prompt print on open if loaded for export
+        window.addEventListener('load', function() {{
+            setTimeout(function() {{
+                if (window.location.search.includes('print=true')) {{
+                    window.print();
+                }}
+            }}, 400);
+        }});
+    </script>
+</body>
+</html>"""
+
 def get_ranknaser_photo_uri():
     photo_b64_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'photo_b64.txt')
     if os.path.exists(photo_b64_file):
@@ -1732,6 +1985,10 @@ HTML_PAGE = """<!DOCTYPE html>
                     <span>🚪 Logout</span>
                 </button>
 
+                <button type="button" id="userGuideHeaderBtn" onclick="openUserGuideModal()" style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border: none; font-weight: 700; border-radius: 10px; padding: 10px 15px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(124,58,237,0.3); font-size: 12.5px; transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'" title="View & Download Official User Guide (English & বাংলা)">
+                    <span>📘 User Guide (EN / বাংলা)</span>
+                    <span style="font-size: 10.5px; background: rgba(255,255,255,0.22); padding: 2px 6px; border-radius: 4px; font-weight: 800;">⬇️ PDF</span>
+                </button>
                 <button type="button" id="returnDashboardBtn" onclick="goBackToHome();" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; font-weight: 700; border-radius: 10px; padding: 10px 16px; cursor: pointer; display: flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(2,132,199,0.3); font-size: 12.5px; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" title="Return to Dashboard">
                     <span>⬅️ Return Dashboard</span>
                 </button>
@@ -2900,7 +3157,272 @@ https://techlandbd.com</textarea>
         </div>
     </div>
 
-    <!-- ================= 7-DAY FREE TRIAL ACTIVE STATUS MODAL ================= -->
+    
+        <!-- ================= FLOATING DASHBOARD CORNER GUIDE BADGE ================= -->
+        <div id="cornerGuideBadge" onclick="openUserGuideModal()" style="position: fixed; bottom: 24px; right: 24px; z-index: 99990; background: linear-gradient(135deg, #1e1b4b, #4338ca); color: white; border-radius: 30px; padding: 12px 20px; box-shadow: 0 10px 25px rgba(67, 56, 202, 0.4); display: flex; align-items: center; gap: 10px; cursor: pointer; border: 2px solid #818cf8; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px) scale(1.03)'" onmouseout="this.style.transform='translateY(0) scale(1)'">
+            <span style="font-size: 22px;">📘</span>
+            <div style="text-align: left;">
+                <div style="font-size: 13px; font-weight: 800; line-height: 1.2;">User Guide / ইউজার গাইড</div>
+                <div style="font-size: 11px; color: #c7d2fe;">Download PDF (English & বাংলা) ⬇️</div>
+            </div>
+        </div>
+
+        <!-- ================= USER GUIDE MODAL (ENGLISH & BANGLA) ================= -->
+        <div id="userGuideModal" onclick="if(event.target === this) closeUserGuideModal()" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999995; align-items: center; justify-content: center; padding: 20px;">
+            <div style="background: #ffffff; border-radius: 20px; max-width: 860px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,0.3); border: 2px solid #6366f1; overflow: hidden; position: relative;">
+                
+                <!-- Modal Top Header -->
+                <div style="padding: 20px 26px; background: linear-gradient(135deg, #1e1b4b, #312e81); color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4338ca;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 26px;">📘</span>
+                        <div>
+                            <h2 style="margin: 0; font-size: 18px; font-weight: 800; letter-spacing: -0.3px;">RankNaserPro Intelligence Suite — User Guide</h2>
+                            <p style="margin: 2px 0 0 0; font-size: 12px; color: #c7d2fe;">Official Operator Manual & SEO Execution Blueprint (English & বাংলা)</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeUserGuideModal()" style="background: rgba(255,255,255,0.15); border: none; font-size: 18px; width: 34px; height: 34px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; transition: background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">✕</button>
+                </div>
+
+                <!-- Control Bar: Language Switcher & PDF Download Buttons -->
+                <div style="padding: 14px 26px; background: #f8fafc; border-bottom: 1.5px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" id="guideTabEnBtn" onclick="switchGuideTab('en')" style="padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 800; cursor: pointer; border: 1.5px solid #4f46e5; background: #4f46e5; color: white; transition: all 0.15s;">
+                            🇬🇧 English Guide
+                        </button>
+                        <button type="button" id="guideTabBnBtn" onclick="switchGuideTab('bn')" style="padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 800; cursor: pointer; border: 1.5px solid #cbd5e1; background: #ffffff; color: #334155; transition: all 0.15s;">
+                            🇧🇩 বাংলা ইউজার গাইড
+                        </button>
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button type="button" onclick="downloadGuidePdf('en')" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; font-size: 12.5px; font-weight: 700; border-radius: 8px; padding: 8px 16px; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(37,99,235,0.25);">
+                            <span>📥 Download English PDF</span>
+                        </button>
+                        <button type="button" onclick="downloadGuidePdf('bn')" style="background: linear-gradient(135deg, #059669, #10b981); color: white; border: none; font-size: 12.5px; font-weight: 700; border-radius: 8px; padding: 8px 16px; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(16,185,129,0.25);">
+                            <span>📥 বাংলা PDF ডাউনলোড</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scrollable Guide Content Area -->
+                <div style="padding: 24px 28px; overflow-y: auto; flex-grow: 1; font-size: 14px; line-height: 1.7; color: #334155;">
+                    
+                    <!-- ENGLISH GUIDE VIEW -->
+                    <div id="guideViewEn" style="display: block;">
+                        <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 14px 18px; border-radius: 0 8px 8px 0; margin-bottom: 22px;">
+                            <div style="font-weight: 800; color: #1e40af; font-size: 15px;">Welcome to RankNaserPro Intelligence Suite</div>
+                            <div style="font-size: 13px; color: #3b82f6; margin-top: 2px;">Architected by <strong>RankNaser</strong> — Lead Architect & SEO Director</div>
+                            <div style="font-size: 12.5px; color: #475569; margin-top: 6px;">
+                                This complete handbook explains how any user or agency can leverage the 6 autonomous search engines to track competitors, reverse-engineer top Google SERPs, generate 2,500+ word EEAT master articles, and automate publishing on 100% autopilot.
+                            </div>
+                        </div>
+
+                        <h3 style="color: #0f172a; font-size: 17px; margin-top: 20px; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 6px;">📋 Table of Contents</h3>
+                        <ol style="padding-left: 20px; margin-bottom: 24px; color: #2563eb; font-weight: 600;">
+                            <li>Module 1: Access, Free Trial & System Gateway</li>
+                            <li>Module 2: Engine 1 — Daily SERP Radar & Keyword Tracking</li>
+                            <li>Module 3: Engine 2 — 360° Deep Competitor Infiltration</li>
+                            <li>Module 4: Engine 3 — 5 vs 1 SERP Outranker</li>
+                            <li>Module 5: Engine 4 — Elite AI Content Studio (2,500+ Words EEAT)</li>
+                            <li>Module 6: Engine 5 — Autonomous Autopilot Agent (Hands-Free SEO)</li>
+                            <li>Module 7: Engine 6 — SEO Director Campaign & 30-Day Roadmap</li>
+                            <li>Module 8: One-Click WordPress & Webhook Auto-Publishing</li>
+                            <li>Module 9: RankNaser's Golden SEO Blueprint for Ranking #1 on Google</li>
+                        </ol>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">🚀 Module 1: Access, Free Trial & System Gateway</h3>
+                        <p><strong>1.1 Initial Login:</strong> Navigate to the gateway and log in using your Admin credentials (<code>ADMIN</code> / <code>AGENTNASER</code>) or your registered user credentials. You can also use the <strong>Instant Enter (1-Click)</strong> button.</p>
+                        <p><strong>1.2 7-Day Complimentary Trial:</strong> First-time users receive 7 full days of unrestricted access to all 6 engines. The live countdown is displayed in the header badge (<code>⏱️ Day 1 of 7</code>). After 7 days, the system automatically locks to protect access. Master administrators can bypass or reset the trial at any time.</p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">📡 Module 2: Engine 1 — Daily SERP Radar & Keyword Tracking</h3>
+                        <p><strong>2.1 Purpose:</strong> Continuously surveillance Google search results (#1 through #10) to monitor keyword rankings, search difficulty, volume trends, and competitor movements.</p>
+                        <p><strong>2.2 How to Use:</strong>
+                            <br>1. Select target country (Bangladesh, US, UK, Global, etc.).
+                            <br>2. Enter your Target Keywords (separated by commas) and your Competitor URLs.
+                            <br>3. Click <strong>"Launch Live SERP Radar Scan"</strong>.
+                            <br>4. The radar renders position distribution cards, movement alerts, and direct ranking tables.
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">🕵️ Module 3: Engine 2 — 360° Deep Competitor Infiltration</h3>
+                        <p><strong>3.1 Purpose:</strong> Scrapes and dissects the live ranking content of your #1 competitor page to uncover their exact headings (H1, H2, H3), total word count, keyword density, and critical content gaps.</p>
+                        <p><strong>3.2 How to Use:</strong>
+                            <br>1. Enter the exact competitor article URL you wish to outrank.
+                            <br>2. Click <strong>"Execute Deep Competitor Infiltration"</strong>.
+                            <br>3. Review the Infiltration Report: word count benchmark, heading hierarchy, and highlighted content gaps that your own article must solve.
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">⚔️ Module 4: Engine 3 — 5 vs 1 SERP Outranker</h3>
+                        <p><strong>4.1 Purpose:</strong> Why beat one competitor when you can beat the top 5 at once? This engine crawls 5 competing URLs simultaneously and synthesizes their combined best points into one superior master outline.</p>
+                        <p><strong>4.2 How to Use:</strong>
+                            <br>1. Provide up to 5 competitor URLs ranking on Google Page 1.
+                            <br>2. Provide your Focus Keyword.
+                            <br>3. Click <strong>"Generate 5 vs 1 Outranking Synthesis"</strong>.
+                            <br>4. The engine outputs a comprehensive master brief containing combined headings, missed competitor angles, and a superior article architecture.
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">✍️ Module 5: Engine 4 — Elite AI Content Studio (2,500+ Words EEAT)</h3>
+                        <p><strong>5.1 Purpose:</strong> Produces human-authored, publication-grade blog posts (2,000 to 3,500+ words) that strictly comply with Google Helpful Content guidelines.</p>
+                        <p><strong>5.2 Key Capabilities:</strong>
+                            <br>• <strong>0 Double Words:</strong> Advanced multi-tier deduplication guarantees zero stutter or repetitive phrasing.
+                            <br>• <strong>Exact Keyword Placement:</strong> The Main Keyword is featured naturally in the H1 title, opening hook, major headings, comparison tables, and FAQs.
+                            <br>• <strong>Semantic LSI Deep-Dives:</strong> Every single LSI keyword provided receives its own dedicated, context-rich subsection.
+                            <br>• <strong>Rich Schema & Tables:</strong> Embeds Google AI Overview quick answers, Markdown comparison tables, and FAQPage JSON-LD Schema.
+                        </p>
+                        <p><strong>5.3 How to Use:</strong>
+                            <br>1. Enter Title, Main Keyword, and Semantic LSI Keywords (comma separated).
+                            <br>2. Select Target Country, Format (Long-Form SEO, Review, Buying Guide), Tone, and Word Count.
+                            <br>3. Click <strong>"Generate Outranking Article with AI Agent"</strong>.
+                            <br>4. View in Visual mode, copy Markdown, or 1-click post to WordPress.
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">🤖 Module 6: Engine 5 — Autonomous Autopilot Agent</h3>
+                        <p><strong>6.1 Purpose:</strong> 100% hands-free SEO worker. You enter your brand name and competitor domains; the agent autonomously scans competitor rankings, discovers high-intent ranking gaps, writes the outranking article, and auto-publishes it to your CMS.</p>
+                        <p><strong>6.2 How to Use:</strong>
+                            <br>1. Enter Brand Name, Target Country, and Competitor Domains.
+                            <br>2. Check "Post to WordPress" or "Post to Custom Webhook".
+                            <br>3. Click <strong>"Launch Autonomous Agent Mission Now"</strong>.
+                            <br>4. Watch real-time execution in the live terminal console.
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">🗺️ Module 7: Engine 6 — SEO Director Campaign & 30-Day Roadmap</h3>
+                        <p><strong>7.1 Purpose:</strong> A 10-day structured execution campaign and 30-day content calendar designed by senior SEO architects to systematically build domain authority.</p>
+                        <p><strong>7.2 How to Use:</strong>
+                            <br>1. Click the top button <strong>"🗺️ 30-Day Content Roadmap"</strong>.
+                            <br>2. Generate your customized 30-day calendar matching your niche and target country.
+                            <br>3. Download the full roadmap as a Markdown or JSON plan.
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">🔌 Module 8: One-Click WordPress & Webhook Auto-Publishing</h3>
+                        <p><strong>8.1 WordPress Integration:</strong>
+                            <br>1. Click <strong>"🔌 WordPress"</strong> in the top header.
+                            <br>2. Enter your WordPress Site URL (e.g., <code>https://mywebsite.com</code>).
+                            <br>3. Enter your WordPress Admin Username.
+                            <br>4. In your WordPress admin panel, go to <em>Users &gt; Profile &gt; Application Passwords</em>, generate a new password, and paste it here.
+                            <br>5. Click <strong>"Test Connection"</strong> and save. Articles can now be published directly as Drafts or Published posts!
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">👑 Module 9: RankNaser's Golden Rules for #1 Google Ranking</h3>
+                        <p>1. <strong>Satisfy Search Intent in the First 100 Words:</strong> Google favors pages that answer the user's primary query immediately.</p>
+                        <p>2. <strong>Cover Every Semantic LSI Entity:</strong> Modern search engines rank topical depth, not raw keyword repetition.</p>
+                        <p>3. <strong>Include Structured Comparison Tables:</strong> Tables dramatically improve dwell time and win Featured Snippets.</p>
+                        <p>4. <strong>Consistent Publishing Rhythm:</strong> Deploy at least 3-5 comprehensive guides per week using the Autopilot Agent.</p>
+                    </div>
+
+                    <!-- BANGLA GUIDE VIEW -->
+                    <div id="guideViewBn" style="display: none;">
+                        <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 14px 18px; border-radius: 0 8px 8px 0; margin-bottom: 22px;">
+                            <div style="font-weight: 800; color: #065f46; font-size: 15px;">স্বাগতম RankNaserPro Intelligence Suite-এ!</div>
+                            <div style="font-size: 13px; color: #047857; margin-top: 2px;">প্রধান আর্কিটেক্ট ও এসইও ডিরেক্টর: <strong>RankNaser</strong></div>
+                            <div style="font-size: 12.5px; color: #475569; margin-top: 6px;">
+                                এই পূর্ণাঙ্গ ব্যবহারকারী নির্দেশিকায় সহজ বাংলা ভাষায় বর্ণনা করা হয়েছে কীভাবে আপনি ৬টি স্বয়ংক্রিয় এআই ইঞ্জিন ব্যবহার করে প্রতিদ্বন্দ্বীদের ট্র্যাক করবেন, ২৫০০+ শব্দের নির্ভুল র‍্যাংকিং আর্টিকেল তৈরি করবেন এবং সরাসরি ওয়েবসাইটে পাবলিশ করবেন।
+                            </div>
+                        </div>
+
+                        <h3 style="color: #0f172a; font-size: 17px; margin-top: 20px; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 6px;">📋 সূচিপত্র (Table of Contents)</h3>
+                        <ol style="padding-left: 20px; margin-bottom: 24px; color: #059669; font-weight: 600;">
+                            <li>মডিউল ১: লগইন ও ১ সপ্তাহের ফ্রি ট্রায়াল সিস্টেম</li>
+                            <li>মডিউল ২: ইঞ্জিন ১ — ডেইলি এসইআরপি রাডার (র‍্যাংক ট্র্যাকিং)</li>
+                            <li>মডিউল ৩: ইঞ্জিন ২ — ৩৬০° ডিপ কম্পিটিটর স্পাই</li>
+                            <li>মডিউল ৪: ইঞ্জিন ৩ — ৫ বনাম ১ আউট-র‍্যাঙ্কার</li>
+                            <li>মডিউল ৫: ইঞ্জিন ৪ — এআই কনটেন্ট স্টুডিও (২৫০০+ শব্দ, হিউম্যান রাইটার কোয়ালিটি)</li>
+                            <li>মডিউল ৬: ইঞ্জিন ৫ — অটোনোমাস অটোপাইলট এজেন্ট (হ্যান্ডস-ফ্রি এসইও)</li>
+                            <li>মডিউল ৭: ইঞ্জিন ৬ — এসইও ডিরেক্টর ক্যাম্পেইন ও ৩০ দিনের রোডম্যাপ</li>
+                            <li>মডিউল ৮: ওয়ার্ডপ্রেস ও কাস্টম সাইট অটো-পাবলিশিং কনফিগারেশন</li>
+                            <li>মডিউল ৯: গুগলে ১ নম্বরে র‍্যাংক করার সেরা এসইও ফর্মুলা</li>
+                        </ol>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">🚀 মডিউল ১: লগইন ও ১ সপ্তাহের ফ্রি ট্রায়াল সিস্টেম</h3>
+                        <p><strong>১.১ লগইন পদ্ধতি:</strong> ড্যাশবোর্ডে প্রবেশের জন্য অ্যাডমিন আইডি (<code>ADMIN</code>) এবং পাসওয়ার্ড (<code>AGENTNASER</code>) দিয়ে লগইন করুন, অথবা <strong>Instant Enter (1-Click)</strong> বাটনে ক্লিক করুন।</p>
+                        <p><strong>১.২ ৭ দিনের ফ্রি ট্রায়াল:</strong> যেকোনো নতুন ইউজার ৭ দিন সম্পূর্ণ ফ্রিতে সব ইঞ্জিন ব্যবহার করতে পারবেন। ড্যাশবোর্ডের হেডারে লাইভ কাউন্টডাউন শো করবে (<code>⏱️ Day 1 of 7</code>)। ৭ দিন শেষ হলে প্ল্যাটফর্ম অটোমেটিক লক হয়ে যাবে। তবে মাস্টার অ্যাডমিন যেকোনো সময় পাসওয়ার্ড দিয়ে এটি আনলক করতে পারবেন।</p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">📡 মডিউল ২: ইঞ্জিন ১ — ডেইলি এসইআরপি রাডার (র‍্যাংক ট্র্যাকিং)</h3>
+                        <p><strong>২.১ মূল কাজ:</strong> আপনার টার্গেটেড কিওয়ার্ডগুলো গুগলের ১ থেকে ১০ নম্বর পজিশনে কোথায় আছে, প্রতিদ্বন্দ্বীরা কীভাবে পজিশন বদলাচ্ছে এবং সার্চ ভলিউম কেমন—তা ২৪/৭ মনিটর করা।</p>
+                        <p><strong>২.২ ব্যবহারের নিয়ম:</strong>
+                            <br>১. দেশ নির্বাচন করুন (যেমন: বাংলাদেশ, ইউএস, ইউকে ইত্যাদি)।
+                            <br>২. আপনার কিওয়ার্ড এবং কম্পিটিটরদের ওয়েবসাইটের নাম দিন।
+                            <br>৩. <strong>"Launch Live SERP Radar Scan"</strong> বাটনে চাপ দিন।
+                            <br>৪. সাথে সাথে লাইভ র‍্যাংকিং ও মুভমেন্ট কার্ড আপনার সামনে চলে আসবে।
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">🕵️ মডিউল ৩: ইঞ্জিন ২ — ৩৬০° ডিপ কম্পিটিটর স্পাই</h3>
+                        <p><strong>৩.১ মূল কাজ:</strong> যে কম্পিটিটর গুগলের ১ নম্বরে বসে আছে, তার পুরো আর্টিকেল স্ক্যান করে তার H1, H2, H3 হেডিংস, মোট শব্দসংখ্যা এবং তার লেখার দুর্বলতাগুলো (Content Gap) বের করে নেওয়া।</p>
+                        <p><strong>৩.২ ব্যবহারের নিয়ম:</strong>
+                            <br>১. প্রতিদ্বন্দ্বীর আর্টিকেলের সঠিক URL দিন।
+                            <br>২. <strong>"Execute Deep Competitor Infiltration"</strong> বাটনে ক্লিক করুন।
+                            <br>৩. রিপোর্ট থেকে দেখুন প্রতিদ্বন্দ্বী কোন কোন পয়েন্ট বাদ দিয়েছে, যা আপনার আর্টিকেলে যোগ করতে হবে।
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">⚔️ মডিউল ৪: ইঞ্জিন ৩ — ৫ বনাম ১ আউট-র‍্যাঙ্কার</h3>
+                        <p><strong>৪.১ মূল কাজ:</strong> এক সাথে শীর্ষ ৫ জন প্রতিদ্বন্দ্বীর আর্টিকেল অ্যানালাইসিস করে তাদের সবার চেয়ে সুপিরিয়র ও তথ্যবহুল একটি মাস্টার আউটলাইন তৈরি করা।</p>
+                        <p><strong>৪.২ ব্যবহারের নিয়ম:</strong>
+                            <br>১. গুগলে র‍্যাংক করা শীর্ষ ৫টি প্রতিদ্বন্দ্বীর লিংক দিন।
+                            <br>২. আপনার ফোকাস কিওয়ার্ড দিন।
+                            <br>৩. <strong>"Generate 5 vs 1 Outranking Synthesis"</strong> চাপুন।
+                            <br>৪. সিস্টেম সবার সেরা তথ্যগুলো নিয়ে একক পূর্ণাঙ্গ আউটলাইন তৈরি করে দেবে।
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">✍️ মডিউল ৫: ইঞ্জিন ৪ — এআই কনটেন্ট স্টুডিও (২৫০০+ শব্দ, হিউম্যান রাইটার কোয়ালিটি)</h3>
+                        <p><strong>৫.১ মূল কাজ:</strong> আন্তর্জাতিক পাবলিকেশন মানের (EEAT) ২৫০০+ শব্দের গভীর ও তথ্যবহুল আর্টিকেল তৈরি করা।</p>
+                        <p><strong>৫.২ বিশেষ সুবিধাসমূহ:</strong>
+                            <br>• <strong>০% ডাবল ওয়ার্ড:</strong> কোনো রোবোটিক পুনরাবৃত্তি বা একই শব্দের তোতাপাখি আচরণ নেই।
+                            <br>• <strong>মেইন কিওয়ার্ডের সঠিক ব্যবহার:</strong> টাইটেল, প্রথম ৬০-৮০ শব্দ, হেডিংস এবং উপসংহারে ন্যাচারালভাবে কিওয়ার্ড থাকবে।
+                            <br>• <strong>প্রতিটি LSI কিওয়ার্ডের ডেডিকেটেড সাব-সেকশন:</strong> আপনি যে LSI কিওয়ার্ড দেবেন, সেটির ওপর আলাদা তথ্যবহুল সেকশন লেখা হবে।
+                            <br>• <strong>গুগল AI ওভারভিউ ও FAQ স্কিমা:</strong> গুগলের নতুন সার্চ ফিচারে আসার জন্য কম্প্যারিজন টেবিল এবং FAQPage স্কিমা কোড থাকবে।
+                        </p>
+                        <p><strong>৫.৩ ব্যবহারের নিয়ম:</strong>
+                            <br>১. টপিক, মেইন কিওয়ার্ড এবং LSI কিওয়ার্ড দিন (কমা দিয়ে দিয়ে)।
+                            <br>২. দেশ, ফরম্যাট (Long-Form SEO, Review ইত্যাদি) ও শব্দসংখ্যা সিলেক্ট করুন।
+                            <br>৩. <strong>"Generate Outranking Article with AI Agent"</strong> চাপুন।
+                            <br>৪. আর্টিকেল তৈরি হলে এক ক্লিকে ওয়ার্ডপ্রেসে পোস্ট করুন বা ডাউনলোড করে নিন।
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">🤖 মডিউল ৬: ইঞ্জিন ৫ — অটোনোমাস অটোপাইলট এজেন্ট (হ্যান্ডস-ফ্রি এসইও)</h3>
+                        <p><strong>৬.১ মূল কাজ:</strong> সম্পূর্ণ অটোমেশন। আপনি শুধু আপনার ব্র্যান্ড নেম ও কম্পিটিটর ডোমেন দেবেন; এজেন্ট নিজে নিজে কম্পিটিটরদের স্ক্যান করবে, হাই-ইনটেন্ট কিওয়ার্ড বের করবে, আর্টিকেল লিখবে এবং সরাসরি সাইটে পাবলিশ করবে।</p>
+                        <p><strong>৬.২ ব্যবহারের নিয়ম:</strong>
+                            <br>১. ব্র্যান্ড নেম ও ১-৩টি কম্পিটিটর ডোমেন দিন।
+                            <br>২. "Post to WordPress" টিক দিন।
+                            <br>৩. <strong>"Launch Autonomous Agent Mission Now"</strong> চাপুন।
+                            <br>৪. লাইভ টার্মিনাল কনসোলে এজেন্টের কাজ স্বচক্ষে দেখুন।
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">🗺️ মডিউল ৭: ইঞ্জিন ৬ — এসইও ডিরেক্টর ক্যাম্পেইন ও ৩০ দিনের রোডম্যাপ</h3>
+                        <p><strong>৭.১ মূল কাজ:</strong> সিনিয়র এসইও ডিরেক্টরের তৈরি ১০ দিনের মাস্টার এক্সিকিউশন ক্যাম্পেইন ও ৩০ দিনের কনটেন্ট ক্যালেন্ডার।</p>
+                        <p><strong>৭.২ ব্যবহারের নিয়ম:</strong>
+                            <br>১. হেডারের <strong>"🗺️ 30-Day Content Roadmap"</strong> বাটনে ক্লিক করুন।
+                            <br>২. আপনার ইন্ডাস্ট্রির জন্য ৩০ দিনের শিডিউল তৈরি করুন এবং ডাউনলোড করে প্রিন্ট করুন।
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">🔌 মডিউল ৮: ওয়ার্ডপ্রেস ও কাস্টম সাইট অটো-পাবলিশিং কনফিগারেশন</h3>
+                        <p><strong>৮.১ ওয়ার্ডপ্রেস কানেক্ট করার উপায়:</strong>
+                            <br>১. হেডারের <strong>"🔌 WordPress"</strong> বাটনে চাপুন।
+                            <br>২. আপনার ওয়েবসাইটের লিংক (যেমন: <code>https://mywebsite.com</code>) দিন।
+                            <br>৩. ওয়ার্ডপ্রেস অ্যাডমিন ইউজারনেম দিন।
+                            <br>৪. ওয়ার্ডপ্রেসের <em>Users &gt; Profile &gt; Application Passwords</em> থেকে নতুন একটি পাসওয়ার্ড তৈরি করে এখানে পেস্ট করুন।
+                            <br>৫. <strong>"Test Connection"</strong> চাপুন এবং সেভ করুন। ব্যস, সরাসরি ড্রাফট পাবলিশ সক্রিয় হয়ে যাবে!
+                        </p>
+
+                        <h3 style="color: #0f172a; font-size: 16px; margin-top: 24px;">👑 মডিউল ৯: গুগলে ১ নম্বরে র‍্যাংক করার সেরা এসইও ফর্মুলা</h3>
+                        <p>১. <strong>প্রথম ১০০ শব্দে সমাধান দিন:</strong> ভিজিটর যে প্রশ্ন নিয়ে এসেছে, তার উত্তর প্রথম প্যারাগ্রাফেই পরিষ্কার করে বলুন।</p>
+                        <p>২. <strong>প্রতিটি LSI কিওয়ার্ডের গভীরতা নিশ্চিত করুন:</strong> শুধু কিওয়ার্ড গোঁজা নয়, সেই বিষয়ের বাস্তব তথ্য দিন।</p>
+                        <p>৩. <strong>কম্প্যারিজন টেবিল ব্যবহার করুন:</strong> টেবিল ভিজিটরের পড়ার সময় বাড়ায় এবং গুগল দ্রুত ফিচার্ড স্নsnippet দেয়।</p>
+                        <p>৪. <strong>নিয়মিত পাবলিশ করুন:</strong> অটোপাইলট এজেন্ট দিয়ে প্রতি সপ্তাহে কমপক্ষে ৩-৫টি মাস্টার আর্টিকেল পাবলিশ করুন।</p>
+                    </div>
+
+                </div>
+
+                <!-- Modal Footer -->
+                <div style="padding: 14px 26px; background: #f8fafc; border-top: 1.5px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div style="font-size: 12px; color: #64748b;">
+                        📖 RankNaserPro Intelligence Suite • Architecture by <strong>RankNaser</strong>
+                    </div>
+                    <button type="button" onclick="closeUserGuideModal()" style="background: #0f172a; color: white; border: none; font-weight: 700; border-radius: 8px; padding: 9px 22px; font-size: 13px; cursor: pointer;">
+                        Close Guide
+                    </button>
+                </div>
+            </div>
+        </div>
+
+<!-- ================= 7-DAY FREE TRIAL ACTIVE STATUS MODAL ================= -->
     <div id="trialInfoModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(5px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
         <div style="background: #ffffff; border-radius: 20px; max-width: 500px; width: 100%; padding: 30px; box-shadow: 0 25px 60px rgba(0,0,0,0.25); border: 1.5px solid #e2e8f0;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
@@ -6279,6 +6801,46 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                 modal.style.display = 'flex';
             }
         }
+        
+        // ================= USER GUIDE CONTROLLERS & PDF PRINTER =================
+        function openUserGuideModal() {
+            const modal = document.getElementById('userGuideModal');
+            if (modal) modal.style.display = 'flex';
+        }
+        window.openUserGuideModal = openUserGuideModal;
+
+        function closeUserGuideModal() {
+            const modal = document.getElementById('userGuideModal');
+            if (modal) modal.style.display = 'none';
+        }
+        window.closeUserGuideModal = closeUserGuideModal;
+
+        function switchGuideTab(lang) {
+            const viewEn = document.getElementById('guideViewEn');
+            const viewBn = document.getElementById('guideViewBn');
+            const tabEn = document.getElementById('guideTabEnBtn');
+            const tabBn = document.getElementById('guideTabBnBtn');
+
+            if (lang === 'bn') {
+                if (viewEn) viewEn.style.display = 'none';
+                if (viewBn) viewBn.style.display = 'block';
+                if (tabEn) { tabEn.style.background = '#ffffff'; tabEn.style.color = '#334155'; tabEn.style.borderColor = '#cbd5e1'; }
+                if (tabBn) { tabBn.style.background = '#059669'; tabBn.style.color = '#ffffff'; tabBn.style.borderColor = '#059669'; }
+            } else {
+                if (viewEn) viewEn.style.display = 'block';
+                if (viewBn) viewBn.style.display = 'none';
+                if (tabEn) { tabEn.style.background = '#4f46e5'; tabEn.style.color = '#ffffff'; tabEn.style.borderColor = '#4f46e5'; }
+                if (tabBn) { tabBn.style.background = '#ffffff'; tabBn.style.color = '#334155'; tabBn.style.borderColor = '#cbd5e1'; }
+            }
+        }
+        window.switchGuideTab = switchGuideTab;
+
+        function downloadGuidePdf(lang) {
+            const url = lang === 'bn' ? '/guide/bangla' : '/guide/english';
+            window.open(url, '_blank');
+        }
+        window.downloadGuidePdf = downloadGuidePdf;
+
         window.showTrialWelcomeModal = showTrialWelcomeModal;
 
         function closeTrialWelcomeModal() {
@@ -6529,6 +7091,18 @@ class RequestHandler(BaseHTTPRequestHandler):
             photo_uri = get_ranknaser_photo_uri()
             rendered_html = HTML_PAGE.replace('__RANKNASER_PHOTO_URI__', photo_uri)
             self.wfile.write(rendered_html.encode('utf-8'))
+        elif self.path == '/guide/english':
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            html_en = render_printable_guide('en')
+            self.wfile.write(html_en.encode('utf-8'))
+        elif self.path == '/guide/bangla':
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            html_bn = render_printable_guide('bn')
+            self.wfile.write(html_bn.encode('utf-8'))
         elif self.path == '/static/ranknaser.jpg':
             if os.path.exists(PHOTO_FILE):
                 self.send_response(200)
