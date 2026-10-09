@@ -3157,16 +3157,6 @@ https://techlandbd.com</textarea>
         </div>
     </div>
 
-    
-        <!-- ================= FLOATING DASHBOARD CORNER GUIDE BADGE ================= -->
-        <div id="cornerGuideBadge" onclick="openUserGuideModal()" style="position: fixed; bottom: 24px; right: 24px; z-index: 99990; background: linear-gradient(135deg, #1e1b4b, #4338ca); color: white; border-radius: 30px; padding: 12px 20px; box-shadow: 0 10px 25px rgba(67, 56, 202, 0.4); display: flex; align-items: center; gap: 10px; cursor: pointer; border: 2px solid #818cf8; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px) scale(1.03)'" onmouseout="this.style.transform='translateY(0) scale(1)'">
-            <span style="font-size: 22px;">📘</span>
-            <div style="text-align: left;">
-                <div style="font-size: 13px; font-weight: 800; line-height: 1.2;">User Guide / ইউজার গাইড</div>
-                <div style="font-size: 11px; color: #c7d2fe;">Download PDF (English & বাংলা) ⬇️</div>
-            </div>
-        </div>
-
         <!-- ================= USER GUIDE MODAL (ENGLISH & BANGLA) ================= -->
         <div id="userGuideModal" onclick="if(event.target === this) closeUserGuideModal()" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999995; align-items: center; justify-content: center; padding: 20px;">
             <div style="background: #ffffff; border-radius: 20px; max-width: 860px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,0.3); border: 2px solid #6366f1; overflow: hidden; position: relative;">
