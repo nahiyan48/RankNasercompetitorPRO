@@ -2835,8 +2835,9 @@ https://techlandbd.com</textarea>
 
 
     <!-- ================= 1-WEEK FREE TRIAL USER WELCOME POPUP MODAL ================= -->
-    <div id="trialWelcomeModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999990; align-items: center; justify-content: center; padding: 20px;">
+    <div id="trialWelcomeModal" onclick="if(event.target === this) closeTrialWelcomeModal()" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999990; align-items: center; justify-content: center; padding: 20px;">
         <div style="background: #ffffff; border-radius: 22px; max-width: 530px; width: 100%; padding: 34px 28px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.3); border: 2.5px solid #10b981; position: relative;">
+            <button id="launchTrialWelcomeBtn" type="button" onclick="document.getElementById('trialWelcomeModal').style.display='none'; closeTrialWelcomeModal(); return false;" aria-label="Close" style="position: absolute; top: 16px; right: 18px; background: #f1f5f9; border: none; font-size: 16px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; transition: background 0.15s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">✕</button>
             <div style="width: 76px; height: 76px; margin: 0 auto 16px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 38px; border: 3px solid #a7f3d0;">
                 🎁
             </div>
@@ -6266,6 +6267,50 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             }
         }
 
+        // ================= 1-WEEK FREE TRIAL USER MESSAGE CONTROLLERS (GLOBAL SCOPE) =================
+        let trialWelcomeTimer = null;
+
+        function showTrialWelcomeModal(force = false) {
+            if (!force && sessionStorage.getItem('ranknaser_welcome_seen') === 'true') {
+                return;
+            }
+            const modal = document.getElementById('trialWelcomeModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        }
+        window.showTrialWelcomeModal = showTrialWelcomeModal;
+
+        function closeTrialWelcomeModal() {
+            if (trialWelcomeTimer) {
+                clearTimeout(trialWelcomeTimer);
+                trialWelcomeTimer = null;
+            }
+            sessionStorage.setItem('ranknaser_welcome_seen', 'true');
+            
+            const modal = document.getElementById('trialWelcomeModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            const dashWrap = document.getElementById('dashboardWrapper');
+            if (dashWrap) {
+                dashWrap.style.display = 'block';
+            }
+            const authSc = document.getElementById('authScreen');
+            if (authSc) {
+                authSc.style.display = 'none';
+            }
+        }
+        window.closeTrialWelcomeModal = closeTrialWelcomeModal;
+
+        function dismissTrialAlert() {
+            const alertBox = document.getElementById('trialWelcomeAlert');
+            if (alertBox) {
+                alertBox.style.display = 'none';
+            }
+        }
+        window.dismissTrialAlert = dismissTrialAlert;
+
         function showDashboardView(user) {
             const authSc = document.getElementById('authScreen');
             const dashWrap = document.getElementById('dashboardWrapper');
@@ -6277,29 +6322,13 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                 nameDisp.textContent = '👤 ' + user.name;
             }
 
-        // ================= 1-WEEK FREE TRIAL USER MESSAGE CONTROLLERS =================
-        function showTrialWelcomeModal() {
-            const modal = document.getElementById('trialWelcomeModal');
-            if (modal) modal.style.display = 'flex';
-        }
-
-        function closeTrialWelcomeModal() {
-            const modal = document.getElementById('trialWelcomeModal');
-            if (modal) modal.style.display = 'none';
-            sessionStorage.setItem('ranknaser_welcome_seen', 'true');
-        }
-
-        function dismissTrialAlert() {
-            const alertBox = document.getElementById('trialWelcomeAlert');
-            if (alertBox) alertBox.style.display = 'none';
-        }
-
             updateTrialBadge(user);
             const isOk = checkTrialEnforcement(user);
-            if (isOk && (!sessionStorage.getItem('ranknaser_welcome_seen'))) {
-                setTimeout(() => {
+            if (isOk && sessionStorage.getItem('ranknaser_welcome_seen') !== 'true') {
+                if (trialWelcomeTimer) clearTimeout(trialWelcomeTimer);
+                trialWelcomeTimer = setTimeout(() => {
                     showTrialWelcomeModal();
-                }, 350);
+                }, 300);
             }
         }
 
