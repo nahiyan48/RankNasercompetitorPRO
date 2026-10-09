@@ -1431,6 +1431,11 @@ HTML_PAGE = """<!DOCTYPE html>
                 <p class="auth-hero-subtitle">
                     Deploy 6 specialized AI agents to track rival rankings, reverse-engineer top Google SERPs, write 2,500+ word master articles, and auto-publish to your CMS on 100% autopilot.
                 </p>
+                <div style="margin-top: 14px;">
+                    <span style="display: inline-flex; align-items: center; gap: 8px; background: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 20px; padding: 6px 18px; font-size: 12px; font-weight: 800; color: #047857;">
+                        <span>🎁</span> 1-WEEK (7-DAY) UNLIMITED FREE TRIAL ACCESS FOR USERS (AUTOMATIC EXPIRATION)
+                    </span>
+                </div>
             </div>
 
             <!-- 4-Item Live Capability Highlight Strip (Immediately Explains What the Suite Does) -->
@@ -1700,6 +1705,10 @@ HTML_PAGE = """<!DOCTYPE html>
                     <span id="customApiBadge" style="font-size: 10.5px; background: rgba(255,255,255,0.22); padding: 2px 6px; border-radius: 4px; font-weight: 600;">Not Configured</span>
                 </button>
                 
+                <div id="trialCountdownBadge" onclick="openTrialModal()" style="cursor: pointer; display: inline-flex; align-items: center; gap: 7px; background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 10px; padding: 7px 13px; font-size: 12px; font-weight: 800; color: #047857; box-shadow: 0 2px 8px rgba(16,185,129,0.18); transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'" title="Click to view 7-Day Free Trial status">
+                    <span style="font-size: 14px;">⏱️</span>
+                    <span id="trialCountdownText">7-Day Free Trial: Day 1 of 7</span>
+                </div>
                 <div id="currentUserBadge" style="display: inline-flex; align-items: center; gap: 8px; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; color: #1e293b;">
                     <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px #10b981;"></span>
                     <span id="currentUserNameDisplay">👤 RankNaser</span>
@@ -1713,6 +1722,32 @@ HTML_PAGE = """<!DOCTYPE html>
                 </button>
             </div>
         </header>
+
+        <!-- ================= 1-WEEK FREE TRIAL USER WELCOME MESSAGE ================= -->
+        <div id="trialWelcomeAlert" style="background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%); border: 1.5px solid #10b981; border-radius: 14px; padding: 14px 20px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.12); flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div style="width: 44px; height: 44px; background: #d1fae5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid #6ee7b7; flex-shrink: 0;">
+                    🎁
+                </div>
+                <div>
+                    <div style="font-size: 15px; font-weight: 800; color: #065f46; display: flex; align-items: center; gap: 8px;">
+                        <span>Your 1-Week (7-Day) Unlimited Free Trial is Active!</span>
+                        <span style="font-size: 11px; background: #059669; color: white; padding: 2px 8px; border-radius: 10px; font-weight: 700;">Full Access</span>
+                    </div>
+                    <div style="font-size: 12.5px; color: #047857; margin-top: 3px;">
+                        Enjoy 100% unrestricted access to all 6 autonomous SEO engines for 7 days. After 1 week, your trial will automatically expire.
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <button type="button" onclick="showTrialWelcomeModal()" style="background: #059669; color: white; border: none; font-weight: 700; border-radius: 8px; padding: 8px 15px; font-size: 12px; cursor: pointer; box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3); transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                    📋 View Trial Message
+                </button>
+                <button type="button" onclick="dismissTrialAlert()" style="background: transparent; border: 1px solid #a7f3d0; color: #065f46; font-weight: 700; border-radius: 8px; padding: 7px 12px; font-size: 12px; cursor: pointer;" title="Dismiss message">
+                    ✕ Dismiss
+                </button>
+            </div>
+        </div>
 
         <!-- Tab Nav: 6 Equal Columns Grid -->
         <div class="tabs-nav">
@@ -2782,6 +2817,111 @@ https://techlandbd.com</textarea>
             </div>
         </div>
     </div>
+
+
+    <!-- ================= 1-WEEK FREE TRIAL USER WELCOME POPUP MODAL ================= -->
+    <div id="trialWelcomeModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999990; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: #ffffff; border-radius: 22px; max-width: 530px; width: 100%; padding: 34px 28px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.3); border: 2.5px solid #10b981; position: relative;">
+            <div style="width: 76px; height: 76px; margin: 0 auto 16px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 38px; border: 3px solid #a7f3d0;">
+                🎁
+            </div>
+            <div style="display: inline-block; background: #ecfdf5; color: #047857; font-size: 11px; font-weight: 800; padding: 4px 14px; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">
+                Special Complimentary Access
+            </div>
+            <h2 style="font-size: 24px; font-weight: 900; color: #0f172a; margin: 0 0 10px 0;">🎉 Welcome! 1-Week Free Trial Active</h2>
+            <p style="font-size: 14.5px; color: #475569; line-height: 1.6; margin: 0 0 20px 0;">
+                You have received <strong>7 Days (1 Week) of 100% Unlimited Free Access</strong> to the complete <strong>RankNaserPro Intelligence Suite</strong>.
+            </p>
+
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 16px; text-align: left; margin-bottom: 22px; font-size: 13px; color: #334155; line-height: 1.7;">
+                <div style="font-weight: 800; color: #0f172a; margin-bottom: 8px; font-size: 13.5px;">🚀 Included in your 1-Week Free Trial:</div>
+                <div>✅ <strong>1. Daily SERP Radar:</strong> Live competitor rank tracking #1-10</div>
+                <div>✅ <strong>2. 360° Deep Spy:</strong> Competitor headings, word count & gap scraping</div>
+                <div>✅ <strong>3. 5 vs 1 Outranker:</strong> Master SERP synthesis & outranking outline</div>
+                <div>✅ <strong>4. AI Content Studio:</strong> 2,500+ word articles with FAQ Schema</div>
+                <div>✅ <strong>5. Autopilot Agent:</strong> Automated direct WordPress & API publishing</div>
+                <div>✅ <strong>6. SEO Director:</strong> 10-day master execution campaign blueprint</div>
+                <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 12px; color: #b91c1c; font-weight: 700;">
+                    ⏳ Notice: Access is active for 7 days and will automatically turn off once the 1 week ends.
+                </div>
+            </div>
+
+            <button type="button" onclick="closeTrialWelcomeModal()" style="width: 100%; background: linear-gradient(135deg, #059669, #10b981); color: white; border: none; font-weight: 800; border-radius: 10px; padding: 13px; font-size: 14px; cursor: pointer; box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35); transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                <span>🚀 Launch My 1-Week Free Trial Access</span>
+            </button>
+        </div>
+    </div>
+
+        <!-- ================= 7-DAY FREE TRIAL AUTOMATIC LOCK OVERLAY ================= -->
+    <div id="trialExpiredModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(8px); z-index: 999999; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: #ffffff; border-radius: 22px; max-width: 530px; width: 100%; padding: 36px 30px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.35); border: 2.5px solid #ef4444; position: relative;">
+            <div style="width: 76px; height: 76px; margin: 0 auto 16px; background: #fee2e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 38px; border: 3px solid #fca5a5;">
+                🔒
+            </div>
+            <div style="display: inline-block; background: #fee2e2; color: #b91c1c; font-size: 11px; font-weight: 800; padding: 3px 14px; border-radius: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">
+                Trial Concluded (1 Week Finished)
+            </div>
+            <h2 style="font-size: 25px; font-weight: 900; color: #0f172a; margin: 0 0 10px 0;">7-Day Free Trial Has Ended</h2>
+            <p style="font-size: 14.5px; color: #475569; line-height: 1.6; margin: 0 0 22px 0;">
+                Your complimentary <strong>1-week (7-day) free trial</strong> for RankNaserPro Intelligence Suite has automatically concluded. All 6 autonomous SEO engines are now locked.
+            </p>
+            
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: left; margin-bottom: 24px; font-size: 13px; color: #334155; line-height: 1.6;">
+                <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px; font-size: 13.5px;">To renew license or unlock lifetime access:</div>
+                <div style="display: flex; align-items: center; gap: 6px;">📧 <span>Contact Admin:</span> <strong>admin@ranknaser.com</strong></div>
+                <div style="display: flex; align-items: center; gap: 6px;">👑 <span>Lead Architect:</span> <strong>RankNaser</strong></div>
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 6px;">License reactivation or admin credentials required.</div>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button type="button" onclick="handleLogout()" style="background: #0f172a; color: white; border: none; font-weight: 700; border-radius: 10px; padding: 12px 22px; font-size: 13px; cursor: pointer; transition: all 0.2s;">
+                    🚪 Logout & Exit
+                </button>
+                <button type="button" onclick="promptAdminUnlock()" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; font-weight: 800; border-radius: 10px; padding: 12px 24px; font-size: 13px; cursor: pointer; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35); transition: all 0.2s;">
+                    🔑 Admin Master Unlock
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 7-DAY FREE TRIAL ACTIVE STATUS MODAL ================= -->
+    <div id="trialInfoModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(5px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: #ffffff; border-radius: 20px; max-width: 500px; width: 100%; padding: 30px; box-shadow: 0 25px 60px rgba(0,0,0,0.25); border: 1.5px solid #e2e8f0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 24px;">🎁</span>
+                    <div>
+                        <h3 style="margin: 0; font-size: 19px; font-weight: 800; color: #0f172a;">7-Day Free Trial Pass</h3>
+                        <div style="font-size: 11.5px; color: #64748b;">Full Autonomous Access Active</div>
+                    </div>
+                </div>
+                <button type="button" onclick="closeTrialModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b; line-height: 1;">✕</button>
+            </div>
+            
+            <div id="trialInfoModalBody" style="font-size: 13.5px; color: #334155; line-height: 1.6;">
+                <!-- dynamic info -->
+            </div>
+
+            <div id="adminTrialControlBar" style="display: none; margin-top: 18px; padding-top: 14px; border-top: 1.5px dashed #cbd5e1;">
+                <div style="font-size: 11.5px; font-weight: 800; color: #0284c7; text-transform: uppercase; margin-bottom: 8px;">⚙️ Admin Testing Controls</div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" onclick="adminSimulateExpiredTrial()" style="background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
+                        ⚠️ Simulate Expired (Test Lock)
+                    </button>
+                    <button type="button" onclick="adminReset7DayTrial()" style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
+                        🔄 Reset 7-Day Free Trial
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 22px; text-align: right;">
+                <button type="button" onclick="closeTrialModal()" style="background: #0f172a; color: white; border: none; font-weight: 700; border-radius: 8px; padding: 9px 20px; font-size: 13px; cursor: pointer;">
+                    Got It
+                </button>
+            </div>
+        </div>
+    </div>
+
     </div> <!-- end #dashboardWrapper -->
 
     <script>
@@ -5842,6 +5982,183 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+
+        // ================= 7-DAY FREE TRIAL EXPIRATION ENGINE =================
+        const TRIAL_DURATION_DAYS = 7;
+        const TRIAL_DURATION_MS = TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000;
+
+        function getTrialData() {
+            let startTs = localStorage.getItem('ranknaser_trial_start');
+            if (!startTs) {
+                startTs = Date.now().toString();
+                localStorage.setItem('ranknaser_trial_start', startTs);
+            }
+            const start = parseInt(startTs, 10);
+            const expires = start + TRIAL_DURATION_MS;
+            const now = Date.now();
+            const remainingMs = expires - now;
+            const isExpired = remainingMs <= 0;
+            
+            const elapsedDays = Math.min(TRIAL_DURATION_DAYS, Math.max(1, Math.floor((now - start) / (24 * 60 * 60 * 1000)) + 1));
+            const remainingDays = Math.max(0, Math.ceil(remainingMs / (24 * 60 * 60 * 1000)));
+            const remainingHours = Math.max(0, Math.floor((remainingMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000)));
+
+            return {
+                start: new Date(start),
+                expires: new Date(expires),
+                isExpired: isExpired,
+                elapsedDays: elapsedDays,
+                remainingDays: remainingDays,
+                remainingHours: remainingHours,
+                remainingMs: remainingMs
+            };
+        }
+
+        function updateTrialBadge(user) {
+            const badge = document.getElementById('trialCountdownBadge');
+            const text = document.getElementById('trialCountdownText');
+            if (!badge || !text) return;
+
+            // Master Admin check
+            if (user && (user.username === 'ADMIN' || (user.email && user.email.toLowerCase() === 'admin@ranknaser.com'))) {
+                badge.style.background = '#e0f2fe';
+                badge.style.borderColor = '#0284c7';
+                badge.style.color = '#0369a1';
+                text.innerHTML = '👑 <strong>Master Admin:</strong> Lifetime';
+                hideTrialExpiredLock();
+                return;
+            }
+
+            const t = getTrialData();
+            if (t.isExpired) {
+                badge.style.background = '#fee2e2';
+                badge.style.borderColor = '#ef4444';
+                badge.style.color = '#b91c1c';
+                text.innerHTML = '🔒 <strong>Free Trial:</strong> Expired';
+                showTrialExpiredLock();
+            } else {
+                badge.style.background = '#ecfdf5';
+                badge.style.borderColor = '#10b981';
+                badge.style.color = '#047857';
+                text.innerHTML = `⏱️ <strong>7-Day Free Trial:</strong> Day ${t.elapsedDays} of 7 (${t.remainingDays}d left)`;
+                hideTrialExpiredLock();
+            }
+        }
+
+        function checkTrialEnforcement(user) {
+            if (user && (user.username === 'ADMIN' || (user.email && user.email.toLowerCase() === 'admin@ranknaser.com'))) {
+                hideTrialExpiredLock();
+                return true;
+            }
+            const t = getTrialData();
+            if (t.isExpired) {
+                showTrialExpiredLock();
+                return false;
+            }
+            hideTrialExpiredLock();
+            return true;
+        }
+
+        function showTrialExpiredLock() {
+            const modal = document.getElementById('trialExpiredModal');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function hideTrialExpiredLock() {
+            const modal = document.getElementById('trialExpiredModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function openTrialModal() {
+            const modal = document.getElementById('trialInfoModal');
+            const body = document.getElementById('trialInfoModalBody');
+            const adminBar = document.getElementById('adminTrialControlBar');
+            if (!modal || !body) return;
+
+            const user = JSON.parse(localStorage.getItem('ranknaser_auth_user') || '{}');
+            const isAdmin = user && (user.username === 'ADMIN' || (user.email && user.email.toLowerCase() === 'admin@ranknaser.com'));
+
+            if (adminBar) {
+                adminBar.style.display = isAdmin ? 'block' : 'none';
+            }
+
+            if (isAdmin) {
+                body.innerHTML = `
+                    <div style="background: #e0f2fe; border: 1.5px solid #bae6fd; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
+                        <div style="font-weight: 800; color: #0369a1; font-size: 14px; margin-bottom: 4px;">👑 Master Administrator Account</div>
+                        <div style="color: #0c4a6e;">You are logged in as the system owner. Your account has <strong>Lifetime Unlimited Access</strong> and will never expire.</div>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px;">
+                        <div><strong>Trial Duration for Users:</strong> 7 Days (1 Week)</div>
+                        <div><strong>Policy:</strong> After 7 days, user sessions automatically lock with the expiration screen.</div>
+                    </div>
+                `;
+            } else {
+                const t = getTrialData();
+                body.innerHTML = `
+                    <div style="background: ${t.isExpired ? '#fee2e2' : '#ecfdf5'}; border: 1.5px solid ${t.isExpired ? '#fca5a5' : '#a7f3d0'}; border-radius: 12px; padding: 14px; margin-bottom: 14px;">
+                        <div style="font-weight: 800; color: ${t.isExpired ? '#b91c1c' : '#047857'}; font-size: 14.5px; margin-bottom: 4px;">
+                            ${t.isExpired ? '🔒 7-Day Free Trial Expired' : '✅ 7-Day Free Trial Active'}
+                        </div>
+                        <div>${t.isExpired ? 'Your complimentary 1-week access has concluded.' : 'You currently have full, unrestricted access to all 6 autonomous SEO engines.'}</div>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; font-size: 13px; line-height: 1.7;">
+                        <div>📅 <strong>Trial Started:</strong> ${t.start.toLocaleDateString()}</div>
+                        <div>⏳ <strong>Trial Ends:</strong> ${t.expires.toLocaleDateString()}</div>
+                        <div>📊 <strong>Progress:</strong> Day ${t.elapsedDays} of 7</div>
+                        <div>⏱️ <strong>Remaining Time:</strong> ${t.isExpired ? '0 hours' : t.remainingDays + ' day(s), ' + t.remainingHours + ' hour(s)'}</div>
+                    </div>
+                `;
+            }
+            modal.style.display = 'flex';
+        }
+
+        function closeTrialModal() {
+            const modal = document.getElementById('trialInfoModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function adminSimulateExpiredTrial() {
+            // Set start date to 8 days ago
+            const eightDaysAgo = Date.now() - (8 * 24 * 60 * 60 * 1000);
+            localStorage.setItem('ranknaser_trial_start', eightDaysAgo.toString());
+            closeTrialModal();
+            const user = JSON.parse(localStorage.getItem('ranknaser_auth_user') || '{}');
+            // If admin is testing, momentarily view non-admin lock
+            alert('Simulation active: Set trial to 8 days ago. Showing trial lock overlay...');
+            showTrialExpiredLock();
+        }
+
+        function adminReset7DayTrial() {
+            localStorage.setItem('ranknaser_trial_start', Date.now().toString());
+            closeTrialModal();
+            hideTrialExpiredLock();
+            const user = JSON.parse(localStorage.getItem('ranknaser_auth_user') || '{}');
+            updateTrialBadge(user);
+            alert('7-Day Free Trial has been reset to Day 1 of 7! Access unlocked.');
+        }
+
+        function promptAdminUnlock() {
+            const u = prompt('Enter Admin User ID:');
+            if (!u) return;
+            const p = prompt('Enter Admin Password:');
+            if (!p) return;
+            if (u.toUpperCase() === 'ADMIN' && (p.toUpperCase() === 'AGENTNASER' || p === 'AGENTNASER')) {
+                const adminUser = {
+                    name: 'RankNaser Admin',
+                    username: 'ADMIN',
+                    email: 'admin@ranknaser.com',
+                    domain: 'ranknaser.com'
+                };
+                localStorage.setItem('ranknaser_auth_user', JSON.stringify(adminUser));
+                hideTrialExpiredLock();
+                showDashboardView(adminUser);
+                alert('Master Admin verified! Full lifetime access unlocked.');
+            } else {
+                alert('Invalid Admin credentials! Only the administrator can unlock.');
+            }
+        }
+
         function showDashboardView(user) {
             const authSc = document.getElementById('authScreen');
             const dashWrap = document.getElementById('dashboardWrapper');
@@ -5851,6 +6168,31 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             const nameDisp = document.getElementById('currentUserNameDisplay');
             if (nameDisp && user && user.name) {
                 nameDisp.textContent = '👤 ' + user.name;
+            }
+
+        // ================= 1-WEEK FREE TRIAL USER MESSAGE CONTROLLERS =================
+        function showTrialWelcomeModal() {
+            const modal = document.getElementById('trialWelcomeModal');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeTrialWelcomeModal() {
+            const modal = document.getElementById('trialWelcomeModal');
+            if (modal) modal.style.display = 'none';
+            sessionStorage.setItem('ranknaser_welcome_seen', 'true');
+        }
+
+        function dismissTrialAlert() {
+            const alertBox = document.getElementById('trialWelcomeAlert');
+            if (alertBox) alertBox.style.display = 'none';
+        }
+
+            updateTrialBadge(user);
+            const isOk = checkTrialEnforcement(user);
+            if (isOk && (!sessionStorage.getItem('ranknaser_welcome_seen'))) {
+                setTimeout(() => {
+                    showTrialWelcomeModal();
+                }, 350);
             }
         }
 
