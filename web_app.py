@@ -7070,8 +7070,11 @@ async def receive_article(request: Request, authorization: str = Header(None)):
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
+        # Extract path without query parameters (supports ?fbclid=..., ?utm_source=..., etc.)
+        self.path = self.path.split('?')[0].strip()
+
         # SECURITY FIREWALL: Block any direct attempts to read source code, config, or hidden files
-        req_clean = self.path.split('?')[0].lower()
+        req_clean = self.path.lower()
         if any(req_clean.endswith(ext) for ext in ['.py', '.json', '.env', '.sh', '.bat', '.yaml', '.yml', '.md', '.txt', '.git']):
             self.send_response(403)
             self.send_header('Content-Type', 'text/plain; charset=utf-8')
@@ -7119,6 +7122,8 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
     def do_POST(self):
+        # Extract path without query parameters
+        self.path = self.path.split('?')[0].strip()
         length = int(self.headers.get('Content-Length', 0))
         body = self.rfile.read(length).decode('utf-8')
         
