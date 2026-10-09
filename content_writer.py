@@ -340,26 +340,60 @@ def _clean_heading(text: str, brand_name: str = "", comp_domains: list = None) -
 
 def clean_and_deduplicate_content(text: str) -> str:
     """
-    Elite SEO Sanitizer & Deduplication Engine:
-    1. Removes consecutive duplicated words (e.g. 'the the', 'camera camera', 'in in', 'article article').
-    2. Removes duplicate consecutive sentences within paragraphs.
-    3. Removes duplicate identical paragraphs and repeated section headings.
-    4. Normalizes whitespace, double colons, double periods, and broken punctuation.
+    Elite SEO Sanitizer & Human Deduplication Engine:
+    1. Removes markdown-wrapped duplicate words (e.g. **word** word, word **word**, **word** **word**).
+    2. Removes multi-word repeated phrases (from 8-word phrases down to 2-word duplicates):
+       e.g. 'Gaming Laptop Gaming Laptop', 'in Bangladesh in Bangladesh', 'price in bd price in bd'.
+    3. Removes consecutive duplicated words with punctuation (e.g. 'the, the', 'market; market').
+    4. Removes duplicate sentences within paragraphs.
+    5. Removes duplicate identical paragraphs and repeated headings.
+    6. Normalizes whitespace, broken double punctuation, and markdown formatting.
     """
     if not text:
         return ""
 
-    # 1. Deduplicate consecutive duplicate words (case-insensitive, preserving first instance)
-    cleaned = re.sub(r'\b([A-Za-z0-9_-]{2,})\s+\1\b', r'\1', text, flags=re.IGNORECASE)
-    cleaned = re.sub(r'\b([A-Za-z0-9_-]{2,})\s+\1\b', r'\1', cleaned, flags=re.IGNORECASE)
+    cleaned = text
 
-    # 2. Fix duplicate spacing and punctuation artifacts
+    # Step 1: Clean markdown bold asterisks formatting & spacing (e.g. at**word**conducted -> at **word** conducted)
+    def fix_bold_pair(m):
+        before = m.group(1) or ''
+        inner = m.group(2).strip()
+        after = m.group(3) or ''
+        prefix = f"{before} " if before else ""
+        suffix = f" {after}" if after else ""
+        return f"{prefix}**{inner}**{suffix}"
+
+    cleaned = re.sub(r'([A-Za-z0-9])?\s*\*\*([^*\n]+?)\*\*\s*([A-Za-z0-9])?', fix_bold_pair, cleaned)
+
+    # Step 2: Handle markdown-wrapped duplicate words
+    def fix_md_dupes(match):
+        w1, w2 = match.group(1), match.group(2)
+        if w1.lower() == w2.lower():
+            return f"**{w1}**"
+        return match.group(0)
+
+    cleaned = re.sub(r'\*\*([A-Za-z0-9_-]+)\*\*\s+([A-Za-z0-9_-]+)\b', fix_md_dupes, cleaned)
+    cleaned = re.sub(r'\b([A-Za-z0-9_-]+)\s+\*\*([A-Za-z0-9_-]+)\*\*', fix_md_dupes, cleaned)
+    cleaned = re.sub(r'\*\*([A-Za-z0-9_-]+)\*\*\s+\*\*([A-Za-z0-9_-]+)\*\*', fix_md_dupes, cleaned)
+
+    # Step 3: Multi-word phrase deduplication (from 8 words down to 2 words)
+    word_pat = r'[A-Za-z0-9_-]+'
+    for n in range(8, 1, -1):
+        phrase_pat = rf'\b({word_pat}(?:\s+{word_pat}){{{n-1}}})\s+\1\b'
+        cleaned = re.sub(phrase_pat, r'\1', cleaned, flags=re.IGNORECASE)
+
+    # Step 4: Single word consecutive repetition (including punctuation like 'the, the' or 'word word')
+    single_word_pat = r'\b([A-Za-z0-9_-]{2,})([,\s]+)\1\b'
+    cleaned = re.sub(single_word_pat, r'\1', cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(single_word_pat, r'\1', cleaned, flags=re.IGNORECASE)
+
+    # Step 5: Fix duplicate spacing and punctuation artifacts
     cleaned = re.sub(r'[ \t]+', ' ', cleaned)
     cleaned = re.sub(r'\.{2,}', '.', cleaned)
     cleaned = re.sub(r'\,{2,}', ',', cleaned)
     cleaned = re.sub(r'\:{2,}', ':', cleaned)
 
-    # 3. Clean duplicate sentences inside paragraphs & prevent repeated headings
+    # Step 6: Deduplicate paragraphs, repeated headings, and duplicate sentences
     raw_paras = cleaned.split('\n\n')
     cleaned_paras = []
     seen_headings = set()
@@ -412,6 +446,74 @@ def clean_and_deduplicate_content(text: str) -> str:
 
     return "\n\n".join(cleaned_paras)
 
+
+
+def build_lsi_analysis_section(lsi: str, main_kw: str, clean_prod: str, country_name: str, currency: str, currency_sym: str, brand_name: str, year: int) -> tuple:
+    """
+    Generates an authentic, in-depth, human-written editorial subsection for a specific Semantic LSI Keyword.
+    Seamlessly weaves both the LSI keyword and the Main Keyword into natural human journalism.
+    """
+    lsi_clean = lsi.strip().title()
+    lsi_lower = lsi.strip().lower()
+    main_kw_clean = main_kw.title()
+    brand_mention = f"the testing lab at **{brand_name}**" if brand_name else "our senior evaluation team"
+    author_rec = f"**{brand_name}**" if brand_name else "authorized industry distributors"
+
+    # 1. Price / Cost / Budget LSI
+    if any(w in lsi_lower for w in ["price", "cost", "budget", "rate", "bdt", "cheap", "affordable"]):
+        title = f"{lsi_clean}: Real-World Market Pricing, Value Analysis & Budget Breakdown ({year})"
+        body = (
+            f"When prospective buyers research **{lsi_lower}** in {country_name}, understanding the price-to-performance curve is essential for avoiding overpaying. "
+            f"In today's dynamic market, retail pricing fluctuates based on official distributor channels, seasonal promotions, and import duty structures. "
+            f"While aggressive discount listings may seem tempting at first glance, evaluating whether a unit includes full manufacturer warranty coverage often proves far more consequential than saving a marginal amount upfront.\n\n"
+            f"According to real-world pricing data synthesized by {brand_mention}, market valuations for **{lsi_lower}** span distinct consumer tiers. "
+            f"Entry-level options provide core functionality for basic use cases, whereas premium models deliver enhanced build materials, superior thermal endurance, and verified energy efficiency. "
+            f"To secure the best value for **{main_kw.lower()}**, we advise purchasing through {author_rec} with a valid tax invoice and genuine warranty registration."
+        )
+
+    # 2. Hardware / Specs / Features LSI
+    elif any(w in lsi_lower for w in ["display", "hz", "screen", "ram", "ssd", "gpu", "cpu", "processor", "battery", "camera", "spec", "sensor", "resolution"]):
+        title = f"{lsi_clean}: Technical Architecture, Real-World Benchmarks & Practical Impact"
+        body = (
+            f"A decisive factor when comparing options for **{main_kw.lower()}** is how **{lsi_lower}** impacts daily responsiveness and sustained duty cycles. "
+            f"Technical specifications on paper can sometimes be misleading, as real-world performance depends heavily on component synergy, heat dissipation, and firmware optimization. "
+            f"During hands-on benchmarks conducted by {brand_mention}, models equipped with certified **{lsi_lower}** demonstrated measurably higher stability under peak workloads without thermal throttling or performance drops.\n\n"
+            f"For power users and everyday consumers alike in {country_name}, prioritizing verified hardware standards ensures long-term longevity into {year} and beyond. "
+            f"Rather than compromising on entry-grade alternatives that quickly become obsolete, choosing **{clean_prod}** configurations that meet or exceed these operational benchmarks guarantees smooth multitasking, durable construction, and total user satisfaction."
+        )
+
+    # 3. Comparison / Alternatives / Best Picks LSI
+    elif any(w in lsi_lower for w in ["best", "top", "vs", "compare", "alternative", "choice", "rank"]):
+        title = f"{lsi_clean}: How Leading Contenders Benchmark Against Market Standards"
+        body = (
+            f"Navigating the competitive landscape for **{lsi_lower}** requires looking beyond manufacturer marketing claims to examine verifiable user feedback and field durability. "
+            f"In a marketplace crowded with competing releases, top-performing options stand apart by delivering consistent build quality, responsive controls, and accessible local servicing. "
+            f"Our direct comparative assessments reveal that the highest-ranked executions of **{main_kw.lower()}** consistently balance ergonomics with heavy-duty mechanical reliability.\n\n"
+            f"When selecting the ideal configuration for your specific requirements in {country_name}, consider your primary use case, physical operating environment, and maintenance expectations. "
+            f"Verified benchmark evaluations from {brand_mention} demonstrate that investing in a recognized industry leader backed by official distributor warranty delivers superior long-term dependability."
+        )
+
+    # 4. Sourcing / Warranty / Location LSI
+    elif any(w in lsi_lower for w in ["bangladesh", "bd", "dhaka", "buy", "shop", "store", "warranty", "original", "distributor", "market"]):
+        title = f"{lsi_clean}: Authorized Sourcing, Holographic Warranty & How to Avoid Gray Market Units"
+        body = (
+            f"Securing authentic **{lsi_lower}** with official manufacturer warranty backing remains one of the most critical steps for buyers in {country_name}. "
+            f"Due to the prevalence of gray-market imports, refurbished repackaging, and unverified retail listings, unsuspecting consumers often face severe repair hurdles when unauthorized units encounter component anomalies.\n\n"
+            f"To guarantee 100% genuine origin and factory-sealed condition, prospective buyers should always inspect official holographic security seals and insist on computerized retail tax invoices. "
+            f"Purchasing directly through verified distributor outlets associated with {author_rec} ensures that your investment in **{main_kw.lower()}** is fully protected with comprehensive after-sales service and genuine replacement parts."
+        )
+
+    # 5. General Contextual Semantic LSI
+    else:
+        title = f"Deep Dive: Key Considerations for {lsi_clean} in {year}"
+        body = (
+            f"An often overlooked yet essential facet of choosing **{main_kw.lower()}** centers on understanding the practical role of **{lsi_lower}**. "
+            f"Whether evaluating day-to-day usability, ergonomic comfort, or long-term operational resilience, incorporating thoughtful design principles directly influences user satisfaction. "
+            f"Field inspections by {brand_mention} show that products designed around these specific criteria deliver noticeably smoother operation and superior mechanical longevity.\n\n"
+            f"For consumers in {country_name} looking to maximize the return on their purchase of **{clean_prod}**, verifying these foundational qualities before buying eliminates buyer remorse and ensures lasting performance across years of daily use."
+        )
+
+    return title, body
 
 def analyze_search_intent_and_entities(main_kw: str, content_type: str, lsis: list = None, cat: str = "general", country_cfg: dict = None) -> dict:
     """
@@ -735,7 +837,27 @@ class ContentWritingAgent:
             format_guideline = "- Specific Format Mandate: VIRAL SOCIAL POST. Punchy hook, engaging formatting, relatable pain points, and strong call to action.\n"
 
         prompt = f"""
-You are an Elite SEO Strategist and Professional Industry Journalist. Your mission is to write a comprehensive, publication-grade, Google Helpful Content (EEAT) compliant blog post / product guide that decisively outranks all competitors on Google search.
+You are an Elite Senior SEO Journalist and Investigative Tech/Industry Editor. Your mission is to write a 100% publication-grade, human-authored, Google Helpful Content (EEAT) compliant master guide that decisively outranks all competitors on Google.
+
+--- CRITICAL SEARCH INTENT & KEYWORD LOCK ---
+1. PRIMARY FOCUS KEYWORD: '{main_keyword}'
+   - Must appear verbatim in the single # H1 Title.
+   - Must appear naturally within the first 60-80 words of the introduction.
+   - Must appear in at least two ## H2 or ### H3 section headings.
+   - Must appear in the Comparison Table, FAQ section, and Final Verdict.
+
+2. COMPREHENSIVE SEMANTIC LSI KEYWORDS MANDATE:
+   - Target Semantic LSI Keywords: {lsi_str}
+   - MANDATORY REQUIREMENT: You MUST dedicate specific, in-depth paragraphs or dedicated ### subheadings to EVERY SINGLE LSI keyword provided above.
+   - For each LSI keyword, provide deep technical, pricing, practical usage, or comparative analysis. Explain exactly why that specific facet matters to buyers researching '{main_keyword}'.
+   - Return an explicit list in "lsi_used" containing every LSI keyword successfully woven into the text.
+
+3. 100% HUMAN WRITER STANDARD & ZERO DUPLICATE WORDS:
+   - WRITE LIKE A HIGH-PAID HUMAN JOURNALIST (e.g. Wirecutter, TechRadar, Forbes Advisor).
+   - VARY SENTENCE LENGTH: Mix concise, punchy sentences with detailed explanatory sentences.
+   - FORBIDDEN ROBOTIC AI WORDS: ABSOLUTELY DO NOT use artificial clichés such as "delve into", "a pervasive challenge", "testament to", "realm of", "game-changer", "tapestry", "in a nutshell", "navigating the landscape", "it's important to remember".
+   - ABSOLUTELY ZERO DUPLICATE WORDS OR PHRASES: Never repeat words or phrases consecutively (e.g. NEVER write "the the", "camera camera", "market market", "in Bangladesh in Bangladesh"). Proofread every sentence for impeccable human flow.
+   - ZERO LIST SPAM: Write in cohesive, well-crafted standard editorial paragraphs (3-5 sentences each). Avoid artificial 1., 2., 3. numbered bullet spam. Your mission is to write a comprehensive, publication-grade, Google Helpful Content (EEAT) compliant blog post / product guide that decisively outranks all competitors on Google search.
 
 --- ABSOLUTE RELEVANCY & TOPIC LOCK MANDATE ---
 1. STRICT TOPIC COHESION: You must write 100% EXCLUSIVELY and DEEPLY about the Primary Focus Keyword '{main_keyword}' and entity '{clean_prod}'.
@@ -819,9 +941,12 @@ Please respond ONLY with a valid JSON object matching this structure:
         data = json.loads(text)
 
         full_text = data.get("article_markdown", "")
+        # Apply elite multi-tier deduplication to eliminate any AI stutter tokens or duplicate phrases
+        full_text = clean_and_deduplicate_content(full_text)
         words = len(re.findall(r'\b\w+\b', full_text))
-        data["actual_word_count"] = words
+        data["article_markdown"] = full_text
         data["content"] = full_text
+        data["actual_word_count"] = words
         data["engine"] = "Gemini AI (Cloud)"
         return data
 
@@ -1339,20 +1464,20 @@ Please respond ONLY with a valid JSON object matching this structure:
         brand_reference = f"**{brand_name}**" if brand_name else "our testing laboratory"
 
         # 1. Clean H1 Title
-        h1_title = topic or f"{clean_prod} Price {c_mod}: Complete {year} Buying Guide, In-Depth Reviews & Market Analysis"
+        h1_title = topic or f"{kw.title()}: Complete {year} Expert Guide, In-Depth Analysis & Reviews"
         h1_title = re.sub(r'^(?:\d+[\.\-\)]\s*)+', '', h1_title).strip()
 
         # Build category-tailored intro narratives
         if cat == "software_saas":
             intro_p2 = (
-                f"A pervasive challenge in today's marketplace is navigating the fine line between accessible subscription fees and long-term software reliability. "
-                f"Lower-tier or unverified solutions often cut costs by offering substandard server infrastructure, limited API integrations, or unverified security practices, which inevitably leads to workflow disruptions and data vulnerability. "
-                f"In contrast, well-engineered alternatives incorporate modern cloud architecture, robust scalability, and certified data compliance designed to support demanding operations without unexpected downtime."
+                f"Choosing the right platform for **{kw.title()}** requires looking past promotional marketing claims to examine day-to-day usability, uptime reliability, and API integration. "
+                f"While low-cost or freemium tools might appear convenient initially, they often carry restrictive feature limits, hidden upgrade costs, or unreliable server infrastructure. "
+                f"Well-designed solutions deliver robust cloud scalability, certified data compliance, and responsive technical support that keeps your workflow running without unexpected downtime."
             )
             intro_p3 = (
-                f"To cut through the noise and provide genuine clarity for decision-makers in {c_name}, {author_label} conducted an exhaustive evaluation across the top competing solutions in this space. "
-                f"Rather than repeating generic marketing summaries, this guide delivers an in-depth breakdown of actual platform capabilities, realistic pricing in {c_curr}, data security compliance, and onboarding ease. "
-                f"Whether you are evaluating **{clean_prod}** for the very first time or migrating from an older platform, the following analysis delivers the actionable facts you need to make an informed decision."
+                f"To assist decision-makers in {c_name}, {author_label} conducted an in-depth evaluation across the leading software and digital tools in this space. "
+                f"Rather than repeating marketing summaries, this guide delivers a realistic breakdown of platform capabilities, transparent pricing tiers in {c_curr}, data security standards, and onboarding ease. "
+                f"Whether you are implementing this solution for the first time or migrating from legacy tools, this analysis provides the essential facts you need."
             )
             default_sections = [
                 f"Understanding {clean_prod}: Core Cloud Architecture, Workflow Integrations & How It Operates",
@@ -1408,14 +1533,14 @@ Please respond ONLY with a valid JSON object matching this structure:
             ]
         elif cat in ["surveillance", "computing", "mobile", "kitchen", "home_appliance"]:
             intro_p2 = (
-                f"A pervasive challenge in today's marketplace is navigating the fine line between accessible initial pricing and long-term mechanical reliability. "
-                f"Lower-tier budget options often trim manufacturing costs by using inferior internal components, fragile chassis housings, or inconsistent regulatory compliance, which inevitably leads to premature component failure. "
-                f"In contrast, well-engineered alternatives incorporate precision component management, reinforced chassis assemblies, and certified safety mechanisms designed to endure demanding duty cycles without performance degradation."
+                f"When evaluating market options for **{kw.title()}**, the single biggest factor separating high-performing choices from disappointing purchases is long-term build quality. "
+                f"Budget-conscious buyers often encounter entry-level units that look attractive on paper but compromise on critical components like thermal dissipation, voltage protection, or chassis rigidity. "
+                f"In contrast, thoroughly engineered models incorporate precision components, verified thermal dissipation, and comprehensive safety mechanisms that deliver sustained dependability over years of daily operation."
             )
             intro_p3 = (
-                f"To cut through the noise and provide genuine clarity for local buyers, {author_label} conducted an exhaustive multi-brand benchmark across the top competing products currently dominating search rankings and retail shelves in {c_name}. "
-                f"Rather than repeating generic manufacturer summaries, this guide delivers an in-depth breakdown of actual operational capabilities, real pricing in {c_curr}, electricity bill impact under {c_power}, and long-term warranty support. "
-                f"Whether you are investing in **{clean_prod}** for the very first time or replacing an aging model, the following analysis delivers the actionable facts you need to make an informed decision."
+                f"To help buyers in {c_name} make an informed investment, {author_label} analyzed hands-on benchmark data, user reliability feedback, and official retail listings across top contenders in the market. "
+                f"Instead of relying on unverified manufacturer claims, this guide breaks down verified specifications, authentic pricing in {c_curr}, power efficiency under {c_power}, and where to find official warranty support. "
+                f"Whether you are buying for personal use or commercial deployment, the following analysis delivers the actionable insights you need."
             )
             default_sections = [
                 f"Understanding {clean_prod}: Core Technology, Architecture & How Modern Units Operate",
@@ -1429,14 +1554,14 @@ Please respond ONLY with a valid JSON object matching this structure:
             ]
         else: # Universal General
             intro_p2 = (
-                f"A pervasive challenge in today's marketplace is navigating the fine line between accessible initial pricing and genuine long-term value. "
-                f"Lower-tier alternatives often reduce costs by compromising on material density, quality control, or after-sales support, which inevitably leads to premature wear or buyer regret. "
-                f"In contrast, high-grade solutions prioritize verified construction standards, user-centric design, and dependable consistency designed to deliver sustained satisfaction across everyday use."
+                f"When researching options for **{kw.title()}**, understanding the balance between initial price and long-term durability is the key to securing genuine value. "
+                f"Low-tier alternatives frequently reduce manufacturing costs by cutting corners on material density, quality control, or after-sales support, which inevitably leads to buyer regret. "
+                f"High-grade solutions prioritize certified standards, intuitive design, and dependable consistency across everyday use."
             )
             intro_p3 = (
-                f"To cut through the noise and provide genuine clarity for buyers in {c_name}, {author_label} conducted an exhaustive benchmark across the leading options currently dominating search rankings and retail channels. "
+                f"To provide genuine clarity for buyers in {c_name}, {author_label} conducted an exhaustive benchmark across the leading options currently dominating search rankings and retail channels. "
                 f"Rather than repeating generic promotional summaries, this guide delivers an in-depth breakdown of practical performance, realistic market valuations in {c_curr}, essential quality indicators, and verified buying options. "
-                f"Whether you are choosing **{clean_prod}** for the very first time or upgrading to a superior alternative, the following analysis delivers the actionable facts you need to make an informed decision."
+                f"Whether you are choosing this solution for the very first time or upgrading to a superior alternative, the following analysis delivers the actionable facts you need to make an informed decision."
             )
             default_sections = [
                 f"Understanding {clean_prod}: Core Overview, Quality Benchmarks & Essential Factors",
@@ -1452,7 +1577,7 @@ Please respond ONLY with a valid JSON object matching this structure:
         # 2. Opening Paragraphs
         intro_paragraphs = [
             f"# {h1_title}\n\n",
-            f"When evaluating the modern consumer landscape for **{clean_prod}**, prospective buyers in {c_name} are frequently confronted with an overwhelming array of choices, fluctuating price points, and aggressive marketing claims. While promotional spec sheets highlight theoretical performance and exterior styling, understanding how **{clean_prod}** actually performs under sustained, daily usage remains the decisive factor in securing genuine value. As technological innovations and consumer engineering continue to advance into {year}, choosing the right model has transitioned from a simple convenience into an essential decision for value-conscious buyers.\n\n",
+            f"When researching and evaluating the market for **{kw.title()}**, prospective buyers in {c_name} are frequently confronted with an overwhelming array of choices, fluctuating price points, and aggressive marketing claims. While promotional spec sheets highlight theoretical performance and exterior styling, understanding how **{clean_prod}** actually performs under sustained, daily usage remains the decisive factor in securing genuine value. As technological innovations and consumer engineering continue to advance into {year}, choosing the right model has transitioned from a simple convenience into an essential decision for value-conscious buyers.\n\n",
             f"{intro_p2}\n\n",
             f"{intro_p3}\n\n"
         ]
@@ -1527,12 +1652,19 @@ Please respond ONLY with a valid JSON object matching this structure:
                     f"To ensure complete peace of mind, consumers should purchase factory-sealed units through {c_retail} and certified distribution partners affiliated with {brand_reference}. Official distribution guarantees that your unit arrives with verified electrical safety compliance, authentic holographic warranty registration, and full access to certified repair centers.\n\n"
                 )
             else:
-                lsi_a = lsis[idx % len(lsis)] if lsis else f"{clean_prod} specifications"
-                lsi_b = lsis[(idx + 1) % len(lsis)] if lsis else f"{clean_prod} review"
                 md_parts.append(
-                    f"Delving into the practical nuances of **{sec_title}**, our reverse-engineering of competing market offerings reveals that real-world satisfaction stems directly from thoughtful design execution rather than promotional marketing claims. In an industry where competing models often advertise identical top-line metrics, analyzing how **{sec_title}** performs under sustained usage is crucial for evaluating overall quality.\n\n"
-                    f"By prioritizing durable materials, verified compliance standards, and optimal technical synergy with **{lsi_a}** and **{lsi_b}**, verified executions of **{clean_prod}** eliminate the subtle defects and performance bottlenecks that trouble lower-end alternatives. Investing in verified offerings supported by {brand_reference} delivers lasting peace of mind and the highest return on your investment.\n\n"
+                    f"When examining the practical dimensions of **{sec_title}**, hands-on evaluation across leading industry benchmarks reveals that true user satisfaction stems from balanced engineering rather than aggressive marketing claims. In an industry where competing options frequently advertise identical top-line metrics, analyzing how **{clean_prod}** performs under sustained, everyday conditions remains essential for making a sound investment.\n\n"
+                    f"By prioritizing durable materials, verified compliance standards, and responsive local support, top-tier selections of **{clean_prod}** effectively eliminate the subtle defects and performance bottlenecks that trouble lower-end alternatives. Investing in verified offerings supported by {brand_reference} delivers lasting peace of mind and the highest return on your investment.\n\n"
                 )
+
+        # 3.5 Dedicated Semantic LSI Deep Dive
+        if lsis and len(lsis) > 0:
+            md_parts.append(f"## In-Depth Analysis: Key Factors for {kw.title()}\n\n")
+            md_parts.append(f"To provide a complete, search-optimized understanding of **{kw.title()}**, our editorial team synthesized the most critical decision factors, specifications, and buyer queries surrounding this topic in {c_name}:\n\n")
+            for lsi_item in lsis[:6]:
+                if lsi_item and lsi_item.strip():
+                    sub_title, sub_body = build_lsi_analysis_section(lsi_item, kw, clean_prod, c_name, c_curr, c_curr_sym, brand_name, year)
+                    md_parts.append(f"### {sub_title}\n\n{sub_body}\n\n")
 
         # 4. Clean Comparison Matrix Table
         md_parts.append(
@@ -1594,14 +1726,22 @@ Please respond ONLY with a valid JSON object matching this structure:
         author_label = f"the testing lab at **{brand_name}**" if brand_name else "our senior evaluation team"
         brand_reference = f"**{brand_name}**" if brand_name else "our testing laboratory"
 
-        h1_title = topic or f"{clean_prod} Review ({year}): In-Depth Hands-On Analysis & Price {c_mod}"
+        h1_title = topic or f"{kw.title()} Review ({year}): In-Depth Hands-On Analysis & Real-World Benchmarks"
         h1_title = re.sub(r'^(?:\d+[\.\-\)]\s*)+', '', h1_title).strip()
+
+        profile_lsi_review = ""
+        if lsis and len(lsis) > 0:
+            profile_lsi_review = f"## Comprehensive Evaluation Criteria for {kw.title()}\n\n"
+            for lsi_item in lsis[:4]:
+                if lsi_item and lsi_item.strip():
+                    st, sb = build_lsi_analysis_section(lsi_item, kw, clean_prod, c_name, c_curr, c_curr_sym, brand_name, year)
+                    profile_lsi_review += f"### {st}\n\n{sb}\n\n"
 
         faqs = profile["faqs"][:3]
 
         md = f"""# {h1_title}
 
-When unboxing and conducting initial benchmarks on **{clean_prod}**, the design philosophy immediately reflects a commitment to high-durability craftsmanship and refined user experience. In a consumer category saturated with generic rebadged devices, this model stands out by prioritizing robust materials, balanced operational efficiency, and intuitive everyday operation. For consumers actively searching for **{clean_prod} Price {c_mod}**, understanding how this unit differentiates itself under sustained daily testing is critical to evaluating its overall return on investment.
+When unboxing and conducting initial benchmarks on **{kw.title()}**, the design philosophy immediately reflects a commitment to high-durability craftsmanship and refined user experience. In a consumer category saturated with generic rebadged devices, this model stands out by prioritizing robust materials, balanced operational efficiency, and intuitive everyday operation. For consumers actively searching for **{clean_prod} Price {c_mod}**, understanding how this unit differentiates itself under sustained daily testing is critical to evaluating its overall return on investment.
 
 Over a multi-week testing protocol conducted by {author_label}, we evaluated this model across varied workloads, measuring output stability, external chassis thermals, acoustic levels, and ease of routine operation. Rather than simply relying on manufacturer marketing claims, our analysis focuses on real-world execution, highlighting where the hardware excels and identifying the subtle operational trade-offs prospective buyers in {c_name} must keep in mind.
 
@@ -1623,7 +1763,7 @@ During rigorous duty-cycle inspections, **{clean_prod}** demonstrated exceptiona
 
 In terms of recurring operational costs, consuming minimal electrical units per month makes this device remarkably cost-effective compared to older, power-hungry alternatives. It represents a practical upgrade that delivers dependable performance with minimal running costs.
 
-## Practical Limitations & Things to Consider Before Buying {c_mod}
+{profile_lsi_review}## Practical Limitations & Things to Consider Before Buying {c_mod}
 
 While **{clean_prod}** delivers exceptional performance across the board, prospective buyers should recognize that its robust build carries a slightly larger footprint than bare-bones compact alternatives. Installation locations will require adequate clearance and stable power connectivity to ensure unrestricted operation.
 
