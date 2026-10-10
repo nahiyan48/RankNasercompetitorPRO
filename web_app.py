@@ -3249,9 +3249,17 @@ https://techlandbd.com</textarea>
                         </div>
                     </div>
 
-                    <div style="margin-bottom: 20px;">
+                    <div style="margin-bottom: 16px;">
                         <label style="display: block; font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Task Directive / Specific Instructions:</label>
                         <textarea id="taskDirectiveText" rows="3" placeholder="e.g. Audit technical indexing and Schema, build internal linking silos, or write 2,500-word EEAT article..." required style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 13px; line-height: 1.5; font-family: inherit;"></textarea>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">
+                            <span>🔑 Google Gemini API Key:</span>
+                            <span style="font-size: 11px; font-weight: 600; color: #059669;">Optional (Stored in browser • Deep AI mode)</span>
+                        </label>
+                        <input type="password" id="taskGeminiKey" placeholder="AIzaSy... (Leave empty to use adaptive forensic engine)" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 12.5px; font-family: monospace;" />
                     </div>
 
                     <div id="agencyTaskStatusAlert" style="display: none; padding: 12px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; font-weight: 700;"></div>
@@ -7423,6 +7431,10 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                 const dom = document.getElementById('taskClientDomain');
                 if (dom) dom.value = clientDomain;
             }
+            const gemKeyInput = document.getElementById('taskGeminiKey');
+            if (gemKeyInput) {
+                gemKeyInput.value = localStorage.getItem('gemini_api_key') || '';
+            }
             const alertBox = document.getElementById('agencyTaskStatusAlert');
             if (alertBox) alertBox.style.display = 'none';
         }
@@ -7438,6 +7450,12 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             const clientDomain = document.getElementById('taskClientDomain').value.trim();
             const priority = document.getElementById('taskPrioritySelect').value;
             const directive = document.getElementById('taskDirectiveText').value.trim();
+            const gemKeyInput = document.getElementById('taskGeminiKey');
+            const geminiKey = (gemKeyInput ? gemKeyInput.value.trim() : '') || localStorage.getItem('gemini_api_key') || '';
+            if (gemKeyInput && gemKeyInput.value.trim()) {
+                localStorage.setItem('gemini_api_key', gemKeyInput.value.trim());
+            }
+
             const btn = document.getElementById('btnDispatchAgencyTask');
             const alertBox = document.getElementById('agencyTaskStatusAlert');
 
@@ -7462,7 +7480,8 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                         agent_id: agentId,
                         client_domain: clientDomain,
                         task_directive: directive,
-                        priority: priority
+                        priority: priority,
+                        gemini_key: geminiKey
                     })
                 });
                 const data = await res.json();
@@ -7644,6 +7663,12 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             html_bn = render_printable_guide('bn')
             self.wfile.write(html_bn.encode('utf-8'))
+        elif self.path in ['/guide', '/user-guide', '/userguide', '/guide/pdf', '/api/user-guide', '/static/user_guide_pdf.html']:
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            html_guide = render_printable_guide('bn')
+            self.wfile.write(html_guide.encode('utf-8'))
         elif self.path == '/api/agency/staff':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json; charset=utf-8')
