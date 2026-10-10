@@ -26,6 +26,7 @@ from wordpress_publisher import WordPressPublisher
 from webhook_publisher import CustomWebhookPublisher
 from autopilot_agent import AutopilotAgent
 from seo_director_agent import PersonalSEODirector
+from agency_workforce import AGENCY_STAFF, AgencyWorkforceEngine, load_agency_data, render_printable_agency_report
 
 import base64
 
@@ -394,7 +395,7 @@ HTML_PAGE = """<!DOCTYPE html>
         /* Tabs Navigation - 6 Equal Symmetrical Columns */
         .tabs-nav {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 10px;
             margin-bottom: 22px;
             border-bottom: 2px solid var(--border);
@@ -2044,6 +2045,9 @@ HTML_PAGE = """<!DOCTYPE html>
             <button class="tab-btn director" id="tabDirectorBtn" onclick="switchTab('director')">
                 <span>🧠 6. Personal SEO Agent</span>
             </button>
+            <button class="tab-btn agency" id="tabAgencyBtn" onclick="switchTab('agency')" style="background: linear-gradient(135deg, #1e1b4b, #312e81); color: white; border: 1.5px solid #818cf8; box-shadow: 0 2px 8px rgba(49,46,129,0.3);">
+                <span>🏢 7. AI Agency Workforce</span>
+            </button>
         </div>
 
         <!-- TAB 1: Daily Tracker -->
@@ -3092,6 +3096,202 @@ https://techlandbd.com</textarea>
             </div>
         </div>
     </div>
+
+
+        <!-- TAB 7: AI Agency Workforce (Autonomous 24/7 Virtual Team) -->
+        <div id="tabAgency" style="display: none;">
+            <!-- Top Return & Breadcrumb Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button type="button" onclick="goBackToHome();" style="background: linear-gradient(135deg, #1e1b4b, #312e81); color: white; border: none; font-weight: 700; border-radius: 8px; padding: 9px 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; box-shadow: 0 2px 6px rgba(30,27,75,0.25);">
+                        <span>⬅️ Back to Home</span>
+                    </button>
+                    <span style="font-size: 13px; font-weight: 800; color: #1e1b4b;">🏢 RankNaser AI Agency Operations Center</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 11.5px; background: #ecfdf5; border: 1.5px solid #10b981; color: #047857; font-weight: 800; padding: 6px 14px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>🛡️</span>
+                        <span>100% Google White-Hat Certified (Zero Spam Guarantee)</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Agency Boss Hero Banner -->
+            <div style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%); border-radius: 20px; padding: 26px 30px; color: white; margin-bottom: 22px; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25); border: 1.5px solid #6366f1; position: relative; overflow: hidden;">
+                <div style="position: absolute; right: -20px; bottom: -20px; font-size: 130px; opacity: 0.08; pointer-events: none;">🏢</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                    <div style="max-width: 650px;">
+                        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(99, 102, 241, 0.25); border: 1px solid #818cf8; border-radius: 20px; padding: 4px 14px; font-size: 11.5px; font-weight: 800; color: #c7d2fe; margin-bottom: 10px;">
+                            <span>👑 FOUNDER & BOSS: RANKNASER</span>
+                            <span>•</span>
+                            <span>AUTONOMOUS WORKFORCE MODEL</span>
+                        </div>
+                        <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 8px 0; letter-spacing: -0.5px;">RankNaser AI Agency OS — 24/7 Virtual Team</h2>
+                        <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; margin: 0;">
+                            A synchronized multi-specialist AI team handling end-to-end digital marketing: <strong>Keywords, EEAT Content, Contextual Internal Links, White-Hat Backlinks, Technical Indexing, Web Development, and Conversion UI/UX</strong>. Every agent strictly follows Google Search Essentials and Spam Policies.
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button type="button" onclick="openAgencyTaskModal()" style="background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; border: none; font-weight: 800; border-radius: 10px; padding: 12px 20px; font-size: 13.5px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37,99,235,0.4); transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                            <span>⚡ Assign Task to Staff</span>
+                        </button>
+                        <button type="button" onclick="openDailyReportModal()" style="background: rgba(255,255,255,0.12); color: white; border: 1.5px solid rgba(255,255,255,0.3); font-weight: 700; border-radius: 10px; padding: 12px 18px; font-size: 13.5px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'">
+                            <span>📊 Today's Work Report</span>
+                        </button>
+                        <a href="/agency/daily-report/pdf" target="_blank" style="background: #059669; color: white; text-decoration: none; font-weight: 800; border-radius: 10px; padding: 12px 18px; font-size: 13.5px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(5,150,105,0.35);">
+                            <span>🖨️ PDF Report</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Agency Metrics Row -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px;">
+                <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                    <div style="font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase;">Active AI Specialists</div>
+                    <div style="font-size: 24px; font-weight: 900; color: #1e1b4b; margin-top: 4px;">6 Full-Time Agents</div>
+                    <div style="font-size: 11.5px; color: #059669; font-weight: 700; margin-top: 2px;">🟢 24/7 Operations Online</div>
+                </div>
+                <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                    <div style="font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase;">Google Policy Compliance</div>
+                    <div style="font-size: 24px; font-weight: 900; color: #059669; margin-top: 4px;">100% White-Hat</div>
+                    <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">Strictly Zero Spam / Zero PBNs</div>
+                </div>
+                <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                    <div style="font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase;">Tasks Completed Today</div>
+                    <div id="agencyStatsTotalTasks" style="font-size: 24px; font-weight: 900; color: #2563eb; margin-top: 4px;">0 Deliverables</div>
+                    <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">Automated Shift Logging</div>
+                </div>
+                <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                    <div style="font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase;">End-to-End Coverage</div>
+                    <div style="font-size: 24px; font-weight: 900; color: #7c3aed; margin-top: 4px;">Full 360° Scope</div>
+                    <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">No Task Left Behind</div>
+                </div>
+            </div>
+
+            <!-- Virtual Office Floor: Staff Cards -->
+            <div style="margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                    <div>
+                        <h3 style="font-size: 18px; font-weight: 900; color: #0f172a; margin: 0;">👥 Agency Staff Floor (Specialist Team)</h3>
+                        <p style="font-size: 12.5px; color: #64748b; margin: 2px 0 0 0;">Each agent executes specialized tasks conforming strictly to Google search & engineering standards.</p>
+                    </div>
+                </div>
+
+                <div id="agencyStaffGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+                    <!-- Rendered dynamically by loadAgencyDashboard() -->
+                </div>
+            </div>
+
+            <!-- Recent Task Deliverables & Shift Logs -->
+            <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 16px; padding: 22px; box-shadow: 0 4px 15px rgba(0,0,0,0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 22px;">📋</span>
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin: 0;">Recent Agency Deliverables & Work Logs</h3>
+                            <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Review completed work submitted by your virtual workforce.</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="loadAgencyDashboard()" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+                        🔄 Refresh Feed
+                    </button>
+                </div>
+
+                <div id="agencyTasksFeed">
+                    <!-- Populated by JS -->
+                    <div style="text-align: center; padding: 30px; color: #94a3b8; font-size: 13.5px;">
+                        Loading live workforce logs...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MODAL: ASSIGN TASK TO AGENT ================= -->
+        <div id="agencyTaskModal" onclick="if(event.target === this) closeAgencyTaskModal()" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999995; align-items: center; justify-content: center; padding: 20px;">
+            <div style="background: #ffffff; border-radius: 20px; max-width: 620px; width: 100%; box-shadow: 0 25px 60px rgba(0,0,0,0.3); border: 2px solid #6366f1; overflow: hidden; position: relative;">
+                <div style="padding: 20px 24px; background: linear-gradient(135deg, #1e1b4b, #312e81); color: white; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 24px;">⚡</span>
+                        <div>
+                            <h3 style="margin: 0; font-size: 17px; font-weight: 800;">Dispatch Task to Agency Staff</h3>
+                            <p style="margin: 2px 0 0 0; font-size: 11.5px; color: #c7d2fe;">Founder Directive • 100% Google White-Hat Certified Execution</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeAgencyTaskModal()" style="background: rgba(255,255,255,0.15); border: none; font-size: 18px; width: 32px; height: 32px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+                </div>
+
+                <form id="agencyTaskForm" onsubmit="handleDispatchAgencyTask(event)" style="padding: 24px;">
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Assign To Staff Member:</label>
+                        <select id="taskAgentSelect" required style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 13.5px; font-weight: 700; color: #0f172a; background: #f8fafc;">
+                            <option value="tanvir">👨‍💼 Tanvir Ahmed — Lead SEO Strategist (Keywords, SERP Radar, Gaps)</option>
+                            <option value="nabila">✍️ Nabila Rahman — On-Page SEO & Content Lead (EEAT 2,500+ Words, Zero Double Words)</option>
+                            <option value="arif">🔗 Arif Hossain — Head of Link Architecture (Internal Silos & Skyscraper Backlinks)</option>
+                            <option value="fahim">⚙️ Fahim Chowdhury — Technical SEO Auditor (Googlebot, Core Web Vitals, Schema)</option>
+                            <option value="zayan">💻 Zayan Karim — Web & WordPress Engineer (1-Click Publishing, Speed, Bug Fixes)</option>
+                            <option value="samira">🎨 Samira Khan — UI/UX & CRO Specialist (Page Experience, Mobile, Conversions)</option>
+                        </select>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 16px;">
+                        <div>
+                            <label style="display: block; font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Client Domain / Website URL:</label>
+                            <input type="text" id="taskClientDomain" placeholder="e.g. https://www.clientwebsite.com" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 13px;" required />
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Task Priority:</label>
+                            <select id="taskPrioritySelect" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 13px; font-weight: 700;">
+                                <option value="High" selected>High Priority</option>
+                                <option value="Urgent">🔥 Urgent</option>
+                                <option value="Normal">Normal</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Task Directive / Specific Instructions:</label>
+                        <textarea id="taskDirectiveText" rows="3" placeholder="e.g. Audit technical indexing and Schema, build internal linking silos, or write 2,500-word EEAT article..." required style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 13px; line-height: 1.5; font-family: inherit;"></textarea>
+                    </div>
+
+                    <div id="agencyTaskStatusAlert" style="display: none; padding: 12px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; font-weight: 700;"></div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <button type="button" onclick="closeAgencyTaskModal()" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; font-weight: 700; border-radius: 8px; padding: 10px 18px; font-size: 13px; cursor: pointer;">Cancel</button>
+                        <button type="submit" id="btnDispatchAgencyTask" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; font-weight: 800; border-radius: 8px; padding: 10px 24px; font-size: 13.5px; cursor: pointer; box-shadow: 0 4px 12px rgba(37,99,235,0.35);">
+                            <span>🚀 Dispatch Task to Agent</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ================= MODAL: DAILY REPORT SUMMARY ================= -->
+        <div id="agencyDailyReportModal" onclick="if(event.target === this) closeDailyReportModal()" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999995; align-items: center; justify-content: center; padding: 20px;">
+            <div style="background: #ffffff; border-radius: 20px; max-width: 800px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,0.3); border: 2px solid #2563eb; overflow: hidden; position: relative;">
+                <div style="padding: 18px 24px; background: linear-gradient(135deg, #1e1b4b, #2563eb); color: white; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 24px;">📊</span>
+                        <div>
+                            <h3 style="margin: 0; font-size: 18px; font-weight: 900;">Daily Agency Work Report (Shift Summary)</h3>
+                            <p style="margin: 2px 0 0 0; font-size: 12px; color: #c7d2fe;">Consolidated deliverable across all 6 specialists</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeDailyReportModal()" style="background: rgba(255,255,255,0.15); border: none; font-size: 18px; width: 32px; height: 32px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+                </div>
+                <div id="dailyReportModalBody" style="padding: 24px; overflow-y: auto; flex: 1;">
+                    <!-- Populated dynamically -->
+                </div>
+                <div style="padding: 14px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                    <a href="/agency/daily-report/pdf" target="_blank" style="background: #059669; color: white; text-decoration: none; font-weight: 800; border-radius: 8px; padding: 9px 20px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>🖨️ Download as PDF</span>
+                    </a>
+                    <button type="button" onclick="closeDailyReportModal()" style="background: #0f172a; color: white; border: none; font-weight: 700; border-radius: 8px; padding: 9px 20px; font-size: 13px; cursor: pointer;">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
 
 
     <!-- ================= 1-WEEK FREE TRIAL USER WELCOME POPUP MODAL ================= -->
@@ -4149,6 +4349,11 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             document.getElementById('tabWriter').style.display = (tab === 'writer') ? 'block' : 'none';
             document.getElementById('tabAutopilot').style.display = (tab === 'autopilot') ? 'block' : 'none';
             document.getElementById('tabDirector').style.display = (tab === 'director') ? 'block' : 'none';
+            const tabAg = document.getElementById('tabAgency');
+            if (tabAg) tabAg.style.display = (tab === 'agency') ? 'block' : 'none';
+            const tabAgBtn = document.getElementById('tabAgencyBtn');
+            if (tabAgBtn) tabAgBtn.className = 'tab-btn agency' + (tab === 'agency' ? ' active' : '');
+            if (tab === 'agency') { loadAgencyDashboard(); }
 
             document.getElementById('tabDailyBtn').className = 'tab-btn daily' + (tab === 'daily' ? ' active' : '');
             document.getElementById('tabSpyBtn').className = 'tab-btn spy' + (tab === 'spy' ? ' active' : '');
@@ -4169,7 +4374,7 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                 switchTab(e.state.tab, false);
             } else {
                 const hash = window.location.hash.replace('#', '');
-                if (hash && ['daily', 'spy', 'multi', 'writer', 'autopilot', 'director'].includes(hash)) {
+                if (hash && ['daily', 'spy', 'multi', 'writer', 'autopilot', 'director', 'agency'].includes(hash)) {
                     switchTab(hash, false);
                 } else {
                     switchTab('daily', false);
@@ -4185,6 +4390,8 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                 closeCustomApiModal();
                 closeClientReportModal();
                 closeRoadmapModal();
+                closeAgencyTaskModal();
+                closeDailyReportModal();
             }
         });
 
@@ -7054,11 +7261,343 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             }
         }
 
+        // ================= AGENCY WORKFORCE CONTROLLER =================
+        let agencyCachedStaff = [];
+        let agencyCachedTasks = [];
+
+        async function loadAgencyDashboard() {
+            const grid = document.getElementById('agencyStaffGrid');
+            const feed = document.getElementById('agencyTasksFeed');
+            const statsCount = document.getElementById('agencyStatsTotalTasks');
+
+            try {
+                const res = await fetch('/api/agency/staff');
+                const data = await res.json();
+                if (data.status === 'success') {
+                    agencyCachedStaff = data.staff || [];
+                    const tasks = (data.data && data.data.tasks) ? data.data.tasks : [];
+                    agencyCachedTasks = tasks;
+
+                    if (statsCount) {
+                        statsCount.innerText = `${tasks.length} Deliverable${tasks.length === 1 ? '' : 's'}`;
+                    }
+
+                    // Render Staff Grid
+                    if (grid) {
+                        grid.innerHTML = agencyCachedStaff.map(s => `
+                            <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.15s, box-shadow 0.15s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.06)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.03)';">
+                                <div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #1e1b4b, #3b82f6); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(37,99,235,0.25);">
+                                                ${s.avatar || '👤'}
+                                            </div>
+                                            <div>
+                                                <div style="font-size: 15px; font-weight: 800; color: #0f172a;">${s.name}</div>
+                                                <div style="font-size: 12px; font-weight: 700; color: #2563eb;">${s.designation}</div>
+                                            </div>
+                                        </div>
+                                        <span style="font-size: 10.5px; background: #ecfdf5; border: 1px solid #10b981; color: #047857; font-weight: 800; padding: 3px 8px; border-radius: 12px;">
+                                            ${s.badge || 'White-Hat'}
+                                        </span>
+                                    </div>
+                                    <div style="font-size: 11.5px; color: #64748b; font-weight: 600; margin-bottom: 8px;">
+                                        📂 <strong>Department:</strong> ${s.department}
+                                    </div>
+                                    <p style="font-size: 12.5px; color: #334155; line-height: 1.5; margin: 0 0 12px 0;">
+                                        ${s.bio}
+                                    </p>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;">
+                                        ${(s.specialties || []).map(sp => `<span style="font-size: 10.5px; background: #f1f5f9; color: #475569; padding: 3px 8px; border-radius: 6px; font-weight: 600;">#${sp}</span>`).join('')}
+                                    </div>
+                                </div>
+                                <div style="border-top: 1px solid #f1f5f9; padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 11px; color: #059669; font-weight: 700;">🟢 Ready for Orders</span>
+                                    <button type="button" onclick="openAgencyTaskModal('${s.id}')" style="background: linear-gradient(135deg, #1e1b4b, #2563eb); color: white; border: none; font-weight: 800; border-radius: 8px; padding: 7px 14px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+                                        <span>⚡ Assign Task</span>
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+
+                    // Render Tasks Feed
+                    if (feed) {
+                        if (tasks.length === 0) {
+                            feed.innerHTML = `
+                                <div style="text-align: center; padding: 40px 20px; color: #64748b; font-size: 13.5px;">
+                                    <div style="font-size: 40px; margin-bottom: 10px;">🏢</div>
+                                    <strong style="color: #0f172a;">No Agency Tasks Executed Today Yet</strong>
+                                    <p style="margin: 6px 0 16px 0; font-size: 12.5px;">Click <strong>"Assign Task to Staff"</strong> above to send orders to Tanvir, Nabila, Arif, Fahim, Zayan, or Samira!</p>
+                                    <button type="button" onclick="openAgencyTaskModal()" style="background: #2563eb; color: white; border: none; font-weight: 800; padding: 8px 18px; border-radius: 8px; font-size: 12.5px; cursor: pointer;">
+                                        ⚡ Assign First Task Now
+                                    </button>
+                                </div>
+                            `;
+                        } else {
+                            const revTasks = [...tasks].reverse();
+                            feed.innerHTML = revTasks.map((t, idx) => `
+                                <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 18px 20px; margin-bottom: 16px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <span style="font-size: 26px;">${t.agent_avatar || '👤'}</span>
+                                            <div>
+                                                <div style="font-size: 14.5px; font-weight: 900; color: #0f172a;">
+                                                    ${t.agent_name} <span style="font-size: 12px; font-weight: 700; color: #2563eb;">(${t.agent_designation})</span>
+                                                </div>
+                                                <div style="font-size: 11.5px; color: #64748b;">
+                                                    Task ID: <strong>${t.task_id}</strong> • Completed: ${t.created_at || 'Today'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <span style="font-size: 11px; background: #ecfdf5; border: 1px solid #10b981; color: #047857; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                                🟢 ${t.status || 'Completed'}
+                                            </span>
+                                            <span style="font-size: 11px; background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                                ${t.priority || 'High'} Priority
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; font-size: 12.5px;">
+                                        <div><strong>🌐 Target Client Website:</strong> <a href="${t.client_domain.startsWith('http') ? t.client_domain : 'https://' + t.client_domain}" target="_blank" style="color: #2563eb; text-decoration: underline; font-weight: 700;">${t.client_domain}</a></div>
+                                        <div style="margin-top: 4px;"><strong>🎯 Directive:</strong> <span style="color: #334155;">${t.task_directive}</span></div>
+                                        <div style="margin-top: 4px; color: #059669; font-weight: 700;">🛡️ <strong>Google Compliance Check:</strong> ${t.google_policy_check || '100% White-Hat Verified'}</div>
+                                    </div>
+                                    <div style="display: flex; gap: 8px;">
+                                        <button type="button" onclick="toggleTaskDeliverable('${t.task_id}')" style="background: #1e1b4b; color: white; border: none; font-weight: 700; border-radius: 6px; padding: 6px 14px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                                            <span>👁️ View Deliverable</span>
+                                        </button>
+                                        <button type="button" onclick="copyTaskDeliverable('${t.task_id}')" style="background: #ffffff; color: #334155; border: 1px solid #cbd5e1; font-weight: 700; border-radius: 6px; padding: 6px 14px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                                            <span>📋 Copy Text</span>
+                                        </button>
+                                    </div>
+                                    <div id="deliv_${t.task_id}" style="display: none; margin-top: 14px; background: #ffffff; border: 1.5px solid #94a3b8; border-radius: 10px; padding: 18px; max-height: 400px; overflow-y: auto; font-size: 13px; line-height: 1.6; color: #0f172a; white-space: pre-wrap; font-family: monospace;">${escapeHtml(typeof t.deliverable === 'object' ? JSON.stringify(t.deliverable, null, 2) : (t.deliverable || 'No deliverable content generated.'))}</div>
+                                </div>
+                            `).join('');
+                        }
+                    }
+                }
+            } catch(e) {
+                console.error('Failed to load agency dashboard:', e);
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function toggleTaskDeliverable(taskId) {
+            const el = document.getElementById('deliv_' + taskId);
+            if (el) {
+                el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'block' : 'none';
+            }
+        }
+
+        function copyTaskDeliverable(taskId) {
+            const t = agencyCachedTasks.find(x => x.task_id === taskId);
+            if (t && t.deliverable) {
+                const textToCopy = typeof t.deliverable === 'object' ? JSON.stringify(t.deliverable, null, 2) : t.deliverable;
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    alert('✅ Deliverable copied to clipboard!');
+                }).catch(() => {
+                    alert('Could not copy automatically. Please open and copy manually.');
+                });
+            }
+        }
+
+        function openAgencyTaskModal(agentId, clientDomain) {
+            const modal = document.getElementById('agencyTaskModal');
+            if (modal) modal.style.display = 'flex';
+            if (agentId) {
+                const sel = document.getElementById('taskAgentSelect');
+                if (sel) sel.value = agentId;
+            }
+            if (clientDomain) {
+                const dom = document.getElementById('taskClientDomain');
+                if (dom) dom.value = clientDomain;
+            }
+            const alertBox = document.getElementById('agencyTaskStatusAlert');
+            if (alertBox) alertBox.style.display = 'none';
+        }
+
+        function closeAgencyTaskModal() {
+            const modal = document.getElementById('agencyTaskModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        async function handleDispatchAgencyTask(event) {
+            event.preventDefault();
+            const agentId = document.getElementById('taskAgentSelect').value;
+            const clientDomain = document.getElementById('taskClientDomain').value.trim();
+            const priority = document.getElementById('taskPrioritySelect').value;
+            const directive = document.getElementById('taskDirectiveText').value.trim();
+            const btn = document.getElementById('btnDispatchAgencyTask');
+            const alertBox = document.getElementById('agencyTaskStatusAlert');
+
+            if (!clientDomain || !directive) {
+                alert('Please provide client domain and specific directive.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳ Executing & Auditing Task...</span>';
+            alertBox.style.display = 'block';
+            alertBox.style.background = '#eff6ff';
+            alertBox.style.color = '#1d4ed8';
+            alertBox.style.border = '1.5px solid #93c5fd';
+            alertBox.innerHTML = '🤖 <strong>Task Dispatched!</strong> Virtual specialist is executing live URL crawl & Google compliance checks. Please wait 5-15 seconds...';
+
+            try {
+                const res = await fetch('/api/agency/assign-task', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        agent_id: agentId,
+                        client_domain: clientDomain,
+                        task_directive: directive,
+                        priority: priority
+                    })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    alertBox.style.background = '#ecfdf5';
+                    alertBox.style.color = '#047857';
+                    alertBox.style.border = '1.5px solid #6ee7b7';
+                    alertBox.innerHTML = `✅ <strong>Success!</strong> Task executed by <strong>${data.task.agent_name}</strong>. Deliverable has been logged.`;
+                    
+                    document.getElementById('taskDirectiveText').value = '';
+                    await loadAgencyDashboard();
+
+                    setTimeout(() => {
+                        closeAgencyTaskModal();
+                        btn.disabled = false;
+                        btn.innerHTML = '<span>🚀 Dispatch Task to Agent</span>';
+                    }, 1200);
+                } else {
+                    alertBox.style.background = '#fef2f2';
+                    alertBox.style.color = '#b91c1c';
+                    alertBox.style.border = '1.5px solid #fca5a5';
+                    alertBox.innerText = '❌ Error: ' + (data.message || 'Execution failed.');
+                    btn.disabled = false;
+                    btn.innerHTML = '<span>🚀 Dispatch Task to Agent</span>';
+                }
+            } catch (err) {
+                alertBox.style.background = '#fef2f2';
+                alertBox.style.color = '#b91c1c';
+                alertBox.style.border = '1.5px solid #fca5a5';
+                alertBox.innerText = '❌ Error: ' + err.message;
+                btn.disabled = false;
+                btn.innerHTML = '<span>🚀 Dispatch Task to Agent</span>';
+            }
+        }
+
+        async function openDailyReportModal() {
+            const modal = document.getElementById('agencyDailyReportModal');
+            if (modal) modal.style.display = 'flex';
+            const body = document.getElementById('dailyReportModalBody');
+            body.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: #64748b;">
+                    <div style="font-size: 36px; margin-bottom: 8px;">⏳</div>
+                    <strong>Compiling Agency Operations Report...</strong>
+                    <p style="font-size: 12px; margin-top: 4px;">Synchronizing deliverables across all 6 specialists...</p>
+                </div>
+            `;
+
+            try {
+                const res = await fetch('/api/agency/daily-report', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({})
+                });
+                const data = await res.json();
+                if (data.status === 'success' && data.report) {
+                    const r = data.report;
+                    body.innerHTML = `
+                        <div style="margin-bottom: 18px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 18px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+                                <div>
+                                    <h4 style="margin: 0; font-size: 16px; font-weight: 900; color: #0f172a;">${r.agency_name}</h4>
+                                    <div style="font-size: 12px; color: #64748b;">Founder: <strong>${r.founder || 'RankNaser'}</strong> • Shift: <strong>${r.generated_date || 'Today'}</strong></div>
+                                </div>
+                                <span style="font-size: 12px; background: #ecfdf5; border: 1.5px solid #10b981; color: #047857; font-weight: 800; padding: 5px 12px; border-radius: 20px;">
+                                    ${r.whitehat_compliance_rating || '100% White-Hat'}
+                                </span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 10px;">
+                                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; text-align: center;">
+                                    <div style="font-size: 11px; color: #64748b; font-weight: 700;">TOTAL TASKS</div>
+                                    <div style="font-size: 18px; font-weight: 900; color: #2563eb;">${r.total_tasks_completed || 0}</div>
+                                </div>
+                                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; text-align: center;">
+                                    <div style="font-size: 11px; color: #64748b; font-weight: 700;">AI SPECIALISTS</div>
+                                    <div style="font-size: 18px; font-weight: 900; color: #7c3aed;">6 Staff</div>
+                                </div>
+                                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; text-align: center;">
+                                    <div style="font-size: 11px; color: #64748b; font-weight: 700;">COMPLIANCE</div>
+                                    <div style="font-size: 18px; font-weight: 900; color: #059669;">100% Zero-Spam</div>
+                                </div>
+                            </div>
+                            ${r.executive_verdict ? `
+                                <div style="margin-top: 12px; background: #ffffff; border-left: 4px solid #2563eb; padding: 10px 14px; border-radius: 6px; font-size: 12px; color: #334155; line-height: 1.5;">
+                                    <strong>Executive Verdict:</strong> ${r.executive_verdict}
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <h4 style="font-size: 14px; font-weight: 800; color: #0f172a; margin: 0 0 10px 0;">👥 Specialists Shift Logs:</h4>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            ${Object.values(r.staff_shift_logs || {}).map(sLog => `
+                                <div style="border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; background: #ffffff;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                        <div style="font-size: 13.5px; font-weight: 800; color: #0f172a;">
+                                            ${sLog.staff.avatar || '👤'} ${sLog.staff.name} <span style="font-size: 11.5px; font-weight: 600; color: #2563eb;">(${sLog.staff.designation})</span>
+                                        </div>
+                                        <span style="font-size: 11px; background: ${sLog.completed_count > 0 ? '#eff6ff' : '#f1f5f9'}; color: ${sLog.completed_count > 0 ? '#1d4ed8' : '#64748b'}; padding: 3px 8px; border-radius: 10px; font-weight: 700;">
+                                            ${sLog.completed_count} Completed
+                                        </span>
+                                    </div>
+                                    ${(sLog.recent_tasks || []).length === 0 ? '<div style="font-size: 11.5px; color: #94a3b8;">Standing by for next directive.</div>' : `
+                                        <div style="margin-top: 6px; display: flex; flex-direction: column; gap: 6px;">
+                                            ${sLog.recent_tasks.map(t => `
+                                                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; font-size: 12px;">
+                                                    <div style="display: flex; justify-content: space-between; font-weight: 700; color: #0f172a;">
+                                                        <span>🎯 ${t.task_directive}</span>
+                                                        <span style="color: #2563eb;">${t.client_domain}</span>
+                                                    </div>
+                                                    <div style="font-size: 11px; color: #059669; margin-top: 2px;">🛡️ ${t.google_policy_check || '100% White-Hat Verified'}</div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    `}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                } else {
+                    body.innerHTML = '<div style="color: #b91c1c; padding: 20px; text-align: center;">Error loading shift report.</div>';
+                }
+            } catch(e) {
+                body.innerHTML = `<div style="color: #b91c1c; padding: 20px; text-align: center;">Error: ${e.message}</div>`;
+            }
+        }
+
+        function closeDailyReportModal() {
+            const modal = document.getElementById('agencyDailyReportModal');
+            if (modal) modal.style.display = 'none';
+        }
+
         // Check URL hash on load for deep linking & initial tab setup
         window.addEventListener('DOMContentLoaded', function() {
             checkAuthOnLoad();
             const hash = window.location.hash.replace('#', '');
-            if (hash && ['daily', 'spy', 'multi', 'writer', 'autopilot', 'director'].includes(hash)) {
+            if (hash && ['daily', 'spy', 'multi', 'writer', 'autopilot', 'director', 'agency'].includes(hash)) {
                 switchTab(hash, false);
             }
         });
@@ -7105,6 +7644,20 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             html_bn = render_printable_guide('bn')
             self.wfile.write(html_bn.encode('utf-8'))
+        elif self.path == '/api/agency/staff':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.end_headers()
+            data = load_agency_data()
+            self.wfile.write(json.dumps({"status": "success", "staff": AGENCY_STAFF, "data": data}, ensure_ascii=False).encode('utf-8'))
+        elif self.path == '/agency/daily-report/pdf':
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            engine = AgencyWorkforceEngine()
+            rep = engine.generate_daily_report()
+            html = render_printable_agency_report(rep)
+            self.wfile.write(html.encode('utf-8'))
         elif self.path == '/static/ranknaser.jpg':
             if os.path.exists(PHOTO_FILE):
                 self.send_response(200)
@@ -7592,6 +8145,49 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-Type', 'application/json; charset=utf-8')
                 self.end_headers()
                 self.wfile.write(json.dumps(res, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/agency/assign-task':
+            try:
+                data = json.loads(body)
+                agent_id = data.get('agent_id', 'tanvir')
+                client_domain = data.get('client_domain', '')
+                task_directive = data.get('task_directive', '')
+                priority = data.get('priority', 'High')
+                gemini_key = data.get('gemini_key', '').strip() or os.environ.get('GEMINI_API_KEY', '').strip()
+
+                engine = AgencyWorkforceEngine(gemini_api_key=gemini_key if gemini_key else None)
+                task_res = engine.execute_task(
+                    agent_id=agent_id,
+                    client_domain=client_domain,
+                    task_directive=task_directive,
+                    priority=priority
+                )
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "success", "task": task_res}, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/agency/daily-report':
+            try:
+                data = json.loads(body) if body else {}
+                gemini_key = data.get('gemini_key', '').strip() or os.environ.get('GEMINI_API_KEY', '').strip()
+
+                engine = AgencyWorkforceEngine(gemini_api_key=gemini_key if gemini_key else None)
+                rep = engine.generate_daily_report()
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "success", "report": rep}, ensure_ascii=False).encode('utf-8'))
             except Exception as e:
                 self.send_response(500)
                 self.send_header('Content-Type', 'application/json; charset=utf-8')
