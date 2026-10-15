@@ -1,0 +1,1210 @@
+{
+    "CRAWL-001": {
+        "id": "CRAWL-001",
+        "category": "Crawler & Discovery",
+        "severity": "W",
+        "title": "Internal Link Discovery & Follow Depth",
+        "why": "সাইটের ভেতরের পেজগুলো একে অপরের সাথে যুক্ত না থাকলে বা ক্রল ডেপথ ৪+ হলে গুগলবট গুরুত্বপূর্ণ পেজ ক্রল করতে পারে না এবং পেইজর‍্যাঙ্ক অপচয় হয়।",
+        "fix": "গুরুত্বপূর্ণ সব পেজকে ৩ ক্লিকের মধ্যে রাখার জন্য ক্যাটাগরি হাব, ব্রেডক্রাম্ব এবং কনটেক্সচুয়াল ইন্টারনাল লিংক স্ট্রাকচার তৈরি করুন।"
+    },
+    "CRAWL-002": {
+        "id": "CRAWL-002",
+        "category": "Crawler & Discovery",
+        "severity": "C",
+        "title": "Robots.txt Presence & Directives Validation",
+        "why": "Robots.txt না থাকলে বা ভুল Disallow: / দিলে পুরো সাইট গুগল সার্চ থেকে উধাও হয়ে যেতে পারে। বট কন্ট্রোল নষ্ট হয়।",
+        "fix": "রুট ডিরেক্টরিতে /robots.txt ফাইল রাখুন, সিনট্যাক্স ভ্যালিডেট করুন, শুধু অ্যাডমিন/প্রাইভেট ফোল্ডার ব্লক করুন এবং নিচে Sitemap: লিংক যুক্ত করুন।"
+    },
+    "CRAWL-003": {
+        "id": "CRAWL-003",
+        "category": "Crawler & Discovery",
+        "severity": "C",
+        "title": "XML Sitemap Discovery & Format Check",
+        "why": "XML সাইটম্যাপ না থাকলে বা ভুল/রিডাইরেক্ট URL থাকলে গুগল নতুন ও আপডেটেড পেজ দ্রুত ইনডেক্স করতে ব্যর্থ হয়।",
+        "fix": "শুধুমাত্র ইনডেক্সযোগ্য, ২০০ স্ট্যাটাস কোডের ক্যানোনিক্যাল URL দিয়ে sitemap.xml তৈরি করুন এবং Search Console-এ সাবমিট করুন।"
+    },
+    "CRAWL-004": {
+        "id": "CRAWL-004",
+        "category": "Crawler & Discovery",
+        "severity": "W",
+        "title": "Crawl Politeness & Server Delay",
+        "why": "সার্ভার খুব স্লো হলে বা ক্রল-ডিলে মাত্রাতিরিক্ত বেশি হলে গুগলবট পেজ ক্রলিং কমিয়ে দেয়।",
+        "fix": "সার্ভার রেসপন্স টাইম দ্রুত রাখুন এবং robots.txt-এ অপ্রয়োজনীয় দীর্ঘ ক্রল-ডিলে পরিহার করুন।"
+    },
+    "CRAWL-005": {
+        "id": "CRAWL-005",
+        "category": "Crawler & Discovery",
+        "severity": "N",
+        "title": "Googlebot Mobile vs Desktop UA Parity",
+        "why": "গুগল মোবাইল-ফার্স্ট ইনডেক্সিং ব্যবহার করে; মোবাইল ও ডেস্কটপ ইউজারের জন্য কনটেন্ট আলাদা হলে র‍্যাঙ্কিং ড্রপ করে।",
+        "fix": "মোবাইল ও ডেস্কটপ উভয় ভার্সনে একই কনটেন্ট, মেটা ট্যাগ ও স্ট্রাকচার্ড ডেটা পরিবেশন করুন।"
+    },
+    "CRAWL-006": {
+        "id": "CRAWL-006",
+        "category": "Crawler & Discovery",
+        "severity": "C",
+        "title": "Raw HTML vs Rendered JS Content Parity",
+        "why": "মূল কনটেন্ট শুধুমাত্র জাভাস্ক্রিপ্ট রেন্ডারিংয়ের ওপর নির্ভরশীল হলে এআই ক্রলার ও সার্চ বট তথ্য মিস করতে পারে।",
+        "fix": "সার্ভার সাইড রেন্ডারিং (SSR) বা প্রি-রেন্ডারিং ব্যবহার করে মূল কনটেন্ট ও ক্যানোনিক্যাল লিংক র HTML-এ রাখুন।"
+    },
+    "CRAWL-007": {
+        "id": "CRAWL-007",
+        "category": "Crawler & Discovery",
+        "severity": "C",
+        "title": "Redirect Chain & Loop Detection",
+        "why": "রিডাইরেক্ট লুপ হলে পেজ খোলাই যায় না; একাধিক চেইন ক্রল বাজেট নষ্ট করে ও পেজ স্পিড কমিয়ে দেয়।",
+        "fix": "সব রিডাইরেক্ট সরাসরি টার্গেট URL-এ (১ হপে) পাঠান এবং সার্ভার কনফিগ থেকে রিডাইরেক্ট লুপ বন্ধ করুন।"
+    },
+    "CRAWL-008": {
+        "id": "CRAWL-008",
+        "category": "Crawler & Discovery",
+        "severity": "W",
+        "title": "URL Normalization & Clean Architecture",
+        "why": "ট্রেলিং স্ল্যাশ, ক্যাপিটাল লেটার বা ট্র্যাকিং প্যারামিটারের কারণে একই পেজের একাধিক ডুপ্লিকেট ভার্সন তৈরি হয়।",
+        "fix": "সব URL লোয়ারকেস রাখুন, ট্রেলিং স্ল্যাশ কনসিস্টেন্ট করুন এবং ক্লিন URL-এ ৩০১ রিডাইরেক্ট নিশ্চিত করুন।"
+    },
+    "CRAWL-009": {
+        "id": "CRAWL-009",
+        "category": "Crawler & Discovery",
+        "severity": "W",
+        "title": "Staging / Auth Environment Protection",
+        "why": "স্টেজিং সাইট ভুলবশত ইনডেক্স হয়ে গেলে প্রোডাকশন সাইটের সাথে কনটেন্ট ক্যানিব্যালাইজেশন তৈরি হয়।",
+        "fix": "স্টেজিং ও টেস্ট এনভায়রনমেন্টে Basic Auth অথবা noindex হেডার সক্রিয় রাখুন।"
+    },
+    "CRAWL-010": {
+        "id": "CRAWL-010",
+        "category": "Crawler & Discovery",
+        "severity": "N",
+        "title": "Crawl Queue & Rate Limit Compliance",
+        "why": "বড় সাইটের জন্য অবিরাম ক্রলিং সার্ভার ডাউন করতে পারে।",
+        "fix": "রেট লিমিটিং এবং ব্যাক-অফ অ্যালগরিদম মেনে রেসপন্স অনুযায়ী ক্রল পরিচালনা করুন।"
+    },
+    "CRAWL-011": {
+        "id": "CRAWL-011",
+        "category": "Crawler & Discovery",
+        "severity": "N",
+        "title": "HTTP Response Headers Completeness",
+        "why": "প্রয়োজনীয় হেডার না থাকলে ব্রাউজার ও সার্চ বট সঠিক কন্টেন্ট-টাইপ ও সিকিউরিটি বুঝতে পারে না।",
+        "fix": "Content-Type, Content-Length, এবং ক্যাশিং হেডার সঠিকভাবে সার্ভার থেকে রেসপন্সে দিন।"
+    },
+    "CRAWL-012": {
+        "id": "CRAWL-012",
+        "category": "Crawler & Discovery",
+        "severity": "W",
+        "title": "Orphan Page Detection (No Internal Inbound Links)",
+        "why": "কোনো ইন্টারনাল লিংক না থাকলে গুগল সেই পেজকে গুরুত্বহীন মনে করে এবং ইনডেক্স থেকে বাদ দেয়।",
+        "fix": "প্রাসঙ্গিক ক্যাটাগরি বা ব্লগ পোস্ট থেকে কনটেক্সচুয়াল ইন্টারনাল লিংক তৈরি করুন অথবা পেজটি সরিয়ে দিন।"
+    },
+    "CRAWL-013": {
+        "id": "CRAWL-013",
+        "category": "Crawler & Discovery",
+        "severity": "W",
+        "title": "Deep Click Depth (4+ Clicks from Homepage)",
+        "why": "হোমপেজ থেকে ৪ বা তার বেশি ক্লিক দূরে থাকা পেজগুলো কম ক্রলিং এবং নগণ্য পেজর‍্যাঙ্ক অথরিটি পায়।",
+        "fix": "ফ্ল্যাট আর্কিটেকচার, ক্যাটাগরি হাব ও ব্রেডক্রাম্ব ব্যবহার করে সব জরুরি পেজ ৩ ক্লিকের মধ্যে আনুন।"
+    },
+    "IDX-001": {
+        "id": "IDX-001",
+        "category": "Indexability & Status",
+        "severity": "C",
+        "title": "Broken Internal Links (4xx Status)",
+        "why": "ইউজার এবং গুগলবট ডেড-এন্ডে পড়ে, ইউজার এক্সপেরিয়েন্স নষ্ট হয় এবং ইন্টারনাল লিংক ইকুইটি নষ্ট হয়।",
+        "fix": "ভাঙ্গা লিংকগুলো সঠিক সক্রিয় URL-এ আপডেট করুন অথবা প্রাসঙ্গিক নতুন পেজে ৩০১ রিডাইরেক্ট করুন।"
+    },
+    "IDX-002": {
+        "id": "IDX-002",
+        "category": "Indexability & Status",
+        "severity": "C",
+        "title": "Server Errors (5xx Status)",
+        "why": "বারবার সার্ভার এরর আসলে গুগল সাইটের ক্রল রেট কমিয়ে দেয় এবং পেজগুলোকে সার্চ ইনডেক্স থেকে সরিয়ে দেয়।",
+        "fix": "সার্ভার এরর লগ চেক করে ব্যাকএন্ড কোড বা ডাটাবেজ স্কেলিং ঠিক করুন এবং আপটাইম নিশ্চিত করুন।"
+    },
+    "IDX-003": {
+        "id": "IDX-003",
+        "category": "Indexability & Status",
+        "severity": "W",
+        "title": "Internal Links Pointing to Redirects (301/302)",
+        "why": "ইন্টারনাল লিংকে রিডাইরেক্ট থাকলে অপ্রয়োজনীয় হপ তৈরি হয় যা পেজ লোডিং স্লো করে এবং ক্রল বাজেট নষ্ট করে।",
+        "fix": "ইন্টারনাল লিংকের href সরাসরি চূড়ান্ত গন্তব্যের ফাইনাল URL দিয়ে রিপ্লেস করুন।"
+    },
+    "IDX-004": {
+        "id": "IDX-004",
+        "category": "Indexability & Status",
+        "severity": "C",
+        "title": "Redirect Loop Detected",
+        "why": "রিডাইরেক্ট লুপে পড়লে ব্রাউজার বা গুগলবট কোনো কনটেন্ট লোড করতে পারে না, পেজ পুরোপুরি অকেজো হয়ে যায়।",
+        "fix": ".htaccess বা Nginx কনফিগারেশন সংশোধন করে চক্রাকার রিডাইরেক্ট চেইন বন্ধ করুন।"
+    },
+    "IDX-005": {
+        "id": "IDX-005",
+        "category": "Indexability & Status",
+        "severity": "W",
+        "title": "Long Redirect Chain (3+ Hops)",
+        "why": "একাধিক রিডাইরেক্ট ধাপ পার হতে পেজ স্পিড মারাত্মক কমে এবং গুগলবট ৩-৪ হপের পর ক্রল বন্ধ করে দিতে পারে।",
+        "fix": "মাঝের সব ধাপ বাইপাস করে সরাসরি প্রথম URL থেকে অন্তিম URL-এ এক ধাপে ৩০১ রিডাইরেক্ট করুন।"
+    },
+    "IDX-006": {
+        "id": "IDX-006",
+        "category": "Indexability & Status",
+        "severity": "W",
+        "title": "Temporary 302 Redirect Instead of Permanent 301",
+        "why": "৩০২ রিডাইরেক্ট লিংক জুস বা অথরিটি পাস করে না, ফলে পুরনো পেজের র‍্যাঙ্কিং পাওয়ার নষ্ট হয়।",
+        "fix": "স্থায়ী পরিবর্তনের জন্য সার্ভার থেকে ৩০১ (Moved Permanently) রিডাইরেক্ট হেডার প্রেরণ করুন।"
+    },
+    "IDX-007": {
+        "id": "IDX-007",
+        "category": "Indexability & Status",
+        "severity": "C",
+        "title": "Broken External Outbound Links",
+        "why": "বাহ্যিক ডেড লিংক পাঠকদের বিভ্রান্ত করে এবং গুগলের দৃষ্টিতে ওয়েবসাইটের বিশ্বাসযোগ্যতা ও কোয়ালিটি হ্রাস করে।",
+        "fix": "বহিরাগত লিংকগুলো নিয়মিত অডিট করে মৃত বা মেয়াদোত্তীর্ণ লিংক মুছে ফেলুন অথবা সক্রিয় সোর্সে আপডেট করুন।"
+    },
+    "IDX-008": {
+        "id": "IDX-008",
+        "category": "Indexability & Status",
+        "severity": "C",
+        "title": "Critical Page Blocked by Noindex (Meta or Header)",
+        "why": "গুরুত্বপূর্ণ পেজে noindex থাকলে গুগল সার্চে পেজটি কখনোই আসবে না, অর্গানিক ট্রাফিক শূন্য হয়ে যাবে।",
+        "fix": "ট্যাগ থেকে 'noindex' সরিয়ে 'index, follow' বসান এবং X-Robots-Tag হেডার চেক করুন।"
+    },
+    "IDX-009": {
+        "id": "IDX-009",
+        "category": "Indexability & Status",
+        "severity": "C",
+        "title": "Important Page Disallowed in Robots.txt",
+        "why": "Robots.txt দিয়ে ব্লক করা থাকলে গুগল পেজটি ক্রল করতে পারে না এবং অন-পেজ সিগন্যাল দেখতে ব্যর্থ হয়।",
+        "fix": "Robots.txt থেকে নির্দিষ্ট পেজের Disallow রুল তুলে নিন।"
+    },
+    "IDX-010": {
+        "id": "IDX-010",
+        "category": "Indexability & Status",
+        "severity": "W",
+        "title": "CSS / JS / Image Assets Blocked in Robots.txt",
+        "why": "রেন্ডারিং অ্যাসেট ব্লক থাকলে গুগলবট সাইটের আসল মোবাইল লেআউট বুঝতে পারে না এবং পেনাল্টি দেয়।",
+        "fix": "CSS, JavaScript এবং আপলোড ফোল্ডারের জন্য দেওয়া Disallow ডিরেক্টিভ তুলে দিন।"
+    },
+    "IDX-011": {
+        "id": "IDX-011",
+        "category": "Indexability & Status",
+        "severity": "C",
+        "title": "Sitemap Contains 404, Noindex, or Redirecting URLs",
+        "why": "সাইটম্যাপে নষ্ট বা নন-ইনডেক্সেবল লিংক থাকলে গুগলের ক্রলিং এফিশিয়েন্সি ও সাইটম্যাপের বিশ্বাসযোগ্যতা নষ্ট হয়।",
+        "fix": "সাইটম্যাপ জেনারেটরে ফিল্টার বসিয়ে শুধুমাত্র লাইভ ২০০ OK ইনডেক্সযোগ্য পেজ রাখুন।"
+    },
+    "IDX-012": {
+        "id": "IDX-012",
+        "category": "Indexability & Status",
+        "severity": "W",
+        "title": "Indexable Live Page Missing from Sitemap",
+        "why": "সাইটম্যাপে না থাকলে গুগল বট নতুন পেজ আবিষ্কার করতে অনেক দেরি করে।",
+        "fix": "সাইটের সব ইনডেক্সযোগ্য আর্টিকেল ও পেজ XML সাইটম্যাপে স্বয়ংক্রিয়ভাবে ইনক্লুড করুন।"
+    },
+    "IDX-013": {
+        "id": "IDX-013",
+        "category": "Indexability & Status",
+        "severity": "W",
+        "title": "Soft 404 Error (Missing Content returning 200 OK)",
+        "why": "পেজ খালি কিন্তু সার্ভার ২০০ OK পাঠালে গুগল বিভ্রান্ত হয় এবং ক্রল বাজেট নষ্ট হয়।",
+        "fix": "কনটেন্ট না থাকলে সার্ভার থেকে সঠিক 404 বা 410 হেডার কোড পাঠান।"
+    },
+    "IDX-014": {
+        "id": "IDX-014",
+        "category": "Indexability & Status",
+        "severity": "C",
+        "title": "Canonical Tag Missing or Inconsistent",
+        "why": "ক্যানোনিক্যাল ট্যাগ না থাকলে ডুপ্লিকেট URL-এর কারণে র‍্যাঙ্কিং একাধিক পেজে ভাগ হয়ে দুর্বল হয়ে যায়।",
+        "fix": "প্রতিটি পেজের <head>-এ স্বয়ংক্রিয় স্ব-নির্দেশক (self-referencing) ক্যানোনিক্যাল ট্যাগ যুক্ত করুন।"
+    },
+    "IDX-015": {
+        "id": "IDX-015",
+        "category": "Indexability & Status",
+        "severity": "C",
+        "title": "Canonical Chain / Loop or Pointing to 404/Noindex",
+        "why": "ভুল ক্যানোনিক্যাল গুগল সম্পূর্ণরূপে উপেক্ষা করে এবং কন্টেন্ট ইনডেক্সেশন বিঘ্নিত হয়।",
+        "fix": "ক্যানোনিক্যাল যেন সবসময় শুধুমাত্র সরাসরি লাইভ ২০০ OK পেজে পয়েন্ট করে তা নিশ্চিত করুন।"
+    },
+    "IDX-016": {
+        "id": "IDX-016",
+        "category": "Indexability & Status",
+        "severity": "W",
+        "title": "Canonical vs Sitemap vs Internal Links Conflict",
+        "why": "পরস্পরবিরোধী সংকেত পেলে গুগল অ্যালগরিদম নিজস্ব সিদ্ধান্ত নেয় যা আপনার র‍্যাঙ্ক নষ্ট করতে পারে।",
+        "fix": "সাইটম্যাপ, ইন্টারনাল লিংক এবং ক্যানোনিক্যাল ট্যাগ যেন সব জায়গায় অভিন্ন URL প্রদর্শন করে।"
+    },
+    "IDX-017": {
+        "id": "IDX-017",
+        "category": "Indexability & Status",
+        "severity": "W",
+        "title": "Multiple Canonical Tags Declared on Page",
+        "why": "একাধিক ক্যানোনিক্যাল ট্যাগ থাকলে গুগল দুটোকেই বাতিল ঘোষণা করে।",
+        "fix": "থিম এবং এসইও প্লাগইন চেক করে ডুপ্লিকেট ট্যাগ ডিলিট করুন, পেজে মাত্র একটি ক্যানোনিক্যাল রাখুন।"
+    },
+    "IDX-018": {
+        "id": "IDX-018",
+        "category": "Indexability & Status",
+        "severity": "W",
+        "title": "Internal Links Marked with Rel Nofollow",
+        "why": "নিজের সাইটের ভেতরের লিংকে nofollow দিলে পেজর‍্যাঙ্ক লিংক জুস প্রবাহ বাধাগ্রস্ত হয়।",
+        "fix": "ইন্টারনাল লিংক থেকে অপ্রয়োজনীয় rel='nofollow' সরিয়ে স্ট্যান্ডার্ড লিংকে রূপান্তর করুন।"
+    },
+    "IDX-019": {
+        "id": "IDX-019",
+        "category": "Indexability & Status",
+        "severity": "W",
+        "title": "Login / Paywall Blocking Crawler Access",
+        "why": "বট যদি লগইন ওয়ালের কারণে কনটেন্ট পড়তে না পারে তবে পেজ ইনডেক্স হবে না।",
+        "fix": "পে-ওয়াল কন্টেন্টে Googlebot-এর জন্য structured data (isAccessibleForFree) ব্যবহার করুন।"
+    },
+    "IDX-020": {
+        "id": "IDX-020",
+        "category": "Indexability & Status",
+        "severity": "W",
+        "title": "CDN / WAF Firewall Blocking Verified Googlebot",
+        "why": "ক্লাউডফ্লেয়ার বা ফায়ারওয়াল গুগলবটকে চ্যালেঞ্জ বা ৪০৩ দিলে সার্চ ফলাফল থেকে পেজ গায়েব হয়ে যায়।",
+        "fix": "Cloudflare/WAF-এ Reverse DNS ভেরিফিকেশন দিয়ে আসল সার্চ বটকে Allowlist করুন।"
+    },
+    "IDX-021": {
+        "id": "IDX-021",
+        "category": "Indexability & Status",
+        "severity": "N",
+        "title": "Pagination Indexability & Structure",
+        "why": "প্যাজিনেশন পেজে সঠিক লিংক না থাকলে ডিপ আর্কাইভ কনটেন্ট ক্রল হয় না।",
+        "fix": "প্যাজিনেটেড পেজে স্বতন্ত্র ক্রলেবল <a href> লিংক এবং সেলফ-ক্যানোনিক্যাল ট্যাগ রাখুন।"
+    },
+    "IDX-022": {
+        "id": "IDX-022",
+        "category": "Indexability & Status",
+        "severity": "W",
+        "title": "Dynamic Query Parameters Creating Duplicate Indexation",
+        "why": "ফিল্টার ও সর্ট প্যারামিটার যুক্ত হাজার হাজার ডুপ্লিকেট পেজ ক্রল বাজেট গ্রাস করে।",
+        "fix": "প্যারামিটার পেজগুলোতে ক্যানোনিক্যাল দিয়ে মূল ক্লিন ক্যাটাগরিতে পয়েন্ট করুন বা robots দিয়ে নিয়ন্ত্রণ করুন।"
+    },
+    "IDX-023": {
+        "id": "IDX-023",
+        "category": "Indexability & Status",
+        "severity": "N",
+        "title": "Search Console URL Inspection Sync Readiness",
+        "why": "গুগল নির্বাচিত আসল ক্যানোনিক্যাল জানতে সার্চ কনসোল যাচাই প্রয়োজন।",
+        "fix": "Search Console API কানেক্ট করে Google-selected canonical নিয়মিত ট্র্যাক করুন।"
+    },
+    "IDX-024": {
+        "id": "IDX-024",
+        "category": "Indexability & Status",
+        "severity": "N",
+        "title": "Search Console Coverage: Crawled But Not Indexed",
+        "why": "কনটেন্টের মান দুর্বল হলে গুগল ক্রল করেও ইনডেক্স করে না।",
+        "fix": "কনটেন্টের গভীরতা ও ইউনিক ভ্যালু বাড়িয়ে সার্চ কনসোলে পুনরায় রিকোয়েস্ট ইনডেক্সিং দিন।"
+    },
+    "OP-001": {
+        "id": "OP-001",
+        "category": "On-Page SEO",
+        "severity": "C",
+        "title": "Title Tag Missing in HTML",
+        "why": "টাইটেল ট্যাগ না থাকলে সার্চ ইঞ্জিন নিজে থেকে র‍্যান্ডম টেক্সট টাইটেল হিসেবে দেখায়, ফলে CTR ও র‍্যাঙ্কিং ধসে পড়ে।",
+        "fix": "<head> সেকশনের ভেতরে সুনির্দিষ্ট ও আকর্ষক <title> ট্যাগ যুক্ত করুন।"
+    },
+    "OP-002": {
+        "id": "OP-002",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Duplicate Title Tag Across Pages",
+        "why": "একাধিক পেজে একই টাইটেল থাকলে একে অপরের সাথে ক্যানিব্যালাইজেশন তৈরি হয় এবং গুগলে কনফিউশন তৈরি হয়।",
+        "fix": "প্রতিটি পেজের কনটেন্টের ওপর ভিত্তি করে একদম ইউনিক ও স্পেসিফিক টাইটেল দিন।"
+    },
+    "OP-003": {
+        "id": "OP-003",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Title Tag Length Out of Bounds (30-60 Chars)",
+        "why": "৬০ অক্ষরের বেশি হলে গুগল SERP-এ টাইটেল কেটে দেয়; ৩০ অক্ষরের কম হলে কিওয়ার্ড সুযোগ নষ্ট হয়।",
+        "fix": "টাইটেল দৈর্ঘ্য ৫০ থেকে ৬০ অক্ষরের মধ্যে রাখুন যাতে SERP পিক্সেল লিমিটে সুন্দরভাবে ফিট হয়।"
+    },
+    "OP-004": {
+        "id": "OP-004",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Primary Focus Keyword Placement in Title",
+        "why": "টাইটেলের শুরুর দিকে মূল কিওয়ার্ড না থাকলে সার্চ ক্লিকের প্রাসঙ্গিকতা কমে যায়।",
+        "fix": "টাইটেলের প্রথম অংশে মূল কিওয়ার্ড এবং শেষে ব্র্যান্ড নাম রাখুন।"
+    },
+    "OP-005": {
+        "id": "OP-005",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Multiple Title Tags Declared",
+        "why": "হেডারের ভেতরে একাধিক টাইটেল ট্যাগ থাকলে সার্চ ইঞ্জিন ভুল টাইটেল বেছে নিতে পারে।",
+        "fix": "অতিরিক্ত টাইটেল ট্যাগ মুছে ফেলে প্রতিটি পেজে একটিমাত্র সঠিক টাইটেল বজায় রাখুন।"
+    },
+    "OP-010": {
+        "id": "OP-010",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Meta Description Missing or Empty",
+        "why": "মেটা ডেসক্রিপশন না থাকলে গুগল পেজ থেকে এলোমেলো লাইন তুলে স্নিপেট তৈরি করে, যা ক্লিক রেট কমায়।",
+        "fix": "প্রতিটি পেজের জন্য আকর্ষণীয় ও ইউনিক মেটা ডেসক্রিপশন লিখুন।"
+    },
+    "OP-011": {
+        "id": "OP-011",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Meta Description Length (70-160 Chars)",
+        "why": "১৬০ অক্ষরের বেশি হলে SERP-এ ডেসক্রিপশন কেটে যায়, আর ৭০ অক্ষরের কম হলে তথ্য অপূর্ণ থাকে।",
+        "fix": "মেটা ডেসক্রিপশনের দৈর্ঘ্য ১২০ থেকে ১৫৫ অক্ষরের মধ্যে রাখুন।"
+    },
+    "OP-012": {
+        "id": "OP-012",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Call-to-Action (CTA) & Keyword in Meta Description",
+        "why": "ডেসক্রিপশনে স্পষ্ট অ্যাকশন এবং কিওয়ার্ড না থাকলে ভিজিটরের ক্লিক করার আগ্রহ কমে যায়।",
+        "fix": "ডেসক্রিপশনে মূল বেনিফিট, ফোকাস কিওয়ার্ড এবং 'জানুন / কিনুন / দেখুন' জাতীয় কল-টু-অ্যাকশন যোগ করুন।"
+    },
+    "OP-020": {
+        "id": "OP-020",
+        "category": "On-Page SEO",
+        "severity": "C",
+        "title": "H1 Heading Missing or Multiple H1 Tags",
+        "why": "H1 ছাড়া পেজের মূল বিষয়বস্তু স্পষ্ট হয় না; আবার একাধিক H1 হেডিং হায়ারার্কি নষ্ট করে।",
+        "fix": "পুরো পেজে মাত্র একটি প্রধান H1 হেডিং রাখুন যা পেজের মূল বিষয়বস্তুকে উপস্থাপন করে।"
+    },
+    "OP-021": {
+        "id": "OP-021",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Duplicate H1 Across Multiple Pages",
+        "why": "ভিন্ন পেজে একই H1 থাকলে গুগল পেজগুলোর আলাদা উদ্দেশ্য বুঝতে পারে না।",
+        "fix": "প্রতিটি স্বতন্ত্র পেজের জন্য পৃথক ও বিষয়ভিত্তিক H1 ব্যবহার করুন।"
+    },
+    "OP-022": {
+        "id": "OP-022",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Heading Hierarchy Level Skip (e.g. H2 to H4)",
+        "why": "হেডিং লেভেল স্কিপ করলে ডকুমেন্ট আউটলাইন ভেঙে যায়, যা স্ক্রিন রিডার ও সার্চ ইঞ্জিনের জন্য ক্ষতিকর।",
+        "fix": "H1-এর পর ক্রমান্বয়ে H2, তার নিচে প্রাসঙ্গিক H3 ব্যবহার করুন; কোনো স্তর এড়িয়ে যাবেন না।"
+    },
+    "OP-023": {
+        "id": "OP-023",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Empty Heading Tags in DOM",
+        "why": "টেক্সট ছাড়া খালি হেডিং ট্যাগ কোড ব্লোট তৈরি করে এবং ইউজার এক্সপেরিয়েন্স নষ্ট করে।",
+        "fix": "HTML কোড থেকে খালি <h2></h2> বা <h3></h3> ট্যাগগুলো ডিলিট করুন।"
+    },
+    "OP-024": {
+        "id": "OP-024",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "H1 and Title Semantic Alignment",
+        "why": "টাইটেল এবং H1-এর মধ্যে অসঙ্গতি থাকলে ভিজিটর ও সার্চ ইঞ্জিন পেজের মূল বিষয় নিয়ে বিভ্রান্ত হয়।",
+        "fix": "টাইটেল এবং H1 হেডিংয়ে অভিন্ন মূল কিওয়ার্ড ও অর্থবহ সামঞ্জস্য বজায় রাখুন।"
+    },
+    "OP-030": {
+        "id": "OP-030",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "URL Too Long, Uppercase or Underscore Issues",
+        "why": "অতিরিক্ত লম্বা, আন্ডারস্কোর (_) বা ক্যাপিটাল লেটার যুক্ত URL শেয়ার করা কঠিন এবং ডুপ্লিকেশন ঘটায়।",
+        "fix": "সংক্ষিপ্ত, শুধুমাত্র ছোট হাতের অক্ষর এবং হাইফেন (-) দিয়ে ক্লিন পারমালিংক তৈরি করুন।"
+    },
+    "OP-031": {
+        "id": "OP-031",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Stop Words & Deep Folder Nesting in URL",
+        "why": "অপ্রয়োজনীয় স্টপ ওয়ার্ড ও একাধিক ফোল্ডার স্তর পারমালিংককে জটিল ও অপাঠ্য করে তোলে।",
+        "fix": "URL থেকে স্টপ ওয়ার্ড বাদ দিয়ে সরাসরি /category/keyword-slug ফরম্যাট অনুসরণ করুন।"
+    },
+    "OP-032": {
+        "id": "OP-032",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Non-ASCII URL Encoding Issues",
+        "why": "স্পেশাল ক্যারেক্টার যুক্ত URL কপি করলে বিকৃত (%20, %E0 ইত্যাদি) হয়ে শেয়ারযোগ্যতা হারায়।",
+        "fix": "URL স্লাগে স্ট্যান্ডার্ড ও নিরাপদ আলফানিউমেরিক অক্ষর ব্যবহার করুন।"
+    },
+    "OP-040": {
+        "id": "OP-040",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Thin Content Flag (<500 Words on Main Topic)",
+        "why": "অল্প কনটেন্ট থাকলে গুগল লো-কোয়ালিটি হিসেবে গণ্য করে এবং সহজে ইনডেক্স করে না।",
+        "fix": "ইউজারের প্রশ্নের পূর্ণাঙ্গ উত্তর দিয়ে কনটেন্টের গভীরতা ও তথ্যসমৃদ্ধ বিবরণ বাড়িয়ে তুলুন।"
+    },
+    "OP-041": {
+        "id": "OP-041",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Exact Duplicate Content Detected",
+        "why": "একই কন্টেন্ট দুটি আলাদা URL-এ থাকলে র‍্যাঙ্কিং ভাগ হয়ে যায় বা গুগল একটিকে ফিল্টার করে দেয়।",
+        "fix": "ক্যানোনিক্যাল ট্যাগ ব্যবহার করুন অথবা দুর্বল পেজটিকে মূল পেজে ৩০১ রিডাইরেক্ট করুন।"
+    },
+    "OP-042": {
+        "id": "OP-042",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Near-Duplicate / Boilerplate Ratio High",
+        "why": "সামান্য বাক্য পরিবর্তন করে তৈরি করা পেজ গুগলের হেল্পফুল কনটেন্ট সিস্টেমে পেনাল্টি পায়।",
+        "fix": "প্রতিটি পেজে নিজস্ব এক্সক্লুসিভ তথ্য, নিজস্ব মতামত ও অনন্য মূল্যায়ন যোগ করুন।"
+    },
+    "OP-043": {
+        "id": "OP-043",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Low Text-to-HTML Ratio (<10%)",
+        "why": "ভারী অপ্রয়োজনীয় স্ক্রিপ্ট ও এইচটিএমএল-এর তুলনায় পড়ার মতো টেক্সট কম থাকলে সাইট স্লো হয়।",
+        "fix": "অপ্রয়োজনীয় ইনলাইন স্টাইল ও স্ক্রিপ্ট কমান এবং মূল কনটেন্টের পরিমাণ বাড়ান।"
+    },
+    "OP-044": {
+        "id": "OP-044",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Content Readability & Paragraph Length",
+        "why": "অতিরিক্ত লম্বা প্যারাগ্রাফ পড়তে কষ্ট হয় এবং মোবাইল পাঠকরা দ্রুত বাউন্স করে চলে যায়।",
+        "fix": "প্রতিটি প্যারাগ্রাফ ২-৩ বাক্যে সীমাবদ্ধ রাখুন এবং সাব-হেডিং দিয়ে কনটেন্ট ভাগ করুন।"
+    },
+    "OP-045": {
+        "id": "OP-045",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Keyword Stuffing / Unnatural Density",
+        "why": "বারবার জোর করে একই কিওয়ার্ড ব্যবহার করলে গুগল স্প্যাম পলিসির আওতায় র‍্যাঙ্ক ড্রপ করে।",
+        "fix": "স্বাভাবিক ভাষায় লিখুন এবং একই শব্দের বদলে সিনোনিমস ও এলএসআই (LSI) কিওয়ার্ড ব্যবহার করুন।"
+    },
+    "OP-046": {
+        "id": "OP-046",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Keyword Cannibalization Risk",
+        "why": "একাধিক পেজ একই সার্চ কোয়েরির জন্য প্রতিদ্বন্দ্বিতা করলে দুটি পেজেরই র‍্যাঙ্কিং ক্ষমতা কমে যায়।",
+        "fix": "পেজ দুটিকে একীভূত (merge) করে ৩০১ রিডাইরেক্ট করুন অথবা সার্চ ইন্টেন্ট আলাদা করুন।"
+    },
+    "OP-047": {
+        "id": "OP-047",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "HTML Lang Attribute Consistency",
+        "why": "ল্যাংগুয়েজ ট্যাগ অনুপস্থিত বা ভুল থাকলে সার্চ ইঞ্জিন এবং ব্রাউজার টেক্সট অনুবাদে ভুল করে।",
+        "fix": "<html lang='bn'> অথবা <html lang='en'> সঠিক ভাষা কোড ঘোষণা করুন।"
+    },
+    "OP-050": {
+        "id": "OP-050",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Missing Image Alt Text Attributes",
+        "why": "Alt ট্যাগ না থাকলে গুগল ইমেজ সার্চ ট্রাফিক মিস হয় এবং দৃষ্টিপ্রতিবন্ধীদের অ্যাক্সেসিবিলিটি নষ্ট হয়।",
+        "fix": "প্রতিটি ইমেজের জন্য বিষয়ভিত্তিক ও প্রাসঙ্গিক সংক্ষিপ্ত Alt ডেসক্রিপশন লিখুন।"
+    },
+    "OP-051": {
+        "id": "OP-051",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Broken Image Links (404 / Missing Files)",
+        "why": "ভাঙা ছবি সাইটের নান্দনিকতা নষ্ট করে এবং অপেশাদার সাইটের সিগন্যাল প্রদান করে।",
+        "fix": "ইমেজ পাথ ও ফাইল ডিরেক্টরি চেক করে সঠিক ছবি লিংক করুন অথবা নষ্ট লিংকটি সরান।"
+    },
+    "OP-052": {
+        "id": "OP-052",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Oversized Heavy Image Files (>200KB)",
+        "why": "ভারী ইমেজ পেজ লোডিংকে ধীরগতির করে এবং Core Web Vitals (LCP) খারাপ করে।",
+        "fix": "ইমেজ কমপ্রেস করুন, সর্বোচ্চ সাইজ ১০০-১৫০KB এর নিচে রাখুন।"
+    },
+    "OP-053": {
+        "id": "OP-053",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Next-Gen Image Formats (WebP / AVIF)",
+        "why": "পুরনো PNG বা JPEG ফরম্যাট WebP-এর চেয়ে ৩০-৫০% বেশি ডেটা ব্যবহার করে।",
+        "fix": "ইমেজগুলোকে আধুনিক WebP অথবা AVIF ফরম্যাটে কনভার্ট করে আপলোড করুন।"
+    },
+    "OP-054": {
+        "id": "OP-054",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Missing Image Width and Height Attributes (CLS Risk)",
+        "why": "ডাইমেনশন না থাকলে ব্রাউজার স্পেস সংরক্ষণ করতে পারে না, ফলে পেজ লোড হওয়ার সময় কনটেন্ট লাফালাফি করে (CLS)।",
+        "fix": "প্রত্যেক <img> ট্যাগে স্পষ্ট width এবং height অ্যাট্রিবিউট অথবা CSS aspect-ratio ব্যবহার করুন।"
+    },
+    "OP-055": {
+        "id": "OP-055",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Image Lazy-Loading & Responsive Srcset",
+        "why": "নিচের ছবিগুলো একসাথে লোড হলে প্রাথমিক পেজ লোড টাইম বৃদ্ধি পায়।",
+        "fix": "স্ক্রিনের নিচের ছবিগুলোতে loading='lazy' এবং মোবাইলের জন্য srcset ব্যবহার করুন।"
+    },
+    "OP-056": {
+        "id": "OP-056",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Above-the-Fold LCP Image Has Lazy Load",
+        "why": "হিরো ইমেজে lazy-load বসালে ব্রাউজার ছবি ডাউনলোডে দেরি করে, ফলে LCP স্কোর মারাত্মক খারাপ হয়।",
+        "fix": "Above-the-fold বা প্রথম ছবিতে loading='eager' অথবা fetchpriority='high' দিন।"
+    },
+    "OP-060": {
+        "id": "OP-060",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Generic Anchor Text ('Click Here', 'Read More')",
+        "why": "'এখানে ক্লিক করুন' জাতীয় অ্যাঙ্কর টেক্সট সার্চ ইঞ্জিনকে গন্তব্য পেজের বিষয়বস্তু সম্পর্কে কোনো সিগন্যাল দেয় না।",
+        "fix": "গন্তব্য পেজের বিষয়বস্তু স্পষ্ট করে এমন বর্ণনামূলক কিওয়ার্ড সমৃদ্ধ অ্যাঙ্কর টেক্সট ব্যবহার করুন।"
+    },
+    "OP-061": {
+        "id": "OP-061",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Low Inbound Internal Links to Target Page",
+        "why": "কম ইন্টারনাল লিংক পাওয়া পেজগুলোকে গুগল অগুরুত্বপূর্ণ মনে করে।",
+        "fix": "সাইটের অন্যান্য উচ্চ ট্রাফিক পেজ থেকে এই পেজে প্রাসঙ্গিক ইন্টারনাল লিংক যুক্ত করুন।"
+    },
+    "OP-062": {
+        "id": "OP-062",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Excessive Links on Page (>200 Total Links)",
+        "why": "এক পেজে অতিরিক্ত লিংক থাকলে প্রতিটি লিংকের লিংক-ইকুইটি পাওয়ার কমে যায়।",
+        "fix": "অপ্রয়োজনীয় ফুটার বা সাইডবার লিংক কমিয়ে মূল কনটেন্টের প্রয়োজনীয় লিংকে গুরুত্ব দিন।"
+    },
+    "OP-063": {
+        "id": "OP-063",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Image Link Missing Alt Text",
+        "why": "ছবি দিয়ে করা লিংকে Alt টেক্সট না থাকলে সার্চ ইঞ্জিন লিংকের কোনো অ্যাঙ্কর টেক্সট পায় না।",
+        "fix": "লিংক হিসেবে ব্যবহৃত ছবির <img> ট্যাগে অর্থপূর্ণ Alt টেক্সট দিন যা অ্যাঙ্কর টেক্সট হিসেবে কাজ করবে।"
+    },
+    "OP-064": {
+        "id": "OP-064",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Target=_blank Missing Rel='noopener noreferrer'",
+        "why": "নতুন ট্যাবে খোলার লিংকে noopener না থাকলে সিকিউরিটি ও পারফরম্যান্স রিস্ক (tabnabbing) তৈরি হয়।",
+        "fix": "প্রতিটি target='_blank' বহিরাগত লিংকে rel='noopener noreferrer' নিশ্চিত করুন।"
+    },
+    "OP-065": {
+        "id": "OP-065",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Paid / Affiliate Links Missing Rel='sponsored' or 'ugc'",
+        "why": "পেইড বা অ্যাফিলিয়েট লিংকে sponsored ট্যাগ না থাকলে গুগল লিংক স্কিম হিসেবে পেনাল্টি দিতে পারে।",
+        "fix": "অ্যাফিলিয়েট ও স্পন্সরড লিংকে rel='sponsored' এবং ইউজার কমেন্টে rel='ugc' যুক্ত করুন।"
+    },
+    "OP-066": {
+        "id": "OP-066",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Internal Link Equity Distribution Balance",
+        "why": "লিংক জুস শুধুমাত্র কয়েকটা পেজে জমা থাকলে বাকি কনটেন্ট র‍্যাঙ্ক করতে ব্যর্থ হয়।",
+        "fix": "বিষয়ভিত্তিক ক্লাস্টার বা সিলু (Silo) কাঠামো অনুযায়ী সুষম ইন্টারনাল লিংক নেটওয়ার্ক তৈরি করুন।"
+    },
+    "OP-070": {
+        "id": "OP-070",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Open Graph (og:title, og:image) Tags Present",
+        "why": "ওপেন গ্রাফ ট্যাগ না থাকলে ফেসবুক বা লিঙ্কডইনে শেয়ার করলে ছবি ও টাইটেল ফাঁকা বা বিকৃত দেখায়।",
+        "fix": "og:title, og:description, og:image (1200x630px) এবং og:url ট্যাগ সঠিকভাবে যোগ করুন।"
+    },
+    "OP-071": {
+        "id": "OP-071",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Twitter Card Tags Configuration",
+        "why": "টুইটার কার্ড না থাকলে এক্সে (টুইটারে) কনটেন্ট শেয়ার করলে ভিজ্যুয়াল কার্ড জেনারেট হয় না।",
+        "fix": "twitter:card ('summary_large_image'), twitter:title এবং twitter:image ট্যাগ যোগ করুন।"
+    },
+    "OP-072": {
+        "id": "OP-072",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Favicon & Apple Touch Icons Presence",
+        "why": "ফেভিকন না থাকলে গুগল মোবাইল SERP-এ সাইটের নামের পাশে ডিফল্ট গ্লোব আইকন দেখায় যা CTR কমায়।",
+        "fix": "ক্লিয়ার ব্র্যান্ডেড Favicon.ico এবং apple-touch-icon যুক্ত করুন।"
+    },
+    "OP-073": {
+        "id": "OP-073",
+        "category": "On-Page SEO",
+        "severity": "W",
+        "title": "Mobile Viewport Meta Tag Configuration",
+        "why": "Viewport ট্যাগ না থাকলে মোবাইল ডিভাইসে সাইট ডেস্কটপ ভিউতে সংকুচিত হয়ে খোলে, যা মোবাইল ইউজারদের জন্য অচল।",
+        "fix": "<meta name='viewport' content='width=device-width, initial-scale=1.0'> নিশ্চিত করুন।"
+    },
+    "OP-074": {
+        "id": "OP-074",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "HTML Charset Declaration (UTF-8)",
+        "why": "ক্যারেক্টার সেট ঘোষণা না থাকলে ব্রাউজারে বিশেষ করে বাংলা ফন্ট ও বিশেষ চিহ্ন ভেঙে যেতে পারে।",
+        "fix": "<head> সেকশনের শুরুতে <meta charset='utf-8'> ডিক্লেয়ার করুন।"
+    },
+    "OP-075": {
+        "id": "OP-075",
+        "category": "On-Page SEO",
+        "severity": "N",
+        "title": "Obsolete Meta Keywords Tag Present",
+        "why": "গুগল ২০০৯ সাল থেকে মেটা কিওয়ার্ড উপেক্ষা করে; এটি রাখা প্রতিযোগীদের আপনার কিওয়ার্ড প্রকাশ করে দেয়।",
+        "fix": "HTML থেকে অপ্রয়োজনীয় <meta name='keywords'> ট্যাগটি ডিলিট করুন।"
+    },
+    "CQ-001": {
+        "id": "CQ-001",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Search Intent Alignment & Page Type Match",
+        "why": "ইউজারের সার্চ ইন্টেন্ট (ইনফরমেশনাল, কমার্শিয়াল, ট্রানজেকশনাল) অনুযায়ী কনটেন্ট না হলে ভিজিটর বাউন্স করে।",
+        "fix": "সার্চ ফলাফলের টপ র‍্যাঙ্কিং পেজগুলো দেখে সঠিক ফরম্যাটে (গাইড, প্রোডাক্ট রিভিউ বা চেকলিস্ট) কনটেন্ট সাজান।"
+    },
+    "CQ-002": {
+        "id": "CQ-002",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Topical Authority & Semantic Entity Coverage",
+        "why": "সম্পর্কিত বিষয়ভিত্তিক এলএসআই সত্তা (LSI Entities) না থাকলে সার্চ ইঞ্জিন কনটেন্টকে সম্পূর্ণ বলে গণ্য করে না।",
+        "fix": "প্রতিযোগীদের তুলনায় মিসিং সাব-টপিকগুলো চিহ্নিত করে বিস্তারিত সেকশন তৈরি করুন।"
+    },
+    "CQ-003": {
+        "id": "CQ-003",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Original Value Proposition (Beyond SERP Repetition)",
+        "why": "অন্যদের লেখা হুবহু কপি বা রিরাইট করলে গুগল হেল্পফুল কনটেন্ট সিস্টেমে সাইট ডিমোট করে।",
+        "fix": "নিজের অভিজ্ঞতা, নতুন তথ্য, আসল মতামত ও ইউনিক কেস স্টাডি যোগ করুন।"
+    },
+    "CQ-004": {
+        "id": "CQ-004",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Comprehensive Topic Depth & Query Resolution",
+        "why": "ইউজারের মনে আসা পরবর্তী প্রশ্নগুলোর উত্তর না থাকলে ব্যবহারকারী অন্য সাইটে ফিরে যায়।",
+        "fix": "People Also Ask (PAA) সেকশনের জনপ্রিয় প্রশ্নগুলোর সমাধান আর্টিকেলে অন্তর্ভুক্ত করুন।"
+    },
+    "CQ-005": {
+        "id": "CQ-005",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Misleading or Clickbait Title vs Content Mismatch",
+        "why": "টাইটেলে এক কথা বলে কনটেন্টে তা না দিলে ইউজার প্রতারিত বোধ করে এবং বাউন্স রেট বাড়ে।",
+        "fix": "টাইটেল যেন ১০০% সততার সাথে আর্টিকেলের বাস্তব তথ্য প্রকাশ করে।"
+    },
+    "CQ-006": {
+        "id": "CQ-006",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Outdated Content (Stale Dates, Broken Years)",
+        "why": "পুরনো তারিখ ও অপ্রাসঙ্গিক তথ্য আর্টিকেলের বিশ্বাসযোগ্যতা ও র‍্যাঙ্কিং নষ্ট করে।",
+        "fix": "নিয়মিত কনটেন্ট রিভিও করে নতুন তথ্য এবং বর্তমান বছরের প্রাসঙ্গিকতা আপডেট করুন।"
+    },
+    "CQ-007": {
+        "id": "CQ-007",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "N",
+        "title": "Visible Date vs Schema DateModified Match",
+        "why": "স্ক্রিনে দেখানো তারিখ এবং স্কিমায় দেওয়া তারিখের অমিল গুগলের কাছে স্প্যামি সিগন্যাল তৈরি করে।",
+        "fix": "কনটেন্ট আপডেটের সাথে সাথে দৃশ্যমান তারিখ ও dateModified স্কিমা একই সাথে আপডেট করুন।"
+    },
+    "CQ-008": {
+        "id": "CQ-008",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "C",
+        "title": "Scaled Automated AI Low-Value Pattern",
+        "why": "হিউম্যান এডিটিং ছাড়া বাল্ক এআই কনটেন্ট উৎপাদন গুগলের স্প্যাম পলিসির সরাসরি লঙ্ঘন।",
+        "fix": "প্রফেশনাল এডিটিং, এক্সপার্ট রিভিও এবং মানুষের বাস্তব দৃষ্টিভঙ্গি যুক্ত করে কনটেন্ট প্রকাশ করুন।"
+    },
+    "CQ-009": {
+        "id": "CQ-009",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Above-the-Fold Content Visibility (No Ad Crowding)",
+        "why": "প্রথম স্ক্রিনেই বড় ব্যানার বা বিজ্ঞাপনে কনটেন্ট ঢেকে থাকলে গুগল পেনাল্টি প্রদান করে।",
+        "fix": "স্ক্রিনের শুরুতেই মূল আর্টিকেলের হেডিং এবং প্রথম প্যারাগ্রাফ দৃশ্যমান রাখুন।"
+    },
+    "CQ-010": {
+        "id": "CQ-010",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Intrusive Full-Screen Mobile Interstitials",
+        "why": "মোবাইলে ঢোকার সাথে সাথে বন্ধ করা যায় না এমন পপআপ ভিজিটরকে বিতাড়িত করে।",
+        "fix": "ছোট ব্যানার নোটিশ ব্যবহার করুন যা সহজে ক্রস (X) দিয়ে বন্ধ করা যায়।"
+    },
+    "CQ-011": {
+        "id": "CQ-011",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "N",
+        "title": "Table of Contents & Scannable Layout",
+        "why": "দীর্ঘ কনটেন্টে টেবিল অব কনটেন্ট না থাকলে ইউজার কাঙ্ক্ষিত অংশ খুঁজে পায় না।",
+        "fix": "ক্লিকযোগ্য জাম্প-লিংক যুক্ত Table of Contents যুক্ত করুন।"
+    },
+    "EEAT-001": {
+        "id": "EEAT-001",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "YMYL (Your Money Your Life) Topic Classifier",
+        "why": "স্বাস্থ্য, অর্থ, আইন সংক্রান্ত বিষয়ে গুগলের কোয়ালিটি রিকোয়ারমেন্ট অত্যন্ত কঠোর।",
+        "fix": "YMYL বিষয়ের আর্টিকেলে স্বীকৃত পেশাজীবী ও বিশেষজ্ঞদের নাম ও রেফারেন্স নিশ্চিত করুন।"
+    },
+    "EEAT-002": {
+        "id": "EEAT-002",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Author Byline, Bio & Profile Link",
+        "why": "বেনামী কনটেন্টে লেখকের পরিচিতি না থাকলে কনটেন্টের এক্সপার্টাইজ প্রমাণ হয় না।",
+        "fix": "প্রতিটি আর্টিকেলে লেখকের নাম, সংক্ষিপ্ত বায়ো এবং ডেডিকেটেড লেখক প্রোফাইল পেজের লিংক দিন।"
+    },
+    "EEAT-003": {
+        "id": "EEAT-003",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "N",
+        "title": "Author Person Schema & sameAs Social Links",
+        "why": "লেখককে সার্চ ইঞ্জিন নলেজ গ্রাফের সাথে মেলাতে না পারলে অথরিটি প্রতিষ্ঠিত হয় না।",
+        "fix": "JSON-LD-তে Person স্কিমা এবং লেখকের LinkedIn/Wikipedia লিংক sameAs-এ যুক্ত করুন।"
+    },
+    "EEAT-004": {
+        "id": "EEAT-004",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "N",
+        "title": "Medical / Legal Reviewer Fact-Checker Attribution",
+        "why": "বিশেষজ্ঞ দ্বারা রিভিও করা না থাকলে স্পর্শকাতর বিষয়ে সার্চ ইঞ্জিনের আস্থা থাকে না।",
+        "fix": "'Reviewed by [Expert Name]' সেকশন ও ভেরিফায়েড ক্রেডেনশিয়াল যুক্ত করুন।"
+    },
+    "EEAT-005": {
+        "id": "EEAT-005",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "First-Hand Experience Evidence (Photos, Case Studies)",
+        "why": "ই-ই-এ-টি-এর প্রথম 'E' হলো অভিজ্ঞতা; নিজের বাস্তব প্রমাণ ছাড়া কনটেন্ট জেনেরিক মনে হয়।",
+        "fix": "নিজস্ব তোলা ছবি, টেস্টিং ফলাফল বা বাস্তব কেস স্টাডি যুক্ত করুন।"
+    },
+    "EEAT-006": {
+        "id": "EEAT-006",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Authoritative External Source Citations (.gov, .edu)",
+        "why": "দাবির সপক্ষে প্রমাণ না থাকলে কনটেন্ট অবিশ্বস্ত হিসেবে বিবেচিত হয়।",
+        "fix": "সরকারি পরিসংখ্যান, গবেষণা জার্নাল বা শীর্ষ অথরিটি ওয়েবসাইট সোর্স হিসেবে সাইট করুন।"
+    },
+    "EEAT-007": {
+        "id": "EEAT-007",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "About Us, Contact Us & Team Transparency Pages",
+        "why": "ওয়েবসাইটের মালিকানা ও উদ্দেশ্য স্পষ্ট না থাকলে ওয়েবসাইট আস্থার ঘাটতিতে পড়ে।",
+        "fix": "স্বচ্ছ About Us, টিম মেম্বারদের ছবি এবং সহজে পৌঁছানোর Contact Us পেজ তৈরি করুন।"
+    },
+    "EEAT-008": {
+        "id": "EEAT-008",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Physical Business Address, Email & Phone Transparency",
+        "why": "বাস্তব অস্তিত্বের প্রমাণ না থাকলে লোকাল ও ই-কমার্স সাইটে গুগল বিশ্বাস স্থাপন করে না।",
+        "fix": "ফুটার এবং কন্টাক্ট পেজে সুনির্দিষ্ট ঠিকানা, হেল্পলাইন ফোন এবং অফিসিয়াল ইমেইল দিন।"
+    },
+    "EEAT-009": {
+        "id": "EEAT-009",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Privacy Policy & Terms of Service Pages Presence",
+        "why": "প্রাইভেসি পলিসি না থাকলে গুগল অ্যাডসেন্স, মার্চেন্ট সেন্টার ও ট্রাস্ট সিগন্যাল ক্ষুণ্ণ হয়।",
+        "fix": "আন্তর্জাতিক মানসম্পন্ন Privacy Policy ও Terms পেজ তৈরি করে ফুটারে লিংক দিন।"
+    },
+    "EEAT-010": {
+        "id": "EEAT-010",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Refund, Return & Shipping Policies (Ecommerce Sites)",
+        "why": "রিটার্ন বা রিফান্ড পলিসি স্পষ্ট না থাকলে ক্রেতা এবং গুগল মার্চেন্ট উভয়ই সাইট প্রত্যাখ্যান করে।",
+        "fix": "স্পষ্ট রিটার্ন ও রিফান্ড নীতি ফুটারে রাখুন এবং স্কিমাতে যুক্ত করুন।"
+    },
+    "EEAT-014": {
+        "id": "EEAT-014",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "W",
+        "title": "Organization Schema with Logo, Name & SameAs",
+        "why": "অর্গানাইজেশন স্কিমা না থাকলে গুগল নলেজ গ্রাফের সাথে ব্র্যান্ডের সম্পর্ক স্থাপন করতে পারে না।",
+        "fix": "JSON-LD Organization স্কিমায় লোগো, অফিসিয়াল সোশ্যাল প্রোফাইল এবং যোগাযোগের তথ্য দিন।"
+    },
+    "EEAT-018": {
+        "id": "EEAT-018",
+        "category": "Content Quality & E-E-A-T",
+        "severity": "C",
+        "title": "Site-Level Trust & Secure Browsing",
+        "why": "অনিরাপদ সংযোগ বা প্রতারণামূলক UI ভিজিটরদের তথ্য ঝুঁকির মুখে ফেলে।",
+        "fix": "ফুল-সাইট HTTPS সক্রিয় রাখুন এবং স্বচ্ছ ও নিরাপদ নেভিগেশন বজায় রাখুন।"
+    },
+    "SD-001": {
+        "id": "SD-001",
+        "category": "Structured Data / Schema",
+        "severity": "C",
+        "title": "Structured Data JSON-LD Syntax Validation",
+        "why": "সিনট্যাক্স এরর থাকলে (কমা বা ব্র্যাকেট ভুল) সার্চ ইঞ্জিন স্কিমা পুরোপুরি বাতিল করে দেয়।",
+        "fix": "Schema Markup Validator দিয়ে কোড যাচাই করে সঠিক সিনট্যাক্স ঠিক করুন।"
+    },
+    "SD-002": {
+        "id": "SD-002",
+        "category": "Structured Data / Schema",
+        "severity": "W",
+        "title": "Target Schema Implementation (Article, Org, Breadcrumb)",
+        "why": "স্কিমা না থাকলে গুগল SERP-এ রিচ রেজাল্ট (স্টার রেটিং, ব্রেডক্রাম্ব) পাওয়া যায় না।",
+        "fix": "পেজের ধরন অনুযায়ী Article, Product, Organization বা BreadcrumbList স্কিমা যুক্ত করুন।"
+    },
+    "SD-003": {
+        "id": "SD-003",
+        "category": "Structured Data / Schema",
+        "severity": "W",
+        "title": "Required vs Recommended Schema Properties",
+        "why": "প্রয়োজনীয় (Required) ফিল্ড মিসিং থাকলে রিচ স্ন্যাপশট পাওয়ার যোগ্যতা হারায়।",
+        "fix": "গুগল সার্চ সেন্ট্রাল ডকুমেন্টেশনের রিকোয়ার্ড প্রপার্টিগুলো পূরণ করুন।"
+    },
+    "SD-005": {
+        "id": "SD-005",
+        "category": "Structured Data / Schema",
+        "severity": "C",
+        "title": "Schema Content Matches Visible On-Page Content",
+        "why": "পেজে নেই এমন কাল্পনিক তথ্য স্কিমাতে দিলে গুগল ম্যানুয়াল স্প্যাম অ্যাকশন প্রদান করে।",
+        "fix": "ব্যবহারকারী পেজে যা দেখতে পায় শুধুমাত্র সেই তথ্যই স্কিমা মার্কআপে রাখুন।"
+    },
+    "SD-006": {
+        "id": "SD-006",
+        "category": "Structured Data / Schema",
+        "severity": "W",
+        "title": "Conflicting Duplicate Schemas (Plugin Overlap)",
+        "why": "থিম ও এসইও প্লাগইন উভয়েই স্কিমা জেনারেট করলে পরস্পরবিরোধী তথ্যে সমস্যা হয়।",
+        "fix": "যেকোনো একটি নির্ভরযোগ্য সোর্স থেকে স্কিমা ইনজেক্ট করুন, ডুপ্লিকেট বন্ধ করুন।"
+    },
+    "SD-007": {
+        "id": "SD-007",
+        "category": "Structured Data / Schema",
+        "severity": "N",
+        "title": "BreadcrumbList Schema Implementation",
+        "why": "ব্রেডক্রাম্ব স্কিমা থাকলে গুগলে জটিল URL-এর বদলে পরিচ্ছন্ন সাইট কাঠামো দেখা যায়।",
+        "fix": "ওয়েবসাইটে দৃশ্যমান ব্রেডক্রাম্ব ট্রেইলের সাথে সামঞ্জস্য রেখে BreadcrumbList স্কিমা দিন।"
+    },
+    "SD-010": {
+        "id": "SD-010",
+        "category": "Structured Data / Schema",
+        "severity": "N",
+        "title": "FAQPage Schema Current Policy Compliance",
+        "why": "গুগল বর্তমানে সাধারণ সাইটের জন্য FAQ রিচ রেজাল্ট সীমিত করেছে, তাই অপ্রয়োজনীয় নির্ভরতা রাখা যাবে না।",
+        "fix": "FAQ স্কিমা থাকলে পেজে দৃশ্যমান প্রশ্নোত্তর রাখুন; না থাকলেও এটি ক্রিটিক্যাল এরর হিসেবে নেবেন না।"
+    },
+    "SEC-001": {
+        "id": "SEC-001",
+        "category": "Security & Architecture",
+        "severity": "C",
+        "title": "HTTPS Encryption & SSL Certificate Validity",
+        "why": "SSL সার্টিফিকেট না থাকলে বা এক্সপায়ার হলে ব্রাউজারে লাল 'Not Secure' সতর্কবার্তা আসে, ৯০%+ ভিজিটর সাইট ছাড়ে।",
+        "fix": "একটি বৈধ SSL সার্টিফিকেট ইন্সটল করুন এবং মেয়াদোত্তীর্ণ হওয়ার পূর্বে অটো-রিনিউয়াল চালু রাখুন।"
+    },
+    "SEC-002": {
+        "id": "SEC-002",
+        "category": "Security & Architecture",
+        "severity": "W",
+        "title": "Modern TLS Protocol Version (TLS 1.2+ Only)",
+        "why": "পুরনো TLS 1.0 বা 1.1 প্রোটোকলে সাইবার আক্রমণের ঝুঁকি থাকে।",
+        "fix": "ওয়েব সার্ভারে শুধুমাত্র TLS 1.2 এবং TLS 1.3 এনক্রিপশন প্রোটোকল এনাবল করুন।"
+    },
+    "SEC-003": {
+        "id": "SEC-003",
+        "category": "Security & Architecture",
+        "severity": "W",
+        "title": "Enforce HTTP to HTTPS 301 Redirection",
+        "why": "http:// ভার্সন রিডাইরেক্ট না হলে সাইটের দুটি ডুপ্লিকেট ভার্সন তৈরি হয় এবং ডেটা অনিরাপদ থাকে।",
+        "fix": "সার্ভার কনফিগারেশনে সমস্ত নন-এইচটিটিপিএস ট্রাফিকের জন্য পার্মানেন্ট ৩০১ রিডাইরেক্ট সেট করুন।"
+    },
+    "SEC-004": {
+        "id": "SEC-004",
+        "category": "Security & Architecture",
+        "severity": "W",
+        "title": "Mixed Content Warning (HTTP Assets on HTTPS)",
+        "why": "HTTPS পেজে কোনো ছবি বা স্ক্রিপ্ট http:// দিয়ে লোড হলে ব্রাউজার প্যাডলক ভেঙে যায় এবং ফাইল ব্লক হয়।",
+        "fix": "সব ইন্টারনাল স্ক্রিপ্ট, স্টাইলশিট ও ইমেজের সোর্স লিংক https:// দিয়ে আপডেট করুন।"
+    },
+    "SEC-005": {
+        "id": "SEC-005",
+        "category": "Security & Architecture",
+        "severity": "W",
+        "title": "HSTS (Strict-Transport-Security) Header",
+        "why": "HSTS না থাকলে ম্যান-ইন-দ্য-মিডল ডাউনগ্রেড অ্যাটাকের ঝুঁকি থাকে।",
+        "fix": "সার্ভার রেসপন্স হেডারে 'Strict-Transport-Security: max-age=31536000; includeSubDomains' যুক্ত করুন।"
+    },
+    "SEC-006": {
+        "id": "SEC-006",
+        "category": "Security & Architecture",
+        "severity": "W",
+        "title": "Security Headers (CSP, X-Frame, X-Content-Type)",
+        "why": "সিকিউরিটি হেডার অনুপস্থিত থাকলে ক্লিকজ্যাকিং, ক্রস-সাইট স্ক্রিপ্টিং (XSS) ও MIME স্নায়িফিং ঝুঁকি তৈরি হয়।",
+        "fix": "X-Frame-Options: SAMEORIGIN, X-Content-Type-Options: nosniff এবং Referrer-Policy হেডার কনফিগার করুন।"
+    },
+    "SEC-007": {
+        "id": "SEC-007",
+        "category": "Security & Architecture",
+        "severity": "C",
+        "title": "Exposed Sensitive Files (.env, .git, backups)",
+        "why": ".env বা .git ফোল্ডার উন্মুক্ত থাকলে ডাটাবেজ পাসওয়ার্ড ও সোর্স কোড হ্যাকারদের হাতে চলে যায়।",
+        "fix": "ওয়েবসার্ভার রুল দিয়ে সমস্ত ডট-ফাইল (.env, .git) পাবলিক অ্যাক্সেস সম্পূর্ণ নিষিদ্ধ করুন।"
+    },
+    "SEC-008": {
+        "id": "SEC-008",
+        "category": "Security & Architecture",
+        "severity": "W",
+        "title": "Server Technology & Version Leakage",
+        "why": "সার্ভারের সুনির্দিষ্ট ভার্সন লিক হলে হ্যাকাররা সেই ভার্সনের নির্দিষ্ট এক্সপ্লয়েট দিয়ে আক্রমণ চালাতে পারে।",
+        "fix": "Apache/Nginx-এ ServerTokens Prod এবং PHP-তে expose_php = Off কনফিগার করুন।"
+    },
+    "SEC-011": {
+        "id": "SEC-011",
+        "category": "Security & Architecture",
+        "severity": "C",
+        "title": "Injected Spam / Malicious Hidden Content",
+        "why": "হ্যাকড হয়ে স্প্যাম লিংক বা ব্যাকডোর ঢুকলে গুগল পুরো সাইট সার্চ ব্ল্যাকলিস্টে পাঠিয়ে দেয়।",
+        "fix": "ম্যালওয়্যার স্ক্যানার দিয়ে ফাইল পরিষ্কার করুন, অ্যাডমিন পাসওয়ার্ড পরিবর্তন করুন ও Search Console-এ রিভিউ রিকোয়েস্ট দিন।"
+    },
+    "SEC-012": {
+        "id": "SEC-012",
+        "category": "Security & Architecture",
+        "severity": "W",
+        "title": "Cookie Flags (Secure, HttpOnly, SameSite)",
+        "why": "কুকিতে সিকিউর ফ্ল্যাগ না থাকলে সেশন হাইজ্যাকিংয়ের আশঙ্কা থাকে।",
+        "fix": "সমস্ত অথেন্টিকেশন কুকিতে 'Secure; HttpOnly; SameSite=Lax' ফ্ল্যাগ এনাবল করুন।"
+    },
+    "PERF-001": {
+        "id": "PERF-001",
+        "category": "Performance & CWV",
+        "severity": "W",
+        "title": "Core Web Vitals Metric Target Readiness",
+        "why": "LCP (>2.5s), INP (>200ms) বা CLS (>0.1) খারাপ হলে গুগলের পেজ এক্সপেরিয়েন্স র‍্যাঙ্কিং সিগন্যালে পিছিয়ে পড়ে।",
+        "fix": "হিরো ইমেজ অপ্টিমাইজ করুন, লেআউট শিফট দূর করতে সাইজ রিজার্ভ করুন এবং দীর্ঘ জাভাস্ক্রিপ্ট টাস্ক ছোট করুন।"
+    },
+    "PERF-003": {
+        "id": "PERF-003",
+        "category": "Performance & CWV",
+        "severity": "W",
+        "title": "Total Page Transfer Size & Asset Weight",
+        "why": "পেজের সাইজ ৩-৫MB এর বেশি হলে মোবাইলে এবং স্লো নেটওয়ার্কে লোড হতে প্রচুর সময় লাগে।",
+        "fix": "ইমেজ কমপ্রেস করুন, সিএসএস/জেএস মিনিফাই করুন এবং মোট পেজ সাইজ ২MB-এর নিচে আনুন।"
+    },
+    "PERF-004": {
+        "id": "PERF-004",
+        "category": "Performance & CWV",
+        "severity": "W",
+        "title": "High TTFB (Time To First Byte > 800ms)",
+        "why": "সার্ভার প্রাথমিক ডেটা পাঠাতে দেরি করলে পেজের বাকি সমস্ত পারফরম্যান্স মেট্রিক খারাপ হয়ে যায়।",
+        "fix": "সার্ভার-সাইড ক্যাশিং, অবজেক্ট ক্যাশ (Redis), ফাস্ট হোস্টিং এবং CDN এজ-ক্যাশিং ব্যবহার করুন।"
+    },
+    "PERF-007": {
+        "id": "PERF-007",
+        "category": "Performance & CWV",
+        "severity": "W",
+        "title": "Gzip or Brotli Text Compression Enabled",
+        "why": "কম্প্রেশন বন্ধ থাকলে এইচটিএমএল, সিএসএস ও জেএস ফাইল সম্পূর্ণ আকারে ডাউনলোড হতে সময় বেশি নেয়।",
+        "fix": "সার্ভারে Gzip অথবা আধুনিক Brotli কম্প্রেশন সক্রিয় করে ফাইলের ওজন ৬০-৭০% কমিয়ে ফেলুন।"
+    },
+    "PERF-008": {
+        "id": "PERF-008",
+        "category": "Performance & CWV",
+        "severity": "W",
+        "title": "Browser Cache-Control & ETag Headers",
+        "why": "ক্যাশিং হেডার না থাকলে রিপিট ভিজিটে ব্রাউজারকে প্রতিবার সমস্ত ফাইল নতুন করে ডাউনলোড করতে হয়।",
+        "fix": "স্ট্যাটিক অ্যাসেটে দীর্ঘস্থায়ী 'Cache-Control: max-age=31536000, immutable' হেডার প্রদান করুন।"
+    },
+    "PERF-013": {
+        "id": "PERF-013",
+        "category": "Performance & CWV",
+        "severity": "N",
+        "title": "CDN Edge Caching & Delivery",
+        "why": "মূল সার্ভার থেকে দূরবর্তী দেশের ব্যবহারকারীদের কাছে সাইট অনেক দেরিতে পৌঁছায়।",
+        "fix": "Cloudflare বা অন্য কোনো বিশ্বস্ত গ্লোবাল CDN ব্যবহার করে কন্টেন্ট ইউজারদের নিকটতম এজ থেকে পরিবেশন করুন।"
+    },
+    "A11Y-002": {
+        "id": "A11Y-002",
+        "category": "Accessibility (WCAG)",
+        "severity": "W",
+        "title": "Color Contrast Ratio Compliance (4.5:1)",
+        "why": "টেক্সট ও ব্যাকগ্রাউন্ড কালারের মধ্যে বৈসাদৃশ্য কম হলে স্বল্পদৃষ্টিসম্পন্ন মানুষের জন্য লেখা পড়া অসম্ভব হয়।",
+        "fix": "বডি টেক্সটে ব্যাকগ্রাউন্ডের বিপরীতে কমপক্ষে ৪.৫:১ এবং বড় টেক্সটে ৩:১ কালার কনট্রাস্ট নিশ্চিত করুন।"
+    },
+    "A11Y-003": {
+        "id": "A11Y-003",
+        "category": "Accessibility (WCAG)",
+        "severity": "W",
+        "title": "Form Inputs Have Explicit Labels or Aria-Labels",
+        "why": "লেবেল ছাড়া স্ক্রিন রিডার ব্যবহারকারী বুঝতে পারেন না কোন বক্সে কী লিখতে হবে।",
+        "fix": "প্রতিটি <input>-এর জন্য স্পষ্ট <label for='...'> অথবা aria-label অ্যাট্রিবিউট ব্যবহার করুন।"
+    },
+    "A11Y-006": {
+        "id": "A11Y-006",
+        "category": "Accessibility (WCAG)",
+        "severity": "W",
+        "title": "Keyboard Navigation & Visible Focus Outline",
+        "why": "মাউস ছাড়া শুধুমাত্র কিবোর্ডের Tab চেপে সাইট চালানো না গেলে এটি অ্যাক্সেসিবিলিটি লঙ্ঘন।",
+        "fix": "সিএসএস থেকে 'outline: none' পরিহার করুন এবং কিবোর্ড ট্যাবিংয়ের সময় স্পষ্ট ফোকাস আউটলাইন রাখুন।"
+    },
+    "A11Y-007": {
+        "id": "A11Y-007",
+        "category": "Accessibility (WCAG)",
+        "severity": "N",
+        "title": "HTML Lang Declaration for Screen Readers",
+        "why": "ভাষার সংকেত না থাকলে স্ক্রিন রিডার সফটওয়্যার ইংরেজি নিয়মে বাংলা বা অন্য ভাষা উচ্চারণ করে নষ্ট করে।",
+        "fix": "<html lang='bn'> বা উপযুক্ত ভাষা কোড ডকুমেন্টের শুরুতে দিন।"
+    },
+    "A11Y-012": {
+        "id": "A11Y-012",
+        "category": "Accessibility (WCAG)",
+        "severity": "W",
+        "title": "Mobile Viewport Allows User Zoom (No Scalable=No)",
+        "why": "user-scalable=no বসালে দৃষ্টিপ্রতিবন্ধী পাঠকরা লেখা জুম বা বড় করতে পারেন না।",
+        "fix": "মেটা ভিউপোর্ট থেকে user-scalable=no এবং maximum-scale=1.0 বাদ দিন।"
+    },
+    "SPAM-001": {
+        "id": "SPAM-001",
+        "category": "Google Spam Policy",
+        "severity": "C",
+        "title": "Cloaking Detection (Bot vs User Mismatch)",
+        "why": "গুগলবটকে এক কনটেন্ট এবং আসল ইউজারকে অন্য কনটেন্ট দেখালে গুগল সরাসরি পার্মানেন্ট ম্যানুয়াল অ্যাকশন দেয়।",
+        "fix": "ইউজার এবং সার্চ ইঞ্জিন বট উভয়ের জন্য একই সত্য কনটেন্ট পরিবেশন করুন।"
+    },
+    "SPAM-002": {
+        "id": "SPAM-002",
+        "category": "Google Spam Policy",
+        "severity": "C",
+        "title": "Sneaky JavaScript or Referrer-Based Redirects",
+        "why": "সার্চ থেকে আসা ভিজিটরকে না জানিয়ে অন্য কোনো থার্ড-পার্টি সাইটে পাঠিয়ে দেওয়া চরম নীতি লঙ্ঘন।",
+        "fix": "সাইটের সব স্ক্রিপ্ট স্ক্যান করে অপ্রত্যাশিত বা ক্ষতিকর রিডাইরেক্ট স্ক্রিপ্ট পুরোপুরি মুছে ফেলুন।"
+    },
+    "SPAM-003": {
+        "id": "SPAM-003",
+        "category": "Google Spam Policy",
+        "severity": "C",
+        "title": "Hidden Text or Off-Screen CSS Keyword Links",
+        "why": "ব্যাকগ্রাউন্ডের সাথে মিলিয়ে সাদা টেক্সট বা display:none দিয়ে কিওয়ার্ড লুকানো ব্ল্যাক-হ্যাট স্প্যাম কৌশল।",
+        "fix": "লুকানো কিওয়ার্ড টেক্সট পুরোপুরি সরিয়ে ফেলুন; সমস্ত প্রয়োজনীয় তথ্য দৃশ্যমান রাখুন।"
+    },
+    "SPAM-009": {
+        "id": "SPAM-009",
+        "category": "Google Spam Policy",
+        "severity": "W",
+        "title": "Link Schemes & Unnatural Paid Backlink Patterns",
+        "why": "পেইড লিংকে sponsored না দেওয়া বা ফুটারে সাইটওয়াইড বাল্ক লিংক কেনাবেচা পেনাল্টি ডেকে আনে।",
+        "fix": "পেইড এবং অ্যাফিলিয়েট লিংকে rel='sponsored' বসান এবং স্প্যামি ব্যাকলিংক ডিসঅ্যাভৌ (disavow) করুন।"
+    },
+    "AEO-001": {
+        "id": "AEO-001",
+        "category": "AEO (Answer Engine)",
+        "severity": "W",
+        "title": "Question-Formatted Subheadings (What, How, Why)",
+        "why": "প্রশ্ন আকারে হেডিং না থাকলে গুগল ভয়েস সার্চ ও Featured Snippet-এ সাইটের উত্তর সহজে খুঁজে পায় না।",
+        "fix": "H2 বা H3 হেডিংগুলোতে সরাসরি ইউজারের প্রশ্ন যেমন 'কীভাবে এসইও করবেন?' জাতীয় প্রশ্ন ব্যবহার করুন।"
+    },
+    "AEO-002": {
+        "id": "AEO-002",
+        "category": "AEO (Answer Engine)",
+        "severity": "W",
+        "title": "Direct 40-60 Word Answer Block Below Headings",
+        "why": "প্রশ্নের উত্তর দিতে অযথা ভূমিকা টানলে গুগল স্নিপেট হিসেবে অন্য প্রতিদ্বন্দীর সংক্ষিপ্ত উত্তর বেছে নেয়।",
+        "fix": "প্রশ্নবোধক হেডিংয়ের ঠিক পরের প্যারায় ৪০ থেকে ৬০ শব্দের মধ্যে সরাসরি টু-দ্য-পয়েন্ট উত্তর দিন।"
+    },
+    "AEO-003": {
+        "id": "AEO-003",
+        "category": "AEO (Answer Engine)",
+        "severity": "N",
+        "title": "Structured Lists & Comparison Tables for Snippets",
+        "why": "টেবিল বা নম্বরযুক্ত লিস্ট ছাড়া তুলনামূলক বা ধাপভিত্তিক প্রশ্নের জন্য ফিচার্ড স্নিপেট পাওয়া যায় না।",
+        "fix": "প্রয়োজনীয় অংশে <ol>, <ul> এবং সুনির্দিষ্ট <table> ফরম্যাটে ডেটা উপস্থাপন করুন।"
+    },
+    "AEO-004": {
+        "id": "AEO-004",
+        "category": "AEO (Answer Engine)",
+        "severity": "N",
+        "title": "Definition-Style Anchor Sentences",
+        "why": "'X কী?' কোয়েরিতে গুগল স্পষ্ট সংজ্ঞা খুঁজে বের করতে সংজ্ঞামূলক বাক্য খোঁজে।",
+        "fix": "বিষয়ের শুরুতে 'X হলো একটি ...' আকারে স্পষ্ট ডেফিনেশন বাক্য রাখুন।"
+    },
+    "GEO-001": {
+        "id": "GEO-001",
+        "category": "GEO (Generative AI)",
+        "severity": "W",
+        "title": "AI Crawler Permissions in Robots.txt (GPTBot, ClaudeBot, etc.)",
+        "why": "ভুলবশত AI ক্রলার ব্লক থাকলে ChatGPT Search বা Perplexity সার্চে আপনার কনটেন্ট উদ্ধৃত (cite) হবে না।",
+        "fix": "ব্যবসায়িক লক্ষ্য অনুযায়ী AI সার্চ বট (GPTBot, PerplexityBot, ClaudeBot) অ্যাক্সেস অনুমতি নিশ্চিত করুন।"
+    },
+    "GEO-002": {
+        "id": "GEO-002",
+        "category": "GEO (Generative AI)",
+        "severity": "W",
+        "title": "WAF / CDN Verified AI Bot Challenge Test",
+        "why": "Robots.txt-এ ছাড় থাকলেও ফায়ারওয়াল বা ক্লাউডফ্লেয়ার AI ক্রলারকে ক্যাপচা চ্যালেঞ্জ দিলে বট তথ্য পায় না।",
+        "fix": "WAF সিকিউরিটি সেটিংসে ভেরিফায়েড এআই বটগুলোকে এলাউলিস্ট রুল দিয়ে এক্সেস দিন।"
+    },
+    "GEO-003": {
+        "id": "GEO-003",
+        "category": "GEO (Generative AI)",
+        "severity": "C",
+        "title": "Server-Rendered HTML for AI Bots (No Client-Only JS)",
+        "why": "বেশিরভাগ জেনারেটিভ AI ক্রলার জাভাস্ক্রিপ্ট রান করে না; ক্লায়েন্ট-সাইড রেন্ডার হলে তারা ফাঁকা পেজ পায়।",
+        "fix": "কোর কনটেন্ট এবং মেটা ইনফরমেশন সার্ভার থেকে পিওর এইচটিএমএল হিসেবে ডেলিভার করুন।"
+    },
+    "GEO-005": {
+        "id": "GEO-005",
+        "category": "GEO (Generative AI)",
+        "severity": "W",
+        "title": "Snippet Eligibility (No Restrictive nosnippet Tag)",
+        "why": "পেজে nosnippet বা খুব ছোট max-snippet ডিরেক্টিভ থাকলে Google AI Overview-তে কনটেন্ট উদ্ধৃত হতে পারে না।",
+        "fix": "AI ভিজিবিলিটি চাইলে <meta name='robots' content='max-snippet:-1, max-image-preview:large'> ব্যবহার করুন।"
+    },
+    "GEO-010": {
+        "id": "GEO-010",
+        "category": "GEO (Generative AI)",
+        "severity": "N",
+        "title": "Quotable Self-Contained 2-4 Sentence Passage Blocks",
+        "why": "এলএলএম মডেলগুলো পুরো পেজের বদলে প্রাসঙ্গিক ছোট অংশ (chunk) কোট করে উত্তর বানায়।",
+        "fix": "প্রতিটি মূল ধারণার জন্য ২-৪ বাক্যের স্বয়ংসম্পূর্ণ ও স্পষ্ট প্যারাগ্রাফ তৈরি করুন।"
+    },
+    "GEO-011": {
+        "id": "GEO-011",
+        "category": "GEO (Generative AI)",
+        "severity": "N",
+        "title": "Original Data, Studies & Proprietary Quotes Presence",
+        "why": "সাধারণ ইন্টারনেট তথ্যের চেয়ে ইউনিক পরিসংখ্যান ও অরিজিনাল ডেটা সম্বলিত সাইটকে AI মডেলরা বেশি সাইট করে।",
+        "fix": "নিজের সার্ভে ডেটা, বাস্তব টেস্ট রেজাল্ট এবং বিশেষজ্ঞ কোটেশন আর্টিকেলে যোগ করুন।"
+    },
+    "GEO-020": {
+        "id": "GEO-020",
+        "category": "GEO (Generative AI)",
+        "severity": "N",
+        "title": "Entity Clarity & Brand Name Consistency",
+        "why": "ব্র্যান্ডের নাম একেক জায়গায় একেক রকম হলে এআই মডেল সত্তা (entity) চিনতে ব্যর্থ হয়।",
+        "fix": "সাইটের মেটা, স্কিমা, সোশ্যাল প্রোফাইল এবং ফুটারে একদম অভিন্ন ব্র্যান্ডের নাম ব্যবহার করুন।"
+    },
+    "GEO-040": {
+        "id": "GEO-040",
+        "category": "GEO (Generative AI)",
+        "severity": "N",
+        "title": "LLMs.txt Protocol Presence (Experimental)",
+        "why": "llms.txt হলো এআই এজেন্টদের জন্য ওয়েবসাইটের সারসংক্ষেপ দেওয়ার একটি উদীয়মান পরীক্ষামূলক ফাইল।",
+        "fix": "ঐচ্ছিক হিসেবে রুট ডিরেক্টরিতে /llms.txt যোগ করতে পারেন (গুগল এটিকে এখনও আনুষ্ঠানিক সিগন্যাল হিসেবে নেয়নি)।"
+    },
+    "LEG-001": {
+        "id": "LEG-001",
+        "category": "Privacy & Legal",
+        "severity": "W",
+        "title": "Cookie Consent Banner & Tracker Governance",
+        "why": "ইউজারের সম্মতি ছাড়া ট্র্যাকিং কুকি ফায়ার করলে আন্তর্জাতিক জিডিপিআর (GDPR) আইনে জরিমানা হতে পারে।",
+        "fix": "একটি স্ট্যান্ডার্ড কুকি কনসেন্ট ব্যানার যুক্ত করুন এবং ইউজার অ্যাকসেপ্ট করার আগে থার্ড-পার্টি ট্র্যাকার ব্লক রাখুন।"
+    },
+    "LEG-002": {
+        "id": "LEG-002",
+        "category": "Privacy & Legal",
+        "severity": "W",
+        "title": "Visible Privacy Policy Link in Footer",
+        "why": "ফুটারে স্পষ্ট প্রাইভেসি পলিসি লিংক না থাকলে সাইট ইউজার ও সার্চ ইঞ্জিনের কাছে বিশ্বাসযোগ্যতা হারায়।",
+        "fix": "ওয়েবসাইটের প্রতিটি পেজের ফুটারে সহজে চোখে পড়ে এমন 'Privacy Policy' পেজ লিংক যুক্ত করুন।"
+    },
+    "LEG-005": {
+        "id": "LEG-005",
+        "category": "Privacy & Legal",
+        "severity": "W",
+        "title": "Affiliate & Sponsored Link Clear Disclosure",
+        "why": "অ্যাফিলিয়েট কমিশনের তথ্য গোপন রাখা এফটিসি (FTC) ও গুগল গাইডলাইনের পরিপন্থী।",
+        "fix": "আর্টিকেলের শুরুতে বা ফুটারে স্পষ্ট স্পন্সরশিপ/অ্যাফিলিয়েট ডিসক্লোজার স্টেটমেন্ট যুক্ত করুন।"
+    }
+}
