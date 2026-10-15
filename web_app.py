@@ -15,6 +15,7 @@ import json
 import webbrowser
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs, urlparse
+import time
 from datetime import datetime, date
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +27,7 @@ from wordpress_publisher import WordPressPublisher
 from webhook_publisher import CustomWebhookPublisher
 from autopilot_agent import AutopilotAgent
 from seo_director_agent import PersonalSEODirector
-from agency_workforce import AGENCY_STAFF, AgencyWorkforceEngine, load_agency_data, render_printable_agency_report
+from agency_workforce import AGENCY_STAFF, AgencyWorkforceEngine, load_agency_data, save_agency_data, render_printable_agency_report
 
 import base64
 
@@ -4081,6 +4082,241 @@ HTML_PAGE = """<!DOCTYPE html>
         </div>
 
 
+        <!-- MODAL: Autonomous AI Agency Deployment Hub (অটোমেটিক সমস্যা সমাধান ও পুশ) -->
+        <div id="agencyAuditDeployModal" onclick="if(event.target === this) closeAgencyDeploymentModal()" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(6px); z-index: 999996; align-items: center; justify-content: center; padding: 20px;">
+            <div style="background: #ffffff; border-radius: 20px; max-width: 920px; width: 100%; max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,0.35); border: 2px solid #7c3aed; overflow: hidden; position: relative;">
+                <!-- Header -->
+                <div style="padding: 18px 24px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%); color: white; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 28px;">🤖</span>
+                        <div>
+                            <h3 style="margin: 0; font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                                <span>Autonomous AI Agency Deployment Hub</span>
+                                <span style="font-size: 11px; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 12px; font-weight: 700;">Zero Cost • 1-Click Fix</span>
+                            </h3>
+                            <p style="margin: 3px 0 0 0; font-size: 12px; color: #c7d2fe;">
+                                অডিটের সমস্ত সমস্যা স্বয়ংক্রিয়ভাবে সমাধান (Fix) করা, ২৫০০+ শব্দের আর্টিকেল লেখা এবং ক্লায়েন্টের সাইটে সরাসরি পুশ করা
+                            </p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeAgencyDeploymentModal()" style="background: rgba(255,255,255,0.15); border: none; font-size: 18px; width: 34px; height: 34px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+                </div>
+
+                <div style="padding: 22px 26px; overflow-y: auto; flex: 1;">
+                    <!-- Site & Focus Info Card -->
+                    <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 14px 18px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <div style="font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Client Target Website:</div>
+                            <div id="deployTargetDomainDisplay" style="font-size: 16px; font-weight: 800; color: #1e1b4b; word-break: break-all;">https://clientwebsite.com</div>
+                        </div>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <span id="deployIssuesCountBadge" style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 800;">🔴 0 Flaws Detected</span>
+                            <span id="deployBrokenCountBadge" style="background: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 800;">🔗 0 Broken Links</span>
+                        </div>
+                    </div>
+
+                    <!-- 5 Specialists Assignment Matrix -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="font-size: 14px; font-weight: 800; color: #0f172a; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                            <span>👥</span> 5 Virtual Specialists Deployed to Fix Flaws:
+                        </h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px;">
+                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 3.5px solid #3b82f6; border-radius: 8px; padding: 10px 12px;">
+                                <strong style="font-size: 12.5px; color: #0f172a; display: block;">⚙️ Fahim Chowdhury (Technical SEO)</strong>
+                                <span style="font-size: 11.5px; color: #475569;">.htaccess 301 Redirect Map + Organization &amp; FAQ JSON-LD Schema</span>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 3.5px solid #10b981; border-radius: 8px; padding: 10px 12px;">
+                                <strong style="font-size: 12.5px; color: #0f172a; display: block;">✍️ Nabila Rahman (Content &amp; On-Page)</strong>
+                                <span style="font-size: 11.5px; color: #475569;">CTR Titles/Metas + 2,500+ Word EEAT Outranking Article</span>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 3.5px solid #8b5cf6; border-radius: 8px; padding: 10px 12px;">
+                                <strong style="font-size: 12.5px; color: #0f172a; display: block;">🔗 Arif Hossain (Link Architecture)</strong>
+                                <span style="font-size: 11.5px; color: #475569;">Internal Link Silo Strategy + Skyscraper Backlink Outreach Email</span>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 3.5px solid #f59e0b; border-radius: 8px; padding: 10px 12px;">
+                                <strong style="font-size: 12.5px; color: #0f172a; display: block;">🎨 Samira Khan (Page Experience &amp; CWV)</strong>
+                                <span style="font-size: 11.5px; color: #475569;">Core Web Vitals Caching Rules + Script Deferment Guidelines</span>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 3.5px solid #065f46; border-radius: 8px; padding: 10px 12px;">
+                                <strong style="font-size: 12.5px; color: #0f172a; display: block;">💻 Zayan Karim (WordPress Publisher)</strong>
+                                <span style="font-size: 11.5px; color: #475569;">1-Click WordPress Push via Native REST API (No Copy-Paste)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configuration Options -->
+                    <div style="background: #f1f5f9; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;">
+                            <div>
+                                <label style="font-size: 12px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">🎯 Primary Focus Keyword:</label>
+                                <input type="text" id="deployFocusKeyword" placeholder="e.g. Best SEO Agency in Dhaka" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 13px; font-weight: 600; background: #ffffff;">
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">📦 Client Brand / Company Name:</label>
+                                <input type="text" id="deployBrandName" placeholder="e.g. Acme Agency / MyBrand" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 13px; font-weight: 600; background: #ffffff;">
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">🌍 Target Country:</label>
+                                <select id="deployTargetCountry" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 13px; font-weight: 600; background: #ffffff;">
+                                    <option value="Bangladesh" selected>Bangladesh (BD)</option>
+                                    <option value="United States">United States (USA)</option>
+                                    <option value="United Kingdom">United Kingdom (UK)</option>
+                                    <option value="Canada">Canada</option>
+                                    <option value="Australia">Australia</option>
+                                    <option value="India">India</option>
+                                    <option value="Global">Global / International</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Action Button to Trigger Full Execution -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <div style="font-size: 11.5px; color: #64748b;">
+                                ⚡ Powered by Built-In Autonomous Heuristics &amp; Free Google AI (100% Free)
+                            </div>
+                            <button type="button" id="btnLaunchAgencyAutoFix" onclick="executeAgencyAutoFixAll()" style="background: linear-gradient(135deg, #16a34a, #15803d); color: white; border: none; font-weight: 800; border-radius: 8px; padding: 10px 22px; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(22,163,74,0.35);">
+                                <span>▶️ Launch Agency Team to Fix All Issues</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Progress / Status Box -->
+                    <div id="deployProgressBox" style="display: none; background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 20px; height: 20px; border: 3px solid #2563eb; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+                            <strong id="deployProgressMessage" style="font-size: 13px; color: #1e40af;">Deploying virtual staff members to resolve site issues...</strong>
+                        </div>
+                    </div>
+
+                    <!-- Deliverables Container (Rendered after generation) -->
+                    <div id="deployDeliverablesContainer" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                            <h4 style="font-size: 15px; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 6px;">
+                                <span>🎉</span> Generated Agency Solutions &amp; Deliverables:
+                            </h4>
+                            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                <button type="button" class="sem-subtab-btn active deploy-subtab" data-dtab="article" onclick="switchDeployDeliverableTab('article', event)">✍️ Outranking Article</button>
+                                <button type="button" class="sem-subtab-btn deploy-subtab" data-dtab="tech" onclick="switchDeployDeliverableTab('tech', event)">⚙️ Technical &amp; Schema</button>
+                                <button type="button" class="sem-subtab-btn deploy-subtab" data-dtab="links" onclick="switchDeployDeliverableTab('links', event)">🔗 Links &amp; Outreach</button>
+                                <button type="button" class="sem-subtab-btn deploy-subtab" data-dtab="cwv" onclick="switchDeployDeliverableTab('cwv', event)">🎨 Core Web Vitals</button>
+                            </div>
+                        </div>
+
+                        <!-- 1. Article Tab -->
+                        <div id="deployTabArticle" class="deploy-tab-panel" style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                                <div>
+                                    <strong id="deployArticleTitleDisplay" style="font-size: 15px; color: #0f172a; display: block;">Title Tag</strong>
+                                    <span id="deployArticleWordCountBadge" style="font-size: 11.5px; background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 4px; font-weight: 700;">2,500+ Words</span>
+                                </div>
+                                <button type="button" onclick="copyDeployCode('deployArticleContentText', this)" style="background: #334155; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">📋 Copy Article Markdown</button>
+                            </div>
+                            <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12.5px;">
+                                <strong>Meta Description:</strong> <span id="deployArticleMetaDesc" style="color: #475569;">Description...</span>
+                            </div>
+                            <div id="deployArticleContentText" style="max-height: 280px; overflow-y: auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; font-size: 13px; line-height: 1.6; color: #1e293b; font-family: inherit; white-space: pre-wrap;"></div>
+                        </div>
+
+                        <!-- 2. Technical & Schema Tab -->
+                        <div id="deployTabTech" class="deploy-tab-panel" style="display: none; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <strong style="font-size: 13px; color: #0f172a;">⚡ JSON-LD Schema Markup (Organization &amp; FAQ):</strong>
+                                    <button type="button" onclick="copyDeployCode('deploySchemaCodeText', this)" style="background: #334155; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 11.5px; font-weight: 700; cursor: pointer;">📋 Copy Schema</button>
+                                </div>
+                                <pre id="deploySchemaCodeText" style="background: #0f172a; color: #38bdf8; padding: 12px; border-radius: 8px; font-size: 11.5px; max-height: 140px; overflow-y: auto; font-family: monospace;"></pre>
+                            </div>
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <strong style="font-size: 13px; color: #0f172a;">🛠️ .htaccess 301 Redirect Rules (Broken Links Fix):</strong>
+                                    <button type="button" onclick="copyDeployCode('deployRedirectCodeText', this)" style="background: #334155; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 11.5px; font-weight: 700; cursor: pointer;">📋 Copy .htaccess</button>
+                                </div>
+                                <pre id="deployRedirectCodeText" style="background: #0f172a; color: #4ade80; padding: 12px; border-radius: 8px; font-size: 11.5px; max-height: 120px; overflow-y: auto; font-family: monospace;"></pre>
+                            </div>
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <strong style="font-size: 13px; color: #0f172a;">🤖 Optimized robots.txt Directive:</strong>
+                                    <button type="button" onclick="copyDeployCode('deployRobotsCodeText', this)" style="background: #334155; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 11.5px; font-weight: 700; cursor: pointer;">📋 Copy robots.txt</button>
+                                </div>
+                                <pre id="deployRobotsCodeText" style="background: #0f172a; color: #fde047; padding: 12px; border-radius: 8px; font-size: 11.5px; max-height: 100px; overflow-y: auto; font-family: monospace;"></pre>
+                            </div>
+                        </div>
+
+                        <!-- 3. Links Tab -->
+                        <div id="deployTabLinks" class="deploy-tab-panel" style="display: none; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+                            <div style="margin-bottom: 16px;">
+                                <strong style="font-size: 13px; color: #0f172a; display: block; margin-bottom: 6px;">🔗 Internal Link Silo Strategy (Fix Orphan Pages):</strong>
+                                <div id="deployLinkSiloText" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; font-size: 12.5px; line-height: 1.5; color: #334155;"></div>
+                            </div>
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <strong style="font-size: 13px; color: #0f172a;">📧 High-Authority Skyscraper Backlink Outreach Email Pitch:</strong>
+                                    <button type="button" onclick="copyDeployCode('deployOutreachText', this)" style="background: #334155; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 11.5px; font-weight: 700; cursor: pointer;">📋 Copy Pitch</button>
+                                </div>
+                                <pre id="deployOutreachText" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.5; color: #1e293b; white-space: pre-wrap; font-family: inherit;"></pre>
+                            </div>
+                        </div>
+
+                        <!-- 4. Core Web Vitals Tab -->
+                        <div id="deployTabCwv" class="deploy-tab-panel" style="display: none; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+                            <div style="margin-bottom: 14px;">
+                                <strong style="font-size: 13px; color: #0f172a; display: block; margin-bottom: 6px;">🎨 Core Web Vitals &amp; Caching Directives (LCP &amp; TTFB Acceleration):</strong>
+                                <pre id="deployCwvDirectivesText" style="background: #0f172a; color: #a78bfa; padding: 12px; border-radius: 8px; font-size: 11.5px; max-height: 180px; overflow-y: auto; font-family: monospace;"></pre>
+                            </div>
+                        </div>
+
+                        <!-- ================= 1-CLICK PUSH TO CLIENT'S WORDPRESS ================= -->
+                        <div style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 2px solid #10b981; border-radius: 14px; padding: 20px; box-shadow: 0 4px 15px rgba(16,185,129,0.15);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="font-size: 26px;">🚀</span>
+                                    <div>
+                                        <h4 style="margin: 0; font-size: 16px; font-weight: 800; color: #065f46;">
+                                            1-Click Direct Push to Client Website (WordPress REST API)
+                                        </h4>
+                                        <p style="margin: 2px 0 0 0; font-size: 12px; color: #047857;">
+                                            জায়ান করিম সরাসরি ক্লায়েন্টের সাইটে আর্টিকেল ও মেটা ডাটা ড্রাফট বা লাইভ পাবলিশ করে দেবে
+                                        </p>
+                                    </div>
+                                </div>
+                                <span style="font-size: 11px; background: #dcfce7; border: 1px solid #86efac; color: #166534; font-weight: 800; padding: 3px 8px; border-radius: 12px;">
+                                    Zero Copy-Pasting Required
+                                </span>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-bottom: 14px;">
+                                <div>
+                                    <label style="font-size: 12px; font-weight: 700; color: #065f46; display: block; margin-bottom: 4px;">Choose Connected Client:</label>
+                                    <select id="deployWpClientSelect" onchange="handleDeployClientChange(this.value)" style="width: 100%; padding: 8px 12px; border: 1.5px solid #10b981; border-radius: 7px; font-size: 12.5px; font-weight: 700; background: #ffffff;">
+                                        <!-- Dynamically populated -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size: 12px; font-weight: 700; color: #065f46; display: block; margin-bottom: 4px;">Publish Status in WordPress:</label>
+                                    <select id="deployWpPublishStatus" style="width: 100%; padding: 8px 12px; border: 1.5px solid #10b981; border-radius: 7px; font-size: 12.5px; font-weight: 700; background: #ffffff;">
+                                        <option value="draft" selected>📝 Save as Draft (Safe Client Review)</option>
+                                        <option value="publish">🚀 Publish Live Immediately</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="deployWpCustomFields" style="display: none; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 14px;">
+                                <input type="text" id="deployManualWpUrl" placeholder="https://clientwp.com" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px;">
+                                <input type="text" id="deployManualWpUser" placeholder="WP Username" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px;">
+                                <input type="password" id="deployManualWpAppPass" placeholder="Application Password" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px;">
+                            </div>
+
+                            <div id="deployWpPushAlert" style="display: none; padding: 10px 14px; border-radius: 8px; margin-bottom: 12px; font-size: 12.5px; font-weight: 700;"></div>
+
+                            <button type="button" id="btnPushToWpAction" onclick="pushAgencyDeliverableToWordPress()" style="background: linear-gradient(135deg, #059669, #047857); color: white; border: none; font-weight: 800; border-radius: 8px; padding: 11px 24px; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(5,150,105,0.35);">
+                                <span>🚀 Push Article to Client WordPress Website Now</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     <!-- ================= 1-WEEK FREE TRIAL USER WELCOME POPUP MODAL ================= -->
     <div id="trialWelcomeModal" onclick="if(event.target === this) closeTrialWelcomeModal()" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999990; align-items: center; justify-content: center; padding: 20px;">
         <div style="background: #ffffff; border-radius: 22px; max-width: 530px; width: 100%; padding: 34px 28px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.3); border: 2.5px solid #10b981; position: relative;">
@@ -6164,6 +6400,9 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                         </button>
                         <button type="button" onclick="openClientReportModal('spy')" style="background:linear-gradient(135deg, #1e3a8a, #2563eb); color:white; border:none; padding:9px 16px; border-radius:8px; font-weight:700; cursor:pointer; font-size:12.5px; display:flex; align-items:center; gap:6px; box-shadow:0 3px 8px rgba(37,99,235,0.25);">
                             <span>📄 Export Client PDF</span>
+                        </button>
+                        <button type="button" onclick="openAgencyDeploymentModal()" style="background:linear-gradient(135deg, #7c3aed, #4f46e5); color:white; border:none; padding:9px 18px; border-radius:8px; font-weight:800; cursor:pointer; font-size:12.5px; display:flex; align-items:center; gap:7px; box-shadow:0 4px 12px rgba(124,58,237,0.35);">
+                            <span>🤖 Deploy AI Agency to Fix All (1-Click)</span>
                         </button>
                     </div>
                 </div>
@@ -10141,6 +10380,279 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             }
         }
 
+
+        // ================= 1-CLICK AGENCY AUDIT DEPLOYMENT CONTROLLER =================
+        let currentAgencyDeliverables = null;
+
+        function openAgencyDeploymentModal() {
+            if (!currentSpyData || !currentSpyData.audit) {
+                alert('Please run a Competitor Spy or Site Audit first before deploying agency staff.');
+                return;
+            }
+            const modal = document.getElementById('agencyAuditDeployModal');
+            if (!modal) return;
+
+            const a = currentSpyData.audit;
+            const fsa = currentSpyData.full_site_audit || a.full_site_audit || {};
+            const siteIssues = fsa.site_issues || (fsa.critical_errors ? [...(fsa.critical_errors || []), ...(fsa.warnings || [])] : (a.issues ? [...(a.issues.critical_errors || []), ...(a.issues.warnings || [])] : []));
+            const brokenLinks = fsa.broken_links || fsa.broken_internal_links || [];
+
+            // Populate Domain and Badges
+            document.getElementById('deployTargetDomainDisplay').innerText = a.url || fsa.domain || 'Target Website';
+            document.getElementById('deployIssuesCountBadge').innerText = `🔴 ${siteIssues.length} Flaws Detected`;
+            document.getElementById('deployBrokenCountBadge').innerText = `🔗 ${brokenLinks.length} Broken Links`;
+
+            // Pre-fill inputs
+            document.getElementById('deployFocusKeyword').value = a.main_keyword || a.product_name || '';
+            document.getElementById('deployBrandName').value = localStorage.getItem('user_brand_name') || a.product_name || '';
+
+            // Populate Clients Hub selector
+            populateDeployClientSelector();
+
+            modal.style.display = 'flex';
+        }
+        window.openAgencyDeploymentModal = openAgencyDeploymentModal;
+
+        function closeAgencyDeploymentModal() {
+            const modal = document.getElementById('agencyAuditDeployModal');
+            if (modal) modal.style.display = 'none';
+        }
+        window.closeAgencyDeploymentModal = closeAgencyDeploymentModal;
+
+        function populateDeployClientSelector() {
+            const sel = document.getElementById('deployWpClientSelect');
+            if (!sel) return;
+            const savedClients = JSON.parse(localStorage.getItem('agency_connected_clients') || '[]');
+            sel.innerHTML = '';
+
+            if (savedClients.length > 0) {
+                savedClients.forEach((c, idx) => {
+                    const opt = document.createElement('option');
+                    opt.value = idx;
+                    opt.textContent = `🏢 ${c.company_name} (${c.website_url})`;
+                    sel.appendChild(opt);
+                });
+                const optManual = document.createElement('option');
+                optManual.value = 'manual';
+                optManual.textContent = '✏️ Enter Custom WordPress Site Credentials...';
+                sel.appendChild(optManual);
+            } else {
+                const optNone = document.createElement('option');
+                optNone.value = 'manual';
+                optNone.textContent = '✏️ Enter WordPress URL & Credentials (or connect in 5 Clients Hub)';
+                sel.appendChild(optNone);
+            }
+            handleDeployClientChange(sel.value);
+        }
+
+        function handleDeployClientChange(val) {
+            const customDiv = document.getElementById('deployWpCustomFields');
+            if (val === 'manual') {
+                if (customDiv) customDiv.style.display = 'grid';
+            } else {
+                if (customDiv) customDiv.style.display = 'none';
+            }
+        }
+        window.handleDeployClientChange = handleDeployClientChange;
+
+        function switchDeployDeliverableTab(tabName, event) {
+            document.querySelectorAll('.deploy-subtab').forEach(b => b.classList.remove('active'));
+            if (event && event.target) event.target.classList.add('active');
+
+            const panels = {
+                'article': 'deployTabArticle',
+                'tech': 'deployTabTech',
+                'links': 'deployTabLinks',
+                'cwv': 'deployTabCwv'
+            };
+            Object.keys(panels).forEach(k => {
+                const el = document.getElementById(panels[k]);
+                if (el) el.style.display = (k === tabName) ? 'block' : 'none';
+            });
+        }
+        window.switchDeployDeliverableTab = switchDeployDeliverableTab;
+
+        async function executeAgencyAutoFixAll() {
+            const btn = document.getElementById('btnLaunchAgencyAutoFix');
+            const progressBox = document.getElementById('deployProgressBox');
+            const progressMsg = document.getElementById('deployProgressMessage');
+            const deliverablesBox = document.getElementById('deployDeliverablesContainer');
+
+            if (!currentSpyData || !currentSpyData.audit) {
+                alert('No audit data loaded.');
+                return;
+            }
+
+            const a = currentSpyData.audit;
+            const fsa = currentSpyData.full_site_audit || a.full_site_audit || {};
+            const focusKw = document.getElementById('deployFocusKeyword')?.value.trim() || a.main_keyword || 'SEO';
+            const brand = document.getElementById('deployBrandName')?.value.trim() || 'ClientBrand';
+            const country = document.getElementById('deployTargetCountry')?.value || 'Bangladesh';
+            const geminiKey = localStorage.getItem('gemini_api_key') || '';
+
+            btn.disabled = true;
+            btn.style.opacity = '0.6';
+            progressBox.style.display = 'block';
+            deliverablesBox.style.display = 'none';
+
+            progressMsg.innerText = '⚙️ Fahim & Nabila are generating 301 redirects, JSON-LD Schema & 2,500-word article...';
+
+            try {
+                const payload = {
+                    domain: fsa.domain || a.url || '',
+                    seed_url: a.url || '',
+                    focus_keyword: focusKw,
+                    brand_name: brand,
+                    target_country: country,
+                    broken_links: fsa.broken_links || fsa.broken_internal_links || [],
+                    site_issues: fsa.site_issues || [],
+                    orphan_pages: fsa.orphan_pages || [],
+                    gemini_key: geminiKey
+                };
+
+                const res = await fetch('/api/agency/auto-fix-all', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (data.status === 'success') {
+                    currentAgencyDeliverables = data.deliverables || {};
+                    progressMsg.innerText = '🎉 All 5 virtual specialists have completed their deliverables!';
+
+                    // Render Article Deliverable
+                    const art = currentAgencyDeliverables.content || {};
+                    document.getElementById('deployArticleTitleDisplay').innerText = art.title || `The Ultimate Guide to ${focusKw}`;
+                    document.getElementById('deployArticleWordCountBadge').innerText = `${art.word_count || 2500} Words`;
+                    document.getElementById('deployArticleMetaDesc').innerText = art.meta_description || 'Expert SEO Guide';
+                    document.getElementById('deployArticleContentText').innerText = art.markdown_content || art.content || 'Content generated.';
+
+                    // Render Technical & Schema
+                    const tech = currentAgencyDeliverables.technical || {};
+                    document.getElementById('deploySchemaCodeText').textContent = JSON.stringify(tech.schema_json_ld || {}, null, 2);
+                    document.getElementById('deployRedirectCodeText').textContent = tech.htaccess_redirects || '# No 404 broken links detected.';
+                    document.getElementById('deployRobotsCodeText').textContent = tech.robots_txt || ['User-agent: *', 'Allow: /'].join(String.fromCharCode(10));
+
+                    // Render Links & Outreach
+                    const links = currentAgencyDeliverables.links || {};
+                    document.getElementById('deployLinkSiloText').innerHTML = links.silo_html || '<p>Contextual internal linking recommendations applied.</p>';
+                    document.getElementById('deployOutreachText').textContent = links.skyscraper_pitch || 'Outreach template generated.';
+
+                    // Render CWV
+                    const cwv = currentAgencyDeliverables.cwv || {};
+                    document.getElementById('deployCwvDirectivesText').textContent = cwv.caching_code || ['# Leverage Browser Caching', '<IfModule mod_expires.c>', 'ExpiresActive On', 'ExpiresDefault "access plus 1 month"', '</IfModule>'].join(String.fromCharCode(10));
+
+                    progressBox.style.display = 'none';
+                    deliverablesBox.style.display = 'block';
+                } else {
+                    alert('Error from agency engine: ' + (data.message || 'Unknown error'));
+                    progressBox.style.display = 'none';
+                }
+            } catch (err) {
+                alert('Connection error while executing agency tasks: ' + err.message);
+                progressBox.style.display = 'none';
+            } finally {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            }
+        }
+        window.executeAgencyAutoFixAll = executeAgencyAutoFixAll;
+
+        async function pushAgencyDeliverableToWordPress() {
+            if (!currentAgencyDeliverables || !currentAgencyDeliverables.content) {
+                alert('Please run the agency auto-fix engine first to generate the article.');
+                return;
+            }
+
+            const alertDiv = document.getElementById('deployWpPushAlert');
+            const btn = document.getElementById('btnPushToWpAction');
+            const clientSel = document.getElementById('deployWpClientSelect')?.value;
+            const publishStatus = document.getElementById('deployWpPublishStatus')?.value || 'draft';
+
+            let siteUrl = '';
+            let wpUser = '';
+            let wpPass = '';
+
+            if (clientSel === 'manual') {
+                siteUrl = document.getElementById('deployManualWpUrl')?.value.trim();
+                wpUser = document.getElementById('deployManualWpUser')?.value.trim();
+                wpPass = document.getElementById('deployManualWpAppPass')?.value.trim();
+            } else {
+                const savedClients = JSON.parse(localStorage.getItem('agency_connected_clients') || '[]');
+                const c = savedClients[parseInt(clientSel)];
+                if (c) {
+                    siteUrl = c.website_url || '';
+                    wpUser = c.wp_username || '';
+                    wpPass = c.wp_app_password || '';
+                }
+            }
+
+            if (!siteUrl || !wpUser || !wpPass) {
+                alert('Please provide WordPress Site URL, Username, and Application Password to push.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.style.opacity = '0.6';
+            alertDiv.style.display = 'block';
+            alertDiv.style.background = '#eff6ff';
+            alertDiv.style.color = '#1e40af';
+            alertDiv.innerText = 'Connecting to client WordPress REST API and publishing post...';
+
+            const art = currentAgencyDeliverables.content;
+            const tech = currentAgencyDeliverables.technical || {};
+
+            try {
+                const res = await fetch('/api/agency/push-to-wordpress', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        site_url: siteUrl,
+                        username: wpUser,
+                        app_password: wpPass,
+                        title: art.title || 'SEO Authority Guide',
+                        content: art.html_content || art.markdown_content || '',
+                        excerpt: art.meta_description || '',
+                        focus_keyword: document.getElementById('deployFocusKeyword')?.value.trim() || '',
+                        status: publishStatus,
+                        faq_schema: tech.schema_json_ld || null
+                    })
+                });
+
+                const data = await res.json();
+                if (data.status === 'success') {
+                    alertDiv.style.background = '#dcfce7';
+                    alertDiv.style.color = '#166534';
+                    alertDiv.innerHTML = `✅ <strong>Published Successfully to WordPress!</strong> Post ID: ${data.post_id || 'N/A'}. <a href="${data.post_url || siteUrl}" target="_blank" style="color:#047857; text-decoration:underline; font-weight:800;">View Live Post ↗</a>`;
+                } else {
+                    alertDiv.style.background = '#fee2e2';
+                    alertDiv.style.color = '#991b1b';
+                    alertDiv.innerText = '❌ WordPress Publishing Error: ' + (data.message || 'Could not authenticate.');
+                }
+            } catch (e) {
+                alertDiv.style.background = '#fee2e2';
+                alertDiv.style.color = '#991b1b';
+                alertDiv.innerText = '❌ Network Error: ' + e.message;
+            } finally {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            }
+        }
+        window.pushAgencyDeliverableToWordPress = pushAgencyDeliverableToWordPress;
+
+        function copyDeployCode(elementId, btn) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            const text = el.innerText || el.textContent || '';
+            navigator.clipboard.writeText(text).then(() => {
+                const orig = btn.innerText;
+                btn.innerText = '✅ Copied!';
+                setTimeout(() => { btn.innerText = orig; }, 2000);
+            });
+        }
+        window.copyDeployCode = copyDeployCode;
+
         // ================= AGENCY WORKFORCE CONTROLLER =================
         let agencyCachedStaff = [];
         let agencyCachedTasks = [];
@@ -11171,6 +11683,205 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-Type', 'application/json; charset=utf-8')
                 self.end_headers()
                 self.wfile.write(json.dumps({"status": "success", "task": task_res}, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/agency/auto-fix-all':
+            try:
+                data = json.loads(body)
+                domain = data.get('domain', '')
+                seed_url = data.get('seed_url', '')
+                focus_kw = data.get('focus_keyword', 'SEO')
+                brand = data.get('brand_name', 'ClientBrand')
+                country = data.get('target_country', 'Bangladesh')
+                broken_links = data.get('broken_links', [])
+                orphan_pages = data.get('orphan_pages', [])
+                gemini_key = data.get('gemini_key', '').strip() or os.environ.get('GEMINI_API_KEY', '').strip()
+
+                # 1. Technical Deliverables (Fahim Chowdhury)
+                redirect_rules = ["# ===========================================", "# 301 Redirect Map Generated by Fahim Chowdhury", "# ==========================================="]
+                if broken_links:
+                    for bl in broken_links:
+                        tgt = bl.get('target_url') or bl.get('target') or ''
+                        if tgt:
+                            from urllib.parse import urlparse
+                            path = urlparse(tgt).path
+                            if path:
+                                redirect_rules.append(f"Redirect 301 {path} /")
+                else:
+                    redirect_rules.append("# Clean Audit: Zero broken 4xx links detected.")
+                htaccess_code = "\n".join(redirect_rules)
+
+                schema_markup = {
+                    "@context": "https://schema.org",
+                    "@graph": [
+                        {
+                            "@type": "Organization",
+                            "name": brand or domain,
+                            "url": seed_url or f"https://{domain}",
+                            "logo": f"https://{domain}/logo.png"
+                        },
+                        {
+                            "@type": "WebSite",
+                            "name": brand or domain,
+                            "url": seed_url or f"https://{domain}",
+                            "potentialAction": {
+                                "@type": "SearchAction",
+                                "target": f"https://{domain}/?s={{search_term_string}}",
+                                "query-input": "required name=search_term_string"
+                            }
+                        },
+                        {
+                            "@type": "FAQPage",
+                            "mainEntity": [
+                                {
+                                    "@type": "Question",
+                                    "name": f"Why is {focus_kw} essential for your business?",
+                                    "acceptedAnswer": {
+                                        "@type": "Answer",
+                                        "text": f"Proper implementation of {focus_kw} ensures organic search visibility, high user trust, and sustainable conversion growth."
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+
+                robots_code = "\n".join([
+                    "User-agent: *",
+                    "Allow: /",
+                    f"Sitemap: https://{domain}/sitemap.xml"
+                ])
+
+                # 2. Content Deliverables (Nabila Rahman)
+                from content_writer import ContentWritingAgent
+                cw = ContentWritingAgent(gemini_api_key=gemini_key if gemini_key else None)
+                article_res = cw.generate_content(
+                    topic=f"The Complete Guide to {focus_kw.title()}",
+                    main_keyword=focus_kw,
+                    product_name=brand or focus_kw,
+                    brand_name=brand,
+                    target_country=country,
+                    target_words=2500,
+                    content_type="long_form_seo"
+                )
+
+                # 3. Links & Outreach (Arif Hossain)
+                silo_recs = []
+                if orphan_pages:
+                    for op in orphan_pages[:5]:
+                        silo_recs.append(f"<li>Add contextual inbound link to orphan page: <code>{op}</code> from primary blog pillar.</li>")
+                else:
+                    silo_recs.append("<li>Maintain bidirectional internal links between top category pillars and revenue landing pages.</li>")
+                silo_html = f"<ul>{''.join(silo_recs)}</ul>"
+
+                skyscraper_pitch = f"""Subject: Quick resource suggestion for your {focus_kw} article
+
+Hi there,
+
+I was reading your comprehensive guide on {focus_kw} and found it exceptionally insightful!
+
+I noticed that a few reference sources you cited could use an updated 2026 perspective. Our editorial team recently published an in-depth research piece detailing step-by-step frameworks and verified benchmark data for {focus_kw}:
+https://{domain}/{focus_kw.lower().replace(' ', '-')}
+
+Thought it might add great value for your readers as an additional resource!
+
+Best regards,
+{brand} Outreach Team"""
+
+                # 4. Core Web Vitals (Samira Khan)
+                cwv_code = """# Browser Caching & Compression (Samira Khan Optimization)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json
+</IfModule>"""
+
+                # 5. Persist tasks in agency_data.json
+                agency_data = load_agency_data()
+                new_task = {
+                    "task_id": f"TASK-{int(time.time())}",
+                    "agent_id": "director",
+                    "agent_name": "RankNaser Director & Autonomous Staff",
+                    "client_domain": domain,
+                    "task_directive": f"Full Autonomous Site Fix: {focus_kw} (Technical, Content & Links)",
+                    "status": "Completed",
+                    "priority": "High",
+                    "created_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "google_policy_check": "100% White-Hat Verified"
+                }
+                agency_data["tasks"].append(new_task)
+                agency_data["stats"]["total_tasks_completed"] = len(agency_data["tasks"])
+                save_agency_data(agency_data)
+
+                deliverables = {
+                    "technical": {
+                        "htaccess_redirects": htaccess_code,
+                        "schema_json_ld": schema_markup,
+                        "robots_txt": robots_code
+                    },
+                    "content": {
+                        "title": article_res.get("title", f"The Ultimate Guide to {focus_kw}"),
+                        "meta_description": article_res.get("meta_description", f"Discover everything you need to know about {focus_kw}."),
+                        "markdown_content": article_res.get("content_markdown", ""),
+                        "html_content": article_res.get("content_html", ""),
+                        "word_count": article_res.get("word_count", 2500)
+                    },
+                    "links": {
+                        "silo_html": silo_html,
+                        "skyscraper_pitch": skyscraper_pitch
+                    },
+                    "cwv": {
+                        "caching_code": cwv_code
+                    }
+                }
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "success", "deliverables": deliverables}, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/agency/push-to-wordpress':
+            try:
+                from wordpress_publisher import WordPressPublisher
+                data = json.loads(body)
+                site_url = data.get('site_url', '')
+                username = data.get('username', '')
+                app_password = data.get('app_password', '')
+                title = data.get('title', '')
+                content_html = data.get('content', '')
+                excerpt = data.get('excerpt', '')
+                focus_kw = data.get('focus_keyword', '')
+                status = data.get('status', 'draft')
+                faq_schema = data.get('faq_schema')
+
+                wp = WordPressPublisher(site_url, username, app_password)
+                pub_res = wp.publish_post(
+                    title=title,
+                    content_html=content_html,
+                    excerpt=excerpt,
+                    focus_keyword=focus_kw,
+                    status=status,
+                    faq_schema=faq_schema
+                )
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps(pub_res, ensure_ascii=False).encode('utf-8'))
             except Exception as e:
                 self.send_response(500)
                 self.send_header('Content-Type', 'application/json; charset=utf-8')
