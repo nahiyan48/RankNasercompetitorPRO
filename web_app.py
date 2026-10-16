@@ -28,6 +28,7 @@ from webhook_publisher import CustomWebhookPublisher
 from autopilot_agent import AutopilotAgent
 from seo_director_agent import PersonalSEODirector
 from agency_workforce import AGENCY_STAFF, AgencyWorkforceEngine, load_agency_data, save_agency_data, render_printable_agency_report
+from gsc_index_engine import gsc_engine
 
 import base64
 
@@ -363,7 +364,8 @@ HTML_PAGE = """<!DOCTYPE html>
                 'writer': 'tabWriter',
                 'autopilot': 'tabAutopilot',
                 'director': 'tabDirector',
-                'agency': 'tabAgency'
+                'agency': 'tabAgency',
+                'index': 'tabIndex'
             };
             Object.keys(tabMap).forEach(key => {
                 const el = document.getElementById(tabMap[key]);
@@ -376,6 +378,9 @@ HTML_PAGE = """<!DOCTYPE html>
             });
             if (tab === 'agency' && typeof loadAgencyDashboard === 'function') {
                 try { loadAgencyDashboard(); } catch(e) {}
+            }
+            if (tab === 'index' && typeof loadGscIndexDashboard === 'function') {
+                try { loadGscIndexDashboard(); } catch(e) {}
             }
             if (updateHistory) {
                 try { history.pushState({ tab: tab }, '', '#' + tab); } catch(e) {}
@@ -585,10 +590,10 @@ HTML_PAGE = """<!DOCTYPE html>
             transform: translateY(-1px) !important;
         }
 
-        /* 7-Engine Navigation Tabs Grid */
+        /* 8-Engine Navigation Tabs Grid */
         .tabs-nav {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(8, 1fr);
             gap: 12px;
             margin-bottom: 24px;
             width: 100%;
@@ -625,7 +630,8 @@ HTML_PAGE = """<!DOCTYPE html>
         .tab-btn.writer:hover,
         .tab-btn.autopilot:hover,
         .tab-btn.director:hover,
-        .tab-btn.agency:hover {
+        .tab-btn.agency:hover,
+        .tab-btn.index:hover {
             background: #ffffff !important;
             border-color: #cbd5e1 !important;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07) !important;
@@ -639,7 +645,8 @@ HTML_PAGE = """<!DOCTYPE html>
         .tab-btn.active.writer,
         .tab-btn.active.autopilot,
         .tab-btn.active.director,
-        .tab-btn.active.agency {
+        .tab-btn.active.agency,
+        .tab-btn.active.index {
             background: #ffffff !important;
             color: #000000 !important;
             border: 2px solid #0f172a !important;
@@ -2620,6 +2627,12 @@ HTML_PAGE = """<!DOCTYPE html>
                 </span>
                 <span class="tab-label">7. Agency Team</span>
             </button>
+            <button class="tab-btn index" id="tabIndexBtn" onclick="switchTab('index')" title="8. Google Search Console Official URL Inspection & Diagnosis">
+                <span class="tab-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><path d="m11 8v6"></path><path d="m8 11h6"></path></svg>
+                </span>
+                <span class="tab-label">8. Google Index</span>
+            </button>
         </div>
 
         <!-- TAB 1: Daily Tracker -->
@@ -3819,6 +3832,339 @@ HTML_PAGE = """<!DOCTYPE html>
                     <!-- Populated by JS -->
                     <div style="text-align: center; padding: 30px; color: #94a3b8; font-size: 13.5px;">
                         Loading live workforce logs...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 8: GOOGLE SEARCH CONSOLE OFFICIAL URL INSPECTION & DIAGNOSIS ================= -->
+        <div id="tabIndex" style="display: none;">
+            <!-- Top Return & Policy Notice Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button type="button" onclick="goBackToHome();" style="background: linear-gradient(135deg, #1e1b4b, #312e81); color: white; border: none; font-weight: 700; border-radius: 8px; padding: 9px 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; box-shadow: 0 2px 6px rgba(30,27,75,0.25);" title="ট্যাব বন্ধ করে মূল ড্যাশবোর্ডে ফিরে যান">
+                        <span>✕ বন্ধ করুন (Back to Home)</span>
+                    </button>
+                    <div>
+                        <h2 style="font-size: 18px; font-weight: 900; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                            <span>Google Search Console URL Inspection & Live Diagnosis</span>
+                            <span style="font-size: 11px; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; padding: 2px 8px; border-radius: 6px; font-weight: 800;">Official API v1</span>
+                        </h2>
+                        <p style="font-size: 12.5px; color: #64748b; margin: 2px 0 0 0;">
+                            একমাত্র অফিশিয়াল সোর্স Google Search Console API এবং রিয়েল-টাইম লাইভ ডায়াগনসিস। নো স্ক্র্যাপিং, নো ফেক গ্যারান্টি।
+                        </p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" onclick="openGscConnectModal()" style="background: #2563eb; color: white; border: none; font-weight: 800; border-radius: 8px; padding: 9px 16px; font-size: 12.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(37,99,235,0.3);">
+                        <span>➕ কানেক্ট প্রপার্টি / SA</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Property Switcher & Action Toolbar Bar -->
+            <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+                <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; flex: 1;">
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label style="font-size: 11.5px; font-weight: 800; color: #475569; text-transform: uppercase;">সিলেক্টেড Search Console প্রপার্টি:</label>
+                        <select id="gscSiteSelect" onchange="onGscSiteChange(this.value)" style="padding: 8px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; font-weight: 700; color: #0f172a; background: #f8fafc; min-width: 280px; outline: none;">
+                            <option value="">-- কোনো প্রপার্টি সিলেক্ট করা নেই --</option>
+                        </select>
+                    </div>
+                    <div id="gscPropertySaBadge" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;">
+                        <span>Checking Service Account status...</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" onclick="triggerGscSitemapDiscovery()" style="background: #f8fafc; border: 1.5px solid #cbd5e1; color: #0f172a; font-weight: 700; border-radius: 8px; padding: 8px 14px; font-size: 12.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>🗺️ সাইটম্যাপ থেকে URL আনুন</span>
+                    </button>
+                    <button type="button" onclick="openGscAddUrlsModal()" style="background: #f8fafc; border: 1.5px solid #cbd5e1; color: #0f172a; font-weight: 700; border-radius: 8px; padding: 8px 14px; font-size: 12.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>📥 ম্যানুয়াল URL / CSV</span>
+                    </button>
+                    <button type="button" id="gscBatchInspectBtn" onclick="runGscBatchInspection()" style="background: #10b981; color: white; border: none; font-weight: 800; border-radius: 8px; padding: 8px 16px; font-size: 12.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(16,185,129,0.3);">
+                        <span>⚡ আনচেকড URL ইন্সপেক্ট করুন</span>
+                    </button>
+                    <button type="button" onclick="exportGscInspectionCsv()" style="background: #0f172a; color: white; border: none; font-weight: 700; border-radius: 8px; padding: 8px 14px; font-size: 12.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>⬇️ CSV এক্সপোর্ট</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Summary KPI Cards Grid (Section 7) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 20px;">
+                <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase;">মোট সংগৃহীত URL</span>
+                        <span style="font-size: 20px;">🌐</span>
+                    </div>
+                    <div id="gscKpiTotalUrls" style="font-size: 28px; font-weight: 900; color: #0f172a; margin-top: 6px;">0</div>
+                    <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">সাইটম্যাপ ও কাস্টম যোগ করা</div>
+                </div>
+
+                <div style="background: #ffffff; border: 1.5px solid #86efac; border-radius: 14px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 12px; font-weight: 800; color: #166534; text-transform: uppercase;">ইন্ডেক্সড পেজ (PASS)</span>
+                        <span style="font-size: 20px;">✅</span>
+                    </div>
+                    <div id="gscKpiIndexed" style="font-size: 28px; font-weight: 900; color: #16a34a; margin-top: 6px;">0</div>
+                    <div style="font-size: 11.5px; color: #166534; margin-top: 4px;">Google Verdict = PASS</div>
+                </div>
+
+                <div style="background: #ffffff; border: 1.5px solid #fca5a5; border-radius: 14px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 12px; font-weight: 800; color: #991b1b; text-transform: uppercase;">নন-ইন্ডেক্সড পেজ</span>
+                        <span style="font-size: 20px;">⚠️</span>
+                    </div>
+                    <div id="gscKpiNonIndexed" style="font-size: 28px; font-weight: 900; color: #dc2626; margin-top: 6px;">0</div>
+                    <div style="font-size: 11.5px; color: #991b1b; margin-top: 4px;">কারণসহ সমাধানের গাইড রয়েছে</div>
+                </div>
+
+                <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase;">দৈনিক API কোটা</span>
+                        <span style="font-size: 20px;">📊</span>
+                    </div>
+                    <div id="gscKpiQuota" style="font-size: 24px; font-weight: 900; color: #2563eb; margin-top: 6px;">0 / 2,000</div>
+                    <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">প্রতি property-তে দিনে ২,০০০ সীমা</div>
+                </div>
+            </div>
+
+            <!-- Non-Indexed Reasons Grouping & Quick Filter (Section 7) -->
+            <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <h3 style="font-size: 14.5px; font-weight: 900; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                        <span>🔍 নন-ইন্ডেক্সড হওয়ার কারণভিত্তিক গ্রুপিং (ক্লিক করে ফিল্টার করুন):</span>
+                    </h3>
+                    <span id="gscLastCheckedAt" style="font-size: 12px; color: #64748b; font-weight: 600;">Last Check: Never</span>
+                </div>
+                <div id="gscReasonPillsContainer" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <div style="padding: 6px 14px; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer;">
+                        সবগুলো দেখুন (0)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search, Filter & Data Table (Section 7 & 8) -->
+            <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 280px;">
+                        <input type="text" id="gscUrlSearchInput" onkeyup="onGscSearchKeyUp()" placeholder="URL দিয়ে খুঁজুন (e.g. /blog/seo-guide)..." style="width: 100%; max-width: 380px; padding: 8px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none;">
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <select id="gscVerdictFilter" onchange="onGscFilterChange()" style="padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 12.5px; font-weight: 700; color: #334155; background: #f8fafc; outline: none;">
+                            <option value="ALL">সকল স্ট্যাটাস</option>
+                            <option value="PASS">✅ শুধু Indexed (PASS)</option>
+                            <option value="FAIL">❌ শুধু Non-Indexed (FAIL)</option>
+                            <option value="UNCHECKED">⏳ শুধু Unchecked</option>
+                        </select>
+                        <select id="gscCoverageFilter" onchange="onGscFilterChange()" style="padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 12.5px; font-weight: 700; color: #334155; background: #f8fafc; outline: none;">
+                            <option value="ALL">সকল কারণ (Coverage State)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- URL Inspection Table -->
+                <div style="overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12.5px;">
+                        <thead>
+                            <tr style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1; color: #475569; font-weight: 800; text-transform: uppercase; font-size: 11px;">
+                                <th style="padding: 12px 14px;">URL</th>
+                                <th style="padding: 12px 14px; width: 110px;">স্ট্যাটাস</th>
+                                <th style="padding: 12px 14px;">Google বলছে (State)</th>
+                                <th style="padding: 12px 14px;">কারণ (Why)</th>
+                                <th style="padding: 12px 14px;">কী করতে হবে (Fix)</th>
+                                <th style="padding: 12px 14px; width: 120px;">Last Crawl</th>
+                                <th style="padding: 12px 14px; width: 100px; text-align: center;">অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gscUrlsTableBody">
+                            <tr>
+                                <td colspan="7" style="padding: 30px; text-align: center; color: #94a3b8; font-size: 13.5px;">
+                                    কোনো URL লোড হয়নি। উপরে '➕ কানেক্ট প্রপার্টি' দিয়ে সাইট যুক্ত করুন অথবা '🗺️ সাইটম্যাপ থেকে URL আনুন'।
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Footer Bar -->
+                <div id="gscPaginationBar" style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid #e2e8f0; flex-wrap: wrap; gap: 10px;">
+                    <div id="gscPaginationInfo" style="font-size: 12.5px; color: #64748b; font-weight: 700;">
+                        Showing 0-0 of 0 URLs
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <button type="button" id="gscPrevPageBtn" onclick="changeGscPage(-1)" style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 6px 14px; font-size: 12px; font-weight: 700; color: #334155; cursor: pointer;">
+                            ⬅️ Previous
+                        </button>
+                        <span id="gscPageIndicator" style="font-size: 12px; font-weight: 800; color: #0f172a; padding: 4px 10px; background: #f1f5f9; border-radius: 6px;">
+                            Page 1 of 1
+                        </span>
+                        <button type="button" id="gscNextPageBtn" onclick="changeGscPage(1)" style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 6px 14px; font-size: 12px; font-weight: 700; color: #334155; cursor: pointer;">
+                            Next ➡️
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MODAL: CONNECT GSC PROPERTY & SERVICE ACCOUNT ================= -->
+        <div id="gscConnectSiteModal" onclick="if(event.target === this) closeGscConnectModal()" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(6px); z-index: 999995; align-items: center; justify-content: center; padding: 20px;">
+            <div style="background: #ffffff; border-radius: 20px; max-width: 680px; width: 100%; max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,0.35); border: 2px solid #2563eb; overflow: hidden; position: relative;">
+                <div style="padding: 18px 24px; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: white; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 24px;">🔗</span>
+                        <div>
+                            <h3 style="margin: 0; font-size: 17px; font-weight: 900;">Google Search Console প্রপার্টি কানেক্ট করুন</h3>
+                            <p style="margin: 2px 0 0 0; font-size: 12px; color: #bfdbfe;">Google Cloud Service Account দিয়ে রিয়েল URL Inspection চালু করুন</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeGscConnectModal()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">✕</button>
+                </div>
+
+                <div style="padding: 24px; overflow-y: auto; flex: 1;">
+                    <div style="background: #eff6ff; border-left: 4px solid #2563eb; padding: 12px 16px; border-radius: 6px; margin-bottom: 18px; font-size: 12.5px; color: #1e3a8a; line-height: 1.5;">
+                        <strong>সেটআপ নির্দেশিকা:</strong>
+                        <ol style="margin: 6px 0 0 18px; padding: 0;">
+                            <li>Google Cloud Console-এ প্রজেক্ট বানিয়ে <strong>Search Console API</strong> চালু করুন।</li>
+                            <li><strong>Service Account</strong> বানিয়ে JSON Key ডাউনলোড করে নিচের ঘরে পেস্ট করুন।</li>
+                            <li>আপনার Search Console-এ গিয়ে <strong>Settings &gt; Users &amp; permissions &gt; Add user</strong> এ Service Account-এর ইমেইল যুক্ত করুন।</li>
+                        </ol>
+                    </div>
+
+                    <div style="margin-bottom: 14px;">
+                        <label style="display: block; font-size: 12.5px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">
+                            Search Console Property: <span style="color: #dc2626;">*</span>
+                        </label>
+                        <input type="text" id="gscInputProperty" placeholder="sc-domain:example.com অথবা https://example.com/" style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; outline: none; box-sizing: border-box;">
+                        <small style="font-size: 11px; color: #64748b; margin-top: 4px; display: block;">Domain Property হলে <code>sc-domain:example.com</code> এবং URL-prefix হলে <code>https://example.com/</code> লিখুন।</small>
+                    </div>
+
+                    <div style="margin-bottom: 14px;">
+                        <label style="display: block; font-size: 12.5px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">
+                            Sitemap URL (ঐচ্ছিক):
+                        </label>
+                        <input type="text" id="gscInputSitemap" placeholder="https://example.com/sitemap.xml (ফাঁকা রাখলে robots.txt থেকে খুঁজবে)" style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; outline: none; box-sizing: border-box;">
+                    </div>
+
+                    <div style="margin-bottom: 18px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <label style="font-size: 12.5px; font-weight: 800; color: #0f172a;">
+                                Service Account JSON Key:
+                            </label>
+                            <label style="font-size: 12px; color: #2563eb; cursor: pointer; font-weight: 700;">
+                                📁 Upload .json file
+                                <input type="file" id="gscSaFileInput" accept=".json" onchange="handleGscSaFileUpload(event)" style="display: none;">
+                            </label>
+                        </div>
+                        <textarea id="gscInputSaJson" rows="6" placeholder='{"type": "service_account", "project_id": "...", "private_key": "...", "client_email": "...@...iam.gserviceaccount.com"}' style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: monospace; font-size: 11.5px; box-sizing: border-box; outline: none;"></textarea>
+                    </div>
+
+                    <div id="gscTestStatusMsg" style="display: none; padding: 10px 14px; border-radius: 8px; font-size: 12.5px; margin-bottom: 14px;"></div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <button type="button" onclick="testGscConnection()" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; color: #0f172a; font-weight: 700; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 13px;">
+                            🧪 Test Permission
+                        </button>
+                        <button type="button" onclick="saveGscSiteConnection()" style="background: #2563eb; color: white; border: none; font-weight: 800; padding: 10px 22px; border-radius: 8px; cursor: pointer; font-size: 13px; box-shadow: 0 2px 6px rgba(37,99,235,0.3);">
+                            💾 Save &amp; Connect Property
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MODAL: ADD CUSTOM URLS / CSV ================= -->
+        <div id="gscAddUrlsModal" onclick="if(event.target === this) closeGscAddUrlsModal()" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(6px); z-index: 999995; align-items: center; justify-content: center; padding: 20px;">
+            <div style="background: #ffffff; border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,0.35); border: 2px solid #0f172a; overflow: hidden; position: relative;">
+                <div style="padding: 18px 24px; background: #0f172a; color: white; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0; font-size: 16px; font-weight: 900;">📥 কাস্টম URL অথবা CSV যোগ করুন</h3>
+                    <button type="button" onclick="closeGscAddUrlsModal()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">✕</button>
+                </div>
+                <div style="padding: 22px; overflow-y: auto; flex: 1;">
+                    <div style="margin-bottom: 14px;">
+                        <label style="display: block; font-size: 12px; font-weight: 800; color: #475569; margin-bottom: 6px;">URL তালিকা (প্রতি লাইনে একটি URL):</label>
+                        <textarea id="gscBulkUrlsInput" rows="7" placeholder="https://example.com/about&#10;https://example.com/services&#10;https://example.com/blog/seo" style="width: 100%; padding: 10px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 12.5px; box-sizing: border-box; outline: none;"></textarea>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; font-size: 12px; font-weight: 800; color: #475569; margin-bottom: 6px;">অথবা CSV ফাইল আপলোড করুন:</label>
+                        <input type="file" id="gscCsvFileInput" accept=".csv,.txt" onchange="handleGscCsvUpload(event)" style="font-size: 12px;">
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <button type="button" onclick="closeGscAddUrlsModal()" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-weight: 700; padding: 9px 16px; border-radius: 8px; cursor: pointer;">Cancel</button>
+                        <button type="button" onclick="submitGscManualUrls()" style="background: #0f172a; color: white; border: none; font-weight: 800; padding: 9px 20px; border-radius: 8px; cursor: pointer;">➕ Add to Inspection Queue</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MODAL: DETAILED URL INSPECTION & LIVE DIAGNOSIS ================= -->
+        <div id="gscUrlDetailModal" onclick="if(event.target === this) closeGscDetailModal()" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(6px); z-index: 999996; align-items: center; justify-content: center; padding: 20px;">
+            <div style="background: #ffffff; border-radius: 20px; max-width: 820px; width: 100%; max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,0.35); border: 2px solid #2563eb; overflow: hidden; position: relative;">
+                <!-- Header -->
+                <div style="padding: 18px 24px; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #1e3a8a 100%); color: white; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="flex: 1; padding-right: 14px;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <span id="gscModalVerdictBadge" style="font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 800; background: #3b82f6; color: white;">INSPECTING</span>
+                            <span id="gscModalCheckedTime" style="font-size: 11.5px; color: #93c5fd;">Checked: Just now</span>
+                        </div>
+                        <h3 id="gscModalTargetUrl" style="margin: 0; font-size: 15px; font-weight: 800; word-break: break-all; color: #ffffff;">https://example.com/</h3>
+                    </div>
+                    <button type="button" onclick="closeGscDetailModal()" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer;">✕</button>
+                </div>
+
+                <!-- Body -->
+                <div style="padding: 22px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 16px;">
+                    <!-- Section 1: Google Says (Official GSC API) -->
+                    <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h4 style="margin: 0; font-size: 14px; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+                                <span>🌐 Google Search Console বলছে (Official API Verdict)</span>
+                            </h4>
+                            <button type="button" onclick="toggleGscRawJson()" style="background: #ffffff; border: 1px solid #cbd5e1; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; cursor: pointer;">
+                                📄 Raw API JSON
+                            </button>
+                        </div>
+                        <div id="gscModalGoogleDataGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; font-size: 12px;">
+                            <!-- Populated dynamically -->
+                        </div>
+                        <div id="gscModalRawJsonContainer" style="display: none; margin-top: 12px;">
+                            <pre id="gscModalRawJson" style="background: #0f172a; color: #38bdf8; padding: 12px; border-radius: 8px; font-size: 11px; max-height: 200px; overflow: auto; margin: 0;"></pre>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Our Real-Time Live Diagnosis -->
+                    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 16px;">
+                        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+                            <span>🩺 আমাদের রিয়েল-টাইম লাইভ ডায়াগনসিস (Live Checks)</span>
+                        </h4>
+                        <div id="gscModalLiveChecksList" style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px;">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Actionable Fix Guide (in Bengali) -->
+                    <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 16px;">
+                        <h4 style="margin: 0 0 6px 0; font-size: 14px; font-weight: 900; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
+                            <span>💡 কীভাবে এই সমস্যা সমাধান (Fix) করবেন:</span>
+                        </h4>
+                        <div id="gscModalSolutionText" style="font-size: 13px; color: #1e40af; line-height: 1.5;">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Direct Search Console Action & Limitation Notice -->
+                    <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div style="flex: 1; min-width: 260px;">
+                            <div style="font-size: 12px; font-weight: 800; color: #92400e;">⚠️ Google Search Console সীমাবদ্ধতা:</div>
+                            <div style="font-size: 11.5px; color: #b45309; margin-top: 2px;">
+                                Google API দিয়ে প্রোগ্রাম্যাটিক্যালি সরাসরি 'Request Indexing' পাঠানো সম্ভব নয়। সমস্যা ফিক্স করার পর সরাসরি Search Console-এ খুলে রিকোয়েস্ট করুন।
+                            </div>
+                        </div>
+                        <a id="gscModalDirectLinkBtn" href="#" target="_blank" rel="noopener" style="background: #0f172a; color: white; text-decoration: none; font-weight: 800; font-size: 12.5px; padding: 9px 16px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                            <span>🚀 Search Console-এ খুলুন ↗</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -5707,36 +6053,55 @@ async def receive_article(request: Request, authorization: str = Header(None)):
         // Initialize Custom API sync badge
         updateCustomBadge();
 
+        function closeAllModalsSafely() {
+            const modalIds = [
+                'gscConnectSiteModal', 'gscAddUrlsModal', 'gscUrlDetailModal',
+                'dirDeliverableModal', 'wpModal', 'customApiModal',
+                'clientReportModal', 'contentRoadmapModal', 'agencyTaskModal',
+                'agencyDailyReportModal', 'clientsHubModal', 'trialWelcomeModal',
+                'userGuideModal', 'trialModal'
+            ];
+            for (let i = 0; i < modalIds.length; i++) {
+                try {
+                    const el = document.getElementById(modalIds[i]);
+                    if (el) el.style.display = 'none';
+                } catch(e) {}
+            }
+        }
+
         function goBackToHome() {
-            closeDirectorModal();
-            closeWpModal();
-            closeCustomApiModal();
-            closeClientReportModal();
-            closeRoadmapModal();
+            closeAllModalsSafely();
             switchTab('daily');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
         }
 
         function switchTab(tab, updateHistory) {
             if (updateHistory === undefined) updateHistory = true;
-            document.getElementById('tabDaily').style.display = (tab === 'daily') ? 'block' : 'none';
-            document.getElementById('tabSpy').style.display = (tab === 'spy') ? 'block' : 'none';
-            document.getElementById('tabMulti').style.display = (tab === 'multi') ? 'block' : 'none';
-            document.getElementById('tabWriter').style.display = (tab === 'writer') ? 'block' : 'none';
-            document.getElementById('tabAutopilot').style.display = (tab === 'autopilot') ? 'block' : 'none';
-            document.getElementById('tabDirector').style.display = (tab === 'director') ? 'block' : 'none';
-            const tabAg = document.getElementById('tabAgency');
-            if (tabAg) tabAg.style.display = (tab === 'agency') ? 'block' : 'none';
-            const tabAgBtn = document.getElementById('tabAgencyBtn');
-            if (tabAgBtn) tabAgBtn.className = 'tab-btn agency' + (tab === 'agency' ? ' active' : '');
-            if (tab === 'agency') { loadAgencyDashboard(); if (typeof updateClientsUI === 'function') updateClientsUI(); }
 
-            document.getElementById('tabDailyBtn').className = 'tab-btn daily' + (tab === 'daily' ? ' active' : '');
-            document.getElementById('tabSpyBtn').className = 'tab-btn spy' + (tab === 'spy' ? ' active' : '');
-            document.getElementById('tabMultiBtn').className = 'tab-btn multi' + (tab === 'multi' ? ' active' : '');
-            document.getElementById('tabWriterBtn').className = 'tab-btn writer' + (tab === 'writer' ? ' active' : '');
-            document.getElementById('tabAutopilotBtn').className = 'tab-btn autopilot' + (tab === 'autopilot' ? ' active' : '');
-            document.getElementById('tabDirectorBtn').className = 'tab-btn director' + (tab === 'director' ? ' active' : '');
+            // Safely hide any open modals without throwing any errors
+            closeAllModalsSafely();
+
+            const allTabs = ['daily', 'spy', 'multi', 'writer', 'autopilot', 'director', 'agency', 'index'];
+            for (let i = 0; i < allTabs.length; i++) {
+                const t = allTabs[i];
+                const tabEl = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (tabEl) {
+                    tabEl.style.display = (tab === t) ? 'block' : 'none';
+                }
+                const btnEl = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1) + 'Btn');
+                if (btnEl) {
+                    btnEl.className = 'tab-btn ' + t + (tab === t ? ' active' : '');
+                }
+            }
+
+            if (tab === 'agency') {
+                try { if (typeof loadAgencyDashboard === 'function') loadAgencyDashboard(); } catch(e){}
+                try { if (typeof updateClientsUI === 'function') updateClientsUI(); } catch(e){}
+            }
+
+            if (tab === 'index') {
+                try { if (typeof loadGscIndexDashboard === 'function') loadGscIndexDashboard(); } catch(e){}
+            }
 
             if (updateHistory) {
                 try {
@@ -5750,7 +6115,7 @@ async def receive_article(request: Request, authorization: str = Header(None)):
                 switchTab(e.state.tab, false);
             } else {
                 const hash = window.location.hash.replace('#', '');
-                if (hash && ['daily', 'spy', 'multi', 'writer', 'autopilot', 'director', 'agency'].includes(hash)) {
+                if (hash && ['daily', 'spy', 'multi', 'writer', 'autopilot', 'director', 'agency', 'index'].includes(hash)) {
                     switchTab(hash, false);
                 } else {
                     switchTab('daily', false);
@@ -5761,14 +6126,7 @@ async def receive_article(request: Request, authorization: str = Header(None)):
         // Keyboard Escape listener to close any open modal
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                closeDirectorModal();
-                closeWpModal();
-                closeCustomApiModal();
-                closeClientReportModal();
-                closeRoadmapModal();
-                closeAgencyTaskModal();
-                closeDailyReportModal();
-                closeClientsHubModal();
+                closeAllModalsSafely();
             }
         });
 
@@ -11074,6 +11432,639 @@ async def receive_article(request: Request, authorization: str = Header(None)):
             }
         }
 
+        // =========================================================================
+        // GOOGLE SEARCH CONSOLE OFFICIAL URL INSPECTION & DIAGNOSIS CLIENT LOGIC
+        // =========================================================================
+        let currentGscSiteId = null;
+        let currentGscDashboardData = null;
+
+        async function loadGscIndexDashboard() {
+            try {
+                const res = await fetch('/api/gsc/sites');
+                const data = await res.json();
+                const sites = data.sites || [];
+                const select = document.getElementById('gscSiteSelect');
+                if (!select) return;
+
+                const prevVal = select.value;
+                select.innerHTML = '<option value="">-- কোনো প্রপার্টি সিলেক্ট করা নেই --</option>';
+                sites.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.textContent = s.property + (s.has_sa ? ' (SA Connected)' : ' (Live Check Only)');
+                    select.appendChild(opt);
+                });
+
+                if (sites.length > 0) {
+                    if (prevVal && sites.some(s => String(s.id) === String(prevVal))) {
+                        select.value = prevVal;
+                    } else {
+                        select.value = sites[0].id;
+                    }
+                    currentGscSiteId = select.value;
+                    currentGscPage = 1;
+                    await fetchGscSiteDashboard(currentGscSiteId, 1);
+                } else {
+                    const saBadge = document.getElementById('gscPropertySaBadge');
+                    if (saBadge) saBadge.innerHTML = '<span style="color:#d97706;">⚠️ কোনো Search Console প্রপার্টি কানেক্ট করা নেই</span>';
+                }
+            } catch(e) {
+                console.error('Error loading GSC sites:', e);
+            }
+        }
+
+        async function onGscSiteChange(val) {
+            currentGscSiteId = val;
+            currentGscPage = 1;
+            if (val) {
+                const saBadge = document.getElementById('gscPropertySaBadge');
+                if (saBadge) {
+                    saBadge.style.background = '#eff6ff';
+                    saBadge.style.color = '#1d4ed8';
+                    saBadge.style.border = '1px solid #bfdbfe';
+                    saBadge.innerHTML = '⏳ ডেটা লোড হচ্ছে...';
+                }
+                await fetchGscSiteDashboard(val, 1);
+            }
+        }
+
+        let currentGscPage = 1;
+        const currentGscLimit = 50;
+        let gscSearchDebounceTimer = null;
+
+        async function fetchGscSiteDashboard(siteId, page) {
+            if (!siteId) return;
+            if (page !== undefined) currentGscPage = page;
+            const search = (document.getElementById('gscUrlSearchInput')?.value || '').trim();
+            const verdict = document.getElementById('gscVerdictFilter')?.value || 'ALL';
+            const coverage = document.getElementById('gscCoverageFilter')?.value || 'ALL';
+
+            const queryUrl = '/api/gsc/dashboard?site_id=' + encodeURIComponent(siteId)
+                + '&page=' + currentGscPage
+                + '&limit=' + currentGscLimit
+                + '&search=' + encodeURIComponent(search)
+                + '&verdict=' + encodeURIComponent(verdict)
+                + '&coverage=' + encodeURIComponent(coverage);
+
+            try {
+                const res = await fetch(queryUrl);
+                const data = await res.json();
+                if (!data.success) return;
+                currentGscDashboardData = data;
+
+                // Update summary KPIs
+                const sum = data.summary || {};
+                const kpiTot = document.getElementById('gscKpiTotalUrls');
+                const kpiIdx = document.getElementById('gscKpiIndexed');
+                const kpiNon = document.getElementById('gscKpiNonIndexed');
+                const kpiQta = document.getElementById('gscKpiQuota');
+                const kpiLast = document.getElementById('gscLastCheckedAt');
+                if (kpiTot) kpiTot.textContent = Number(sum.total_urls || 0).toLocaleString();
+                if (kpiIdx) kpiIdx.textContent = Number(sum.indexed || 0).toLocaleString();
+                if (kpiNon) kpiNon.textContent = Number(sum.non_indexed || 0).toLocaleString();
+                if (kpiQta) kpiQta.textContent = (sum.quota_used || 0) + ' / ' + (sum.quota_max || 2000);
+                if (kpiLast) kpiLast.textContent = 'Last Check: ' + (sum.last_check_at || 'Never');
+
+                // Update Service Account Badge
+                const site = data.site || {};
+                const saBadge = document.getElementById('gscPropertySaBadge');
+                if (saBadge) {
+                    if (site.has_sa && site.service_account_email) {
+                        saBadge.style.background = '#ecfdf5';
+                        saBadge.style.color = '#065f46';
+                        saBadge.style.border = '1px solid #a7f3d0';
+                        saBadge.innerHTML = '🟢 Service Account: <strong>' + site.service_account_email + '</strong>';
+                    } else {
+                        saBadge.style.background = '#fffbeb';
+                        saBadge.style.color = '#92400e';
+                        saBadge.style.border = '1px solid #fde68a';
+                        saBadge.innerHTML = '🟡 Search Console কানেক্ট নেই (শুধু লাইভ ডায়াগনসিস চলবে)';
+                    }
+                }
+
+                // Update Reason Filter Pills & Dropdown
+                renderGscReasonPills(data.reason_groups || {}, sum.total_urls || 0);
+                if (data.coverage_options) {
+                    renderGscCoverageFilterOptions(data.coverage_options);
+                }
+
+                // Render Table (Only 50 items - instant rendering!)
+                renderGscUrlsTable(data.urls || []);
+
+                // Update Pagination Controls
+                renderGscPagination(data.pagination || {});
+            } catch(e) {
+                console.error('Error fetching GSC site dashboard:', e);
+            }
+        }
+
+        function renderGscPagination(pag) {
+            const page = pag.page || 1;
+            const limit = pag.limit || 50;
+            const totalFiltered = pag.total_filtered || 0;
+            const totalPages = pag.total_pages || 1;
+
+            const startIdx = totalFiltered === 0 ? 0 : (page - 1) * limit + 1;
+            const endIdx = Math.min(totalFiltered, page * limit);
+
+            const infoEl = document.getElementById('gscPaginationInfo');
+            if (infoEl) {
+                infoEl.innerHTML = 'Showing <strong>' + startIdx.toLocaleString() + ' - ' + endIdx.toLocaleString() + '</strong> of <strong>' + totalFiltered.toLocaleString() + '</strong> URLs';
+            }
+
+            const indEl = document.getElementById('gscPageIndicator');
+            if (indEl) {
+                indEl.textContent = 'Page ' + page.toLocaleString() + ' of ' + totalPages.toLocaleString();
+            }
+
+            const prevBtn = document.getElementById('gscPrevPageBtn');
+            if (prevBtn) {
+                prevBtn.disabled = (page <= 1);
+                prevBtn.style.opacity = (page <= 1) ? '0.4' : '1';
+                prevBtn.style.cursor = (page <= 1) ? 'not-allowed' : 'pointer';
+            }
+
+            const nextBtn = document.getElementById('gscNextPageBtn');
+            if (nextBtn) {
+                nextBtn.disabled = (page >= totalPages);
+                nextBtn.style.opacity = (page >= totalPages) ? '0.4' : '1';
+                nextBtn.style.cursor = (page >= totalPages) ? 'not-allowed' : 'pointer';
+            }
+        }
+
+        function changeGscPage(delta) {
+            if (!currentGscSiteId) return;
+            const pag = currentGscDashboardData?.pagination || {};
+            const totalPages = pag.total_pages || 1;
+            const newPage = currentGscPage + delta;
+            if (newPage >= 1 && newPage <= totalPages) {
+                fetchGscSiteDashboard(currentGscSiteId, newPage);
+            }
+        }
+
+        function onGscFilterChange() {
+            if (!currentGscSiteId) return;
+            currentGscPage = 1;
+            fetchGscSiteDashboard(currentGscSiteId, 1);
+        }
+
+        function onGscSearchKeyUp() {
+            clearTimeout(gscSearchDebounceTimer);
+            gscSearchDebounceTimer = setTimeout(function() {
+                if (!currentGscSiteId) return;
+                currentGscPage = 1;
+                fetchGscSiteDashboard(currentGscSiteId, 1);
+            }, 300);
+        }
+
+        function renderGscReasonPills(groups, totalUrls) {
+            const container = document.getElementById('gscReasonPillsContainer');
+            if (!container) return;
+
+            let html = '<div onclick="filterGscByReason(&quot;ALL&quot;)" data-reason="ALL" style="padding: 6px 14px; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #3b82f6; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer;">সবগুলো দেখুন (' + totalUrls.toLocaleString() + ')</div>';
+
+            Object.keys(groups).forEach(reason => {
+                const count = groups[reason];
+                const safeReason = reason.replace(/"/g, '&quot;');
+                html += '<div onclick="filterGscByReason(this.getAttribute(&quot;data-reason&quot;))" data-reason="' + safeReason + '" style="padding: 6px 14px; background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">'
+                    + '<span>⚠️ ' + reason + '</span>'
+                    + '<span style="background: #e11d48; color: white; border-radius: 10px; padding: 1px 7px; font-size: 10.5px; font-weight: 800;">' + count.toLocaleString() + '</span>'
+                    + '</div>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderGscCoverageFilterOptions(reasons) {
+            const select = document.getElementById('gscCoverageFilter');
+            if (!select) return;
+            const currentVal = select.value;
+            select.innerHTML = '<option value="ALL">সকল কারণ (Coverage State)</option>';
+            reasons.forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r;
+                opt.textContent = r;
+                if (r === currentVal) opt.selected = true;
+                select.appendChild(opt);
+            });
+        }
+
+        function renderGscUrlsTable(urls) {
+            const tbody = document.getElementById('gscUrlsTableBody');
+            if (!tbody) return;
+
+            if (!urls || urls.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="padding: 30px; text-align: center; color: #94a3b8; font-size: 13.5px;">কোনো URL পাওয়া যায়নি। উপরে &quot;সাইটম্যাপ থেকে URL আনুন&quot; অথবা &quot;ম্যানুয়াল URL&quot; এ ক্লিক করুন।</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = urls.map(u => {
+                let badge = '<span style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 3px 8px; border-radius: 6px; font-weight: 800; font-size: 11px;">⏳ UNCHECKED</span>';
+                if (u.verdict === 'PASS') {
+                    badge = '<span style="background: #dcfce7; color: #166534; border: 1px solid #86efac; padding: 3px 8px; border-radius: 6px; font-weight: 800; font-size: 11px;">✅ INDEXED</span>';
+                } else if (u.verdict === 'FAIL') {
+                    badge = '<span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; padding: 3px 8px; border-radius: 6px; font-weight: 800; font-size: 11px;">❌ NOT INDEXED</span>';
+                }
+
+                return '<tr class="gsc-row" style="border-bottom: 1px solid #f1f5f9;">'
+                    + '<td style="padding: 12px 14px; max-width: 280px; word-break: break-all;">'
+                    + '<a href="' + u.url + '" target="_blank" rel="noopener" style="color: #2563eb; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">'
+                    + u.url + ' ↗'
+                    + '</a>'
+                    + '</td>'
+                    + '<td style="padding: 12px 14px;">' + badge + '</td>'
+                    + '<td style="padding: 12px 14px; font-weight: 700; color: #0f172a;">' + (u.coverage_state || 'Not Inspected') + '</td>'
+                    + '<td style="padding: 12px 14px; color: #475569; max-width: 220px; font-size: 12px;">' + (u.reason_bn || '-') + '</td>'
+                    + '<td style="padding: 12px 14px; color: #1d4ed8; max-width: 260px; font-size: 12px;">' + (u.solution_bn || '-') + '</td>'
+                    + '<td style="padding: 12px 14px; color: #64748b; font-size: 11.5px;">' + (u.last_crawl_time ? u.last_crawl_time.split('T')[0] : 'Never') + '</td>'
+                    + '<td style="padding: 12px 14px; text-align: center;">'
+                    + '<div style="display: flex; gap: 6px; justify-content: center;">'
+                    + '<button type="button" onclick="viewGscUrlDetails(' + u.id + ')" style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px; cursor: pointer;" title="Google বলছে ও লাইভ চেক ফলাফল দেখুন">🔍 ডিটেইলস</button>'
+                    + '<button type="button" onclick="inspectSingleGscUrl(' + u.id + ')" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #0f172a; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px; cursor: pointer;" title="Recheck / Inspect now">⚡</button>'
+                    + '</div>'
+                    + '</td>'
+                    + '</tr>';
+            }).join('');
+        }
+
+        function filterGscByReason(reason) {
+            const select = document.getElementById('gscCoverageFilter');
+            if (select) {
+                select.value = reason;
+                onGscFilterChange();
+            }
+        }
+
+        function openGscConnectModal() {
+            const modal = document.getElementById('gscConnectSiteModal');
+            if (modal) modal.style.display = 'flex';
+        }
+        function closeGscConnectModal() {
+            const modal = document.getElementById('gscConnectSiteModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function handleGscSaFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('gscInputSaJson').value = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+
+        async function testGscConnection() {
+            const prop = (document.getElementById('gscInputProperty')?.value || '').trim();
+            const saJson = (document.getElementById('gscInputSaJson')?.value || '').trim();
+            const msgBox = document.getElementById('gscTestStatusMsg');
+            if (!msgBox) return;
+
+            if (!prop) {
+                alert('অনুগ্রহ করে প্রপার্টি দিন (যেমন: sc-domain:example.com)');
+                return;
+            }
+            if (!saJson) {
+                alert('অনুগ্রহ করে Service Account JSON কী পেস্ট অথবা ফাইল আপলোড করুন');
+                return;
+            }
+
+            msgBox.style.display = 'block';
+            msgBox.style.background = '#eff6ff';
+            msgBox.style.color = '#1d4ed8';
+            msgBox.textContent = 'Google Search Console API পারমিশন যাচাই করা হচ্ছে...';
+
+            try {
+                const res = await fetch('/api/gsc/test-connection', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ property: prop, service_account_json: saJson })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    msgBox.style.background = '#ecfdf5';
+                    msgBox.style.color = '#065f46';
+                    msgBox.innerHTML = '✅ ' + data.message;
+                } else {
+                    msgBox.style.background = '#fff1f2';
+                    msgBox.style.color = '#be123c';
+                    msgBox.innerHTML = '❌ ' + data.message;
+                }
+            } catch(e) {
+                msgBox.style.background = '#fff1f2';
+                msgBox.style.color = '#be123c';
+                msgBox.textContent = 'Error testing connection: ' + e.message;
+            }
+        }
+
+        async function saveGscSiteConnection() {
+            const prop = (document.getElementById('gscInputProperty')?.value || '').trim();
+            const sitemap = (document.getElementById('gscInputSitemap')?.value || '').trim();
+            const saJson = (document.getElementById('gscInputSaJson')?.value || '').trim();
+
+            if (!prop) {
+                alert('অনুগ্রহ করে Search Console প্রপার্টি দিন (যেমন sc-domain:example.com)');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/gsc/connect-site', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ property: prop, sitemap_url: sitemap, service_account_json: saJson })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Search Console প্রপার্টি সফলভাবে সংরক্ষিত ও কানেক্ট হয়েছে!');
+                    closeGscConnectModal();
+                    await loadGscIndexDashboard();
+                } else {
+                    alert('Error saving connection: ' + (data.message || 'Unknown'));
+                }
+            } catch(e) {
+                alert('Error saving connection: ' + e.message);
+            }
+        }
+
+        async function triggerGscSitemapDiscovery() {
+            if (!currentGscSiteId) {
+                alert('প্রথমে একটি Search Console প্রপার্টি সিলেক্ট করুন অথবা কানেক্ট করুন।');
+                return;
+            }
+            try {
+                const res = await fetch('/api/gsc/discover-sitemap', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ site_id: currentGscSiteId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('XML সাইটম্যাপ থেকে ' + data.total_urls_found + 'টি URL পাওয়া গেছে (নতুন যোগ হয়েছে: ' + data.new_urls_added + 'টি)।');
+                    await fetchGscSiteDashboard(currentGscSiteId);
+                } else {
+                    alert('Sitemap discovery error: ' + (data.message || 'Failed'));
+                }
+            } catch(e) {
+                alert('Error discovering sitemap: ' + e.message);
+            }
+        }
+
+        function openGscAddUrlsModal() {
+            const modal = document.getElementById('gscAddUrlsModal');
+            if (modal) modal.style.display = 'flex';
+        }
+        function closeGscAddUrlsModal() {
+            const modal = document.getElementById('gscAddUrlsModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function handleGscCsvUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const lines = e.target.result.split(new RegExp('[\\\\r\\\\n]+'));
+                const urls = lines.map(l => l.split(',')[0].trim()).filter(u => u.startsWith('http'));
+                document.getElementById('gscBulkUrlsInput').value = urls.join(String.fromCharCode(10));
+            };
+            reader.readAsText(file);
+        }
+
+        async function submitGscManualUrls() {
+            if (!currentGscSiteId) {
+                alert('প্রথমে একটি Search Console প্রপার্টি সিলেক্ট করুন।');
+                return;
+            }
+            const text = (document.getElementById('gscBulkUrlsInput')?.value || '').trim();
+            const urls = text.split(new RegExp('[\\\\r\\\\n]+')).map(u => u.trim()).filter(u => u.startsWith('http'));
+            if (urls.length === 0) {
+                alert('অনুগ্রহ করে অন্তত একটি সঠিক HTTP/HTTPS URL প্রদান করুন।');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/gsc/add-urls', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ site_id: currentGscSiteId, urls: urls })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert(data.added + 'টি নতুন URL ইন্সপেকশন কিউতে যোগ করা হয়েছে!');
+                    closeGscAddUrlsModal();
+                    await fetchGscSiteDashboard(currentGscSiteId);
+                }
+            } catch(e) {
+                alert('Error adding manual URLs: ' + e.message);
+            }
+        }
+
+        async function runGscBatchInspection() {
+            if (!currentGscSiteId) {
+                alert('প্রথমে একটি Search Console প্রপার্টি সিলেক্ট করুন।');
+                return;
+            }
+            const btn = document.getElementById('gscBatchInspectBtn');
+            const origText = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.innerHTML = '<span>⏳ ইন্সপেক্ট হচ্ছে...</span>';
+                btn.disabled = true;
+            }
+
+            try {
+                const res = await fetch('/api/gsc/inspect-batch', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ site_id: currentGscSiteId, limit: 5 })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    await fetchGscSiteDashboard(currentGscSiteId);
+                    if (data.quota_exhausted) {
+                        alert(data.message);
+                    }
+                } else {
+                    alert('Inspection notice: ' + (data.message || 'Error'));
+                }
+            } catch(e) {
+                alert('Batch inspection error: ' + e.message);
+            } finally {
+                if (btn) {
+                    btn.innerHTML = origText;
+                    btn.disabled = false;
+                }
+            }
+        }
+
+        async function inspectSingleGscUrl(urlId) {
+            if (!currentGscSiteId) return;
+            try {
+                const res = await fetch('/api/gsc/inspect-url', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ site_id: currentGscSiteId, url_id: urlId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    await fetchGscSiteDashboard(currentGscSiteId);
+                    await viewGscUrlDetails(urlId);
+                } else {
+                    alert(data.message || 'Inspection error');
+                }
+            } catch(e) {
+                alert('Single inspection error: ' + e.message);
+            }
+        }
+
+        async function viewGscUrlDetails(urlId) {
+            try {
+                const res = await fetch('/api/gsc/url-details?url_id=' + urlId);
+                const data = await res.json();
+                if (!data.success) return;
+
+                const url = data.url || {};
+                const gSays = data.google_says || {};
+                const checks = data.live_checks || [];
+
+                document.getElementById('gscModalTargetUrl').textContent = url.url || '';
+                document.getElementById('gscModalCheckedTime').textContent = 'Checked: ' + (url.last_inspected_at || 'Just now');
+
+                const vBadge = document.getElementById('gscModalVerdictBadge');
+                if (vBadge) {
+                    if (url.verdict === 'PASS') {
+                        vBadge.textContent = 'INDEXED (PASS)';
+                        vBadge.style.background = '#16a34a';
+                    } else if (url.verdict === 'FAIL') {
+                        vBadge.textContent = 'NOT INDEXED (FAIL)';
+                        vBadge.style.background = '#dc2626';
+                    } else {
+                        vBadge.textContent = 'UNCHECKED';
+                        vBadge.style.background = '#64748b';
+                    }
+                }
+
+                // Google Data Grid
+                const gGrid = document.getElementById('gscModalGoogleDataGrid');
+                if (gGrid) {
+                    gGrid.innerHTML = [
+                        '<div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px;"><strong>Coverage State:</strong><div style="font-size: 13px; font-weight: 800; color: #dc2626; margin-top: 2px;">' + (gSays.coverage_state || url.coverage_state || 'Not Inspected') + '</div></div>',
+                        '<div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px;"><strong>Google-Selected Canonical:</strong><div style="font-size: 11.5px; word-break: break-all; margin-top: 2px;">' + (gSays.google_canonical || 'None') + '</div></div>',
+                        '<div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px;"><strong>User-Declared Canonical:</strong><div style="font-size: 11.5px; word-break: break-all; margin-top: 2px;">' + (gSays.user_canonical || 'None') + '</div></div>',
+                        '<div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px;"><strong>Crawled As:</strong><div style="font-size: 13px; font-weight: 700; color: #2563eb; margin-top: 2px;">' + (gSays.crawled_as || 'Googlebot Mobile') + '</div></div>',
+                        '<div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px;"><strong>Robots.txt Directive:</strong><div style="font-size: 12px; font-weight: 700; margin-top: 2px;">' + (gSays.robots_txt_state || 'ALLOWED') + '</div></div>',
+                        '<div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px;"><strong>Page Fetch State:</strong><div style="font-size: 12px; font-weight: 700; margin-top: 2px;">' + (gSays.page_fetch_state || 'SUCCESSFUL') + '</div></div>'
+                    ].join('');
+                }
+
+                // Raw JSON
+                const rawPre = document.getElementById('gscModalRawJson');
+                if (rawPre) rawPre.textContent = gSays.raw_json ? JSON.stringify(JSON.parse(gSays.raw_json), null, 2) : 'No raw Google JSON stored yet.';
+
+                // Live Checks List
+                const lList = document.getElementById('gscModalLiveChecksList');
+                if (lList) {
+                    if (checks.length === 0) {
+                        lList.innerHTML = '<div style="color: #64748b; font-size: 12px;">এখনো কোনো লাইভ ডায়াগনসিস চেক চালানো হয়নি। উপরের ⚡ বাটনে ক্লিক করুন।</div>';
+                    } else {
+                        lList.innerHTML = checks.map(c => {
+                            let icon = '✅';
+                            let color = '#166534';
+                            let bg = '#f0fdf4';
+                            if (c.result === 'FAIL') {
+                                icon = '❌';
+                                color = '#991b1b';
+                                bg = '#fef2f2';
+                            } else if (c.result === 'WARN') {
+                                icon = '⚠️';
+                                color = '#92400e';
+                                bg = '#fffbeb';
+                            }
+                            return '<div style="background: ' + bg + '; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;">'
+                                + '<div><strong>' + icon + ' ' + c.check_name + ':</strong> <span style="color: ' + color + ';">' + c.message + '</span></div>'
+                                + '<span style="font-size: 10.5px; color: #94a3b8;">' + (c.checked_at || '') + '</span>'
+                                + '</div>';
+                        }).join('');
+                    }
+                }
+
+                // Solution Guide
+                const solBox = document.getElementById('gscModalSolutionText');
+                if (solBox) solBox.innerHTML = '<strong>কারণ:</strong> ' + data.reason_bn + '<br><br><strong>সমাধানের ধাপ:</strong> ' + data.solution_bn;
+
+                // Direct Link
+                const directBtn = document.getElementById('gscModalDirectLinkBtn');
+                if (directBtn) directBtn.href = data.gsc_direct_url || '#';
+
+                document.getElementById('gscUrlDetailModal').style.display = 'flex';
+            } catch(e) {
+                console.error('Error viewing URL details:', e);
+            }
+        }
+
+        function closeGscDetailModal() {
+            const modal = document.getElementById('gscUrlDetailModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function toggleGscRawJson() {
+            const box = document.getElementById('gscModalRawJsonContainer');
+            if (box) box.style.display = (box.style.display === 'none' || !box.style.display) ? 'block' : 'none';
+        }
+
+        function exportGscInspectionCsv() {
+            if (!currentGscDashboardData || !currentGscDashboardData.urls) {
+                alert('এক্সপোর্ট করার মতো কোনো URL ডেটা লোড নেই।');
+                return;
+            }
+            const urls = currentGscDashboardData.urls;
+            const headers = ['URL', 'Verdict', 'Coverage State', 'Why (Bangla)', 'Solution (Bangla)', 'Last Crawl', 'Checked At'];
+            const rows = urls.map(u => [
+                '"' + (u.url || '').replace(/"/g, '""') + '"',
+                '"' + (u.verdict || '').replace(/"/g, '""') + '"',
+                '"' + (u.coverage_state || '').replace(/"/g, '""') + '"',
+                '"' + (u.reason_bn || '').replace(/"/g, '""') + '"',
+                '"' + (u.solution_bn || '').replace(/"/g, '""') + '"',
+                '"' + (u.last_crawl_time || '').replace(/"/g, '""') + '"',
+                '"' + (u.last_inspected_at || '').replace(/"/g, '""') + '"'
+            ]);
+
+            const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers.join(','), ...rows.map(e => e.join(','))].join(String.fromCharCode(10));
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'google_index_inspection_report_' + new Date().toISOString().split('T')[0] + '.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        window.loadGscIndexDashboard = loadGscIndexDashboard;
+        window.onGscSiteChange = onGscSiteChange;
+        window.fetchGscSiteDashboard = fetchGscSiteDashboard;
+        window.renderGscReasonPills = renderGscReasonPills;
+        window.renderGscCoverageFilterOptions = renderGscCoverageFilterOptions;
+        window.renderGscUrlsTable = renderGscUrlsTable;
+        window.onGscFilterChange = onGscFilterChange;
+        window.onGscSearchKeyUp = onGscSearchKeyUp;
+        window.changeGscPage = changeGscPage;
+        window.filterGscByReason = filterGscByReason;
+        window.openGscConnectModal = openGscConnectModal;
+        window.closeGscConnectModal = closeGscConnectModal;
+        window.handleGscSaFileUpload = handleGscSaFileUpload;
+        window.testGscConnection = testGscConnection;
+        window.saveGscSiteConnection = saveGscSiteConnection;
+        window.triggerGscSitemapDiscovery = triggerGscSitemapDiscovery;
+        window.openGscAddUrlsModal = openGscAddUrlsModal;
+        window.closeGscAddUrlsModal = closeGscAddUrlsModal;
+        window.handleGscCsvUpload = handleGscCsvUpload;
+        window.submitGscManualUrls = submitGscManualUrls;
+        window.runGscBatchInspection = runGscBatchInspection;
+        window.inspectSingleGscUrl = inspectSingleGscUrl;
+        window.viewGscUrlDetails = viewGscUrlDetails;
+        window.closeGscDetailModal = closeGscDetailModal;
+        window.toggleGscRawJson = toggleGscRawJson;
+        window.exportGscInspectionCsv = exportGscInspectionCsv;
+
         function closeDailyReportModal() {
             const modal = document.getElementById('agencyDailyReportModal');
             if (modal) modal.style.display = 'none';
@@ -11083,7 +12074,7 @@ async def receive_article(request: Request, authorization: str = Header(None)):
         window.addEventListener('DOMContentLoaded', function() {
             checkAuthOnLoad();
             const hash = window.location.hash.replace('#', '');
-            if (hash && ['daily', 'spy', 'multi', 'writer', 'autopilot', 'director', 'agency'].includes(hash)) {
+            if (hash && ['daily', 'spy', 'multi', 'writer', 'autopilot', 'director', 'agency', 'index'].includes(hash)) {
                 switchTab(hash, false);
             }
             // Auto-trigger live demo scan on initial dashboard load so user immediately sees active data
@@ -11114,8 +12105,11 @@ async def receive_article(request: Request, authorization: str = Header(None)):
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        # Extract path without query parameters (supports ?fbclid=..., ?utm_source=..., etc.)
-        self.path = self.path.split('?')[0].strip()
+        # Extract path and query parameters
+        full_raw_path = self.path
+        raw_query = full_raw_path.split('?')[1] if '?' in full_raw_path else ''
+        query_params = parse_qs(raw_query)
+        self.path = full_raw_path.split('?')[0].strip()
 
         # SECURITY FIREWALL: Block any direct attempts to read source code, config, or hidden files
         req_clean = self.path.lower()
@@ -11181,6 +12175,54 @@ class RequestHandler(BaseHTTPRequestHandler):
             else:
                 self.send_response(404)
                 self.end_headers()
+        elif self.path == '/api/gsc/sites':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.end_headers()
+            sites = gsc_engine.list_sites()
+            self.wfile.write(json.dumps({"success": True, "sites": sites}, ensure_ascii=False).encode('utf-8'))
+        elif self.path == '/api/gsc/dashboard':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.end_headers()
+            s_val = query_params.get('site_id', ['1'])[0]
+            page_val = query_params.get('page', ['1'])[0]
+            limit_val = query_params.get('limit', ['50'])[0]
+            search_val = query_params.get('search', [''])[0]
+            verdict_val = query_params.get('verdict', ['ALL'])[0]
+            coverage_val = query_params.get('coverage', ['ALL'])[0]
+            try:
+                s_id = int(s_val)
+            except Exception:
+                s_id = 1
+            try:
+                page = max(1, int(page_val))
+            except Exception:
+                page = 1
+            try:
+                limit = min(200, max(10, int(limit_val)))
+            except Exception:
+                limit = 50
+            data = gsc_engine.get_site_dashboard(
+                site_id=s_id,
+                page=page,
+                limit=limit,
+                verdict_filter=verdict_val,
+                coverage_filter=coverage_val,
+                search=search_val
+            )
+            self.wfile.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
+        elif self.path == '/api/gsc/url-details':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.end_headers()
+            u_val = query_params.get('url_id', ['1'])[0]
+            try:
+                u_id = int(u_val)
+            except Exception:
+                u_id = 1
+            data = gsc_engine.get_url_details(u_id)
+            self.wfile.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
         else:
             self.send_response(404)
             self.end_headers()
@@ -11903,7 +12945,118 @@ Best regards,
                 self.send_response(500)
                 self.send_header('Content-Type', 'application/json; charset=utf-8')
                 self.end_headers()
-                self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/gsc/test-connection':
+            try:
+                data = json.loads(body) if body else {}
+                prop = data.get('property', '')
+                sa_json = data.get('service_account_json', '')
+                res = gsc_engine.test_connection(prop, sa_json)
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps(res, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"success": False, "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/gsc/connect-site':
+            try:
+                data = json.loads(body) if body else {}
+                prop = data.get('property', '')
+                sa_json = data.get('service_account_json', '')
+                sitemap = data.get('sitemap_url', '')
+                res = gsc_engine.connect_site(prop, sa_json, sitemap)
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps(res, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"success": False, "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/gsc/discover-sitemap':
+            try:
+                data = json.loads(body) if body else {}
+                s_id = int(data.get('site_id', 1))
+                sitemap = data.get('sitemap_url', '')
+                res = gsc_engine.discover_urls_from_sitemap(s_id, sitemap)
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps(res, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"success": False, "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/gsc/add-urls':
+            try:
+                data = json.loads(body) if body else {}
+                s_id = int(data.get('site_id', 1))
+                urls = data.get('urls', [])
+                res = gsc_engine.add_manual_urls(s_id, urls)
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps(res, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"success": False, "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/gsc/inspect-url':
+            try:
+                data = json.loads(body) if body else {}
+                s_id = int(data.get('site_id', 1))
+                u_id = int(data.get('url_id', 1))
+                res = gsc_engine.inspect_url_official_api(s_id, u_id)
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps(res, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"success": False, "message": str(e)}).encode('utf-8'))
+        elif self.path == '/api/gsc/inspect-batch':
+            try:
+                data = json.loads(body) if body else {}
+                s_id = int(data.get('site_id', 1))
+                limit = int(data.get('limit', 5))
+                
+                from gsc_index_engine import get_db
+                conn = get_db()
+                c = conn.cursor()
+                c.execute("SELECT id FROM urls WHERE site_id = ? AND verdict = 'UNCHECKED' ORDER BY id ASC LIMIT ?", (s_id, limit))
+                pending = [row['id'] for row in c.fetchall()]
+                conn.close()
+
+                inspected_count = 0
+                quota_exhausted = False
+                for uid in pending:
+                    insp_res = gsc_engine.inspect_url_official_api(s_id, uid)
+                    if insp_res.get('quota_exhausted'):
+                        quota_exhausted = True
+                        break
+                    inspected_count += 1
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    "success": True,
+                    "batch_inspected": inspected_count,
+                    "quota_exhausted": quota_exhausted,
+                    "message": "আজকের কোটা শেষ (২,০০০ URL সীমা)। বাকি URL আগামীকাল চেক হবে।" if quota_exhausted else f"{inspected_count}টি URL সফলভাবে ইন্সপেক্ট করা হয়েছে।"
+                }, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({"success": False, "message": str(e)}).encode('utf-8'))
         else:
             self.send_response(404)
             self.end_headers()
